@@ -1,0 +1,5 @@
+site_name: Sub Mare Imperium - Derelict
+repo_url: https://github.com/TheFakeMontyOnTheRun/space-trashman-blues
+theme: readthedocs
+nav:
+- Index: index.md
