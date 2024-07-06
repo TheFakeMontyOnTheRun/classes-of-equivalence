@@ -1,0 +1,6 @@
+[submodule "core/gtest"]
+	path = core/gtest
+	url = https://github.com/google/googletest
+[submodule "core/gmock"]
+	path = core/gmock
+	url = https://github.com/google/googlemock

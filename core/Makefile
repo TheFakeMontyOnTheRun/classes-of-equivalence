@@ -1,5 +1,5 @@
 GTEST_DIR = gtest
-GMOCK_DIR = gmock/googlemock
+GMOCK_DIR = gmock
 
 CXXFLAGS = -Iinclude -I../common/include -O3 -g -c -std=c++0x -Wno-narrowing   \
 		-DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING -DMORE_OBJECTS \

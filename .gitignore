@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+*.gcda
+*.gcno
+unittests
+core/coverage
