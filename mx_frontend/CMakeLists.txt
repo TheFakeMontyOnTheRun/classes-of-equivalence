@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(derelict32)
+project(equivalence32)
 
 set(CMAKE_C_STANDARD 90)
 
@@ -19,7 +19,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=3 -DSDLSW -DCLI_BUILD -DSU
 
 find_package(SDL2 REQUIRED)
 
-add_executable(derelict32
+add_executable(equivalence32
         ../common/src/Crawler.c
         ../common/src/MainMenu.c
         ../common/src/HelpScreen.c
@@ -57,6 +57,6 @@ add_executable(derelict32
 
 include(FindPkgConfig)
 
-target_include_directories(derelict32 PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(derelict32 LINK_PUBLIC ${SDL2_LIBRARY} m)
+target_include_directories(equivalence32 PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(equivalence32 LINK_PUBLIC ${SDL2_LIBRARY} m)
 
