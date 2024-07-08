@@ -218,7 +218,9 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
-        newState != kHackingGame) {
+        newState != kHackingGame &&
+        newState != kBattleScreen &&
+        newState != kBattleResultScreen) {
         clearTextures();
         clearTileProperties();
     }

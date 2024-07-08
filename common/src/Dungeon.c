@@ -339,7 +339,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
             enteredThru = 0;
-            setPlayerDirection((enum EDirection)enteredThru);
+            setPlayerDirection((enum EDirection) enteredThru);
             initRoom(getPlayerRoom());
 
             thisMissionName = getRoomDescription();
@@ -368,7 +368,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 }
 
                 enable3DRendering = FALSE;
-                setPlayerDirection((enum EDirection)enteredThru);
+                setPlayerDirection((enum EDirection) enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
                 initRoom(room);
@@ -386,7 +386,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             return gameSnapshot;
         }
 
-	struct Room* playerRoom = getRoom(getPlayerRoom());
+        struct Room *playerRoom = getRoom(getPlayerRoom());
         head = playerRoom->itemsPresent->next;
 
         while (head != NULL) {
@@ -395,11 +395,11 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             head = head->next;
         }
 
-	int random = rand() % 100;
+        int random = rand() % 100;
 
-	if (random < playerRoom->chanceOfRandomBattle) {
-	    enterState(kHackingGame);
-	}
+        if (random < playerRoom->chanceOfRandomBattle) {
+            enterState(kBattleScreen);
+        }
     }
 
     return gameSnapshot;
