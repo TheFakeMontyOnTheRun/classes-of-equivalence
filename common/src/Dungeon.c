@@ -386,13 +386,20 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             return gameSnapshot;
         }
 
-        head = getRoom(getPlayerRoom())->itemsPresent->next;
+	struct Room* playerRoom = getRoom(getPlayerRoom());
+        head = playerRoom->itemsPresent->next;
 
         while (head != NULL) {
             struct Item *itemPtr = getItem(head->item);
             setItem(itemPtr->position.x, itemPtr->position.y, itemPtr->index);
             head = head->next;
         }
+
+	int random = rand() % 100;
+
+	if (random < playerRoom->chanceOfRandomBattle) {
+	    enterState(kHackingGame);
+	}
     }
 
     return gameSnapshot;

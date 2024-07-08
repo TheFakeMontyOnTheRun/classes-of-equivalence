@@ -51,6 +51,8 @@ enum EGameMenuState {
 #ifdef SUPPORTS_HACKING_MINIGAME
     kHackingGame,
 #endif
+    kBattleScreen,
+    kBattleResultScreen,
     kGoodVictoryEpilogue,
     kBadVictoryEpilogue,
     kGoodGameOverEpilogue,

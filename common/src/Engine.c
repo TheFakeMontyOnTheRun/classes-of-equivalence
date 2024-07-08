@@ -82,6 +82,8 @@ void enterState(enum EGameMenuState newState) {
             unloadStateCallback = Crawler_unloadStateCallback;
             break;
 #ifdef SUPPORTS_HACKING_MINIGAME
+        case kBattleScreen:
+        case kBattleResultScreen:
         case kHackingGame: {
             initStateCallback = HackingScreen_initStateCallback;
             repaintCallback = HackingScreen_repaintCallback;
