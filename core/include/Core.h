@@ -105,6 +105,19 @@ struct Room {
 /**
  *
  */
+struct Character {
+    const char *name;
+    uint8_t hp;
+    uint8_t energy;
+    uint8_t location;
+    enum EDirection direction;
+    uint8_t rank;
+    struct WorldPosition position;
+    uint8_t inParty: 1;
+};
+/**
+ *
+ */
 enum EGameStates {
     kNormalGameplay,
     kGoodVictory,
