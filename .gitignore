@@ -36,3 +36,6 @@ unittests
 core/coverage
 mx_frontend/cmake-build-debug
 mx_frontend/.idea
+mx_frontend/derelict.elf
+mx_frontend/derelict.gba
+mx_frontend/build/derelict.elf.map

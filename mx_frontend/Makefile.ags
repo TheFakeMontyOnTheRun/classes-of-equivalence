@@ -75,6 +75,8 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/Crawler.c \
                 		../../common/src/HelpScreen.c \
                 		../../common/src/CreditsScreen.c \
+                        ../../common/src/BattleScreen.c \
+                        ../../common/src/BattleResultScreen.c \
                 		../../common/src/GameMenu.c \
                 		../menu/src/Main.c \
                 		../../common/src/Engine.c \

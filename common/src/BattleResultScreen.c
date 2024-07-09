@@ -21,9 +21,6 @@
 #include "SoundSystem.h"
 #include "HackingMinigameRules.h"
 
-#ifdef PAGE_FLIP_ANIMATION
-int wasSmoothMovementPreviouslyEnabled;
-#endif
 
 const char *functionNames3[5] = {
         "???",
@@ -37,9 +34,6 @@ void BattleResultScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
-#ifdef PAGE_FLIP_ANIMATION
-    wasSmoothMovementPreviouslyEnabled = enableSmoothMovement;
-#endif
 
     initHackingMinigame();
 }
@@ -142,7 +136,4 @@ enum EGameMenuState BattleResultScreen_tickCallback(enum ECommand cmd, void* dat
 
 void BattleResultScreen_unloadStateCallback(enum EGameMenuState newState) {
     (void)newState;
-#ifdef PAGE_FLIP_ANIMATION
-    enableSmoothMovement = wasSmoothMovementPreviouslyEnabled;
-#endif
 }
