@@ -5,15 +5,15 @@
 
 #ifdef AGS
 #define PAGE_FLIP_TARGET 128
-#define XRES 130
+#define XRES 240
 #define YRES 160
-#define HALF_XRES 65
+#define HALF_XRES 120
 #define HALF_YRES 80
 #else
 #define PAGE_FLIP_TARGET 200
-#define XRES 216
+#define XRES 320
 #define YRES 200
-#define HALF_XRES 100
+#define HALF_XRES 160
 #define HALF_YRES 100
 #endif
 /*

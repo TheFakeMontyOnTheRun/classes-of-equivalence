@@ -888,12 +888,5 @@ void render(const long ms) {
         dirtyLineY0 = 0;
         dirtyLineY1 = YRES_FRAMEBUFFER;
 
-        if (needsToRedrawHUD) {
-            needsToRedrawHUD = FALSE;
-            fillRect(XRES, 0, XRES_FRAMEBUFFER - XRES, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), FALSE);
-            redrawHUD();
-        }
-
-        updateMap();
     }
 }
