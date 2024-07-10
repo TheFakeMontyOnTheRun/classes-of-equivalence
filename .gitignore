@@ -39,3 +39,5 @@ mx_frontend/.idea
 mx_frontend/derelict.elf
 mx_frontend/derelict.gba
 mx_frontend/build/derelict.elf.map
+tools/wobj-compiler/target
+packer
