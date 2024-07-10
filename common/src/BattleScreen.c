@@ -22,68 +22,46 @@
 #include "HackingMinigameRules.h"
 
 
-const char *functionNames2[5] = {
-        "???",
-        "writeB",
-        "snprintf",
-        "hackLogin",
-        "LoadDBReg"
-};
+extern struct Character party[4];
+
+int currentCharacter;
+#define kDummyBattleOptionsCount  4
+
+const char *BattleScreen_options[kDummyBattleOptionsCount] = {
+        "Attack", "Defend", "Special", "Run"};
 
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     (void)tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
-
-    initHackingMinigame();
+    currentCharacter = 0;
 }
 
 void BattleScreen_repaintCallback(void) {
-    uint8_t pin;
-    uint8_t holdingDisk;
 
     if (firstFrameOnCurrentState) {
         clearScreen();
         needsToRedrawVisibleMeshes = 0;
-        drawTextAt(1, 1, "Stack trace:", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 0), 11, " CPU0 ", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 1), 11, " CPU1 ", getPaletteEntry(0xFF999999));
-        drawTextAt((12 * 2), 11, " CPU2 ", getPaletteEntry(0xFF999999));
-    }
 
-    drawTextAt((12 * cursorPosition), 11, ">", getPaletteEntry(0xFF999999));
-    drawTextAt((12 * cursorPosition) + 5, 11, "<", getPaletteEntry(0xFF999999));
-
-    for (pin = 0; pin < 3; ++pin) {
-        uint8_t disk;
-
-        if (pin != 0) {
-            uint8_t pinX = (10 * (pin) ) * 8;
-        }
-
-        for (disk = 0; disk < 5; ++disk) {
-
-            uint8_t diskIndex = getPositionForPin(pin, disk);
-
-            const char *funcName = (disk >= getDisksForPin(pin)) ? NULL
-                                                                 : functionNames2[diskIndex];
-
-            if (funcName) {
-                drawTextAt(
-                        10 * (pin) + (pin == 0 ? 0 : 1), 4 + (4 - disk),
-                        funcName, getPaletteEntry(0xFF999999));
-            }
+        for (int c = 1; c < YRES_FRAMEBUFFER; c = c * 2) {
+            drawLine(0, c + YRES_FRAMEBUFFER / 2, XRES_FRAMEBUFFER, c + YRES_FRAMEBUFFER / 2, getPaletteEntry(0xFFFF0000));
         }
     }
 
-    drawTextAt(1, 2, "Pointer:", getPaletteEntry(0xFF999999));
+    drawTextWindow(12, 1, 8, 3, "Robot", "HP: 36");
 
-    holdingDisk = getHoldingDisk();
+    drawWindowWithOptions(
+            0,
+            (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+            9 + 2,
+            kDummyBattleOptionsCount + 2,
+            "Action",
+            BattleScreen_options,
+            kDummyBattleOptionsCount,
+            cursorPosition);
 
-    if (holdingDisk != 0xFF) {
-        drawTextAt(19, 2, functionNames2[holdingDisk], getPaletteEntry(0xFF999999));
-    } else {
-        drawTextAt(19, 2, "NULL", getPaletteEntry(0xFF999999));
+    if (party[currentCharacter].inParty) {
+        drawTextWindow(0, (YRES_FRAMEBUFFER / 8) - 6, 8, 5, party[currentCharacter].name, "HP: 50\nEN: 20" );
     }
 }
 
@@ -97,7 +75,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
     }
 
     switch (cmd) {
-        case kCommandLeft:
+        case kCommandUp:
             if (cursorPosition > 0) {
                 cursorPosition--;
                 firstFrameOnCurrentState = 1;
@@ -106,8 +84,8 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
             turnTarget = turnStep;
 #endif
             break;
-        case kCommandRight:
-            if (cursorPosition < 2) {
+        case kCommandDown:
+            if (cursorPosition < kDummyBattleOptionsCount) {
                 cursorPosition++;
                 firstFrameOnCurrentState = 1;
             }
@@ -116,15 +94,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
 #endif
             break;
         case kCommandBack:
-        case kCommandDown:
             return kBackToGame;
         case kCommandFire1:
-            if (holdingDisk == 0xFF) {
-                pickDisk(cursorPosition);
-            } else {
-                dropDisk(cursorPosition);
-            }
             firstFrameOnCurrentState = 1;
+            currentCharacter++;
+
+            if (currentCharacter == 5) {
+                return kBackToGame;
+            }
             break;
 
         default:

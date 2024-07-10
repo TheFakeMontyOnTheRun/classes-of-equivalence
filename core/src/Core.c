@@ -799,7 +799,16 @@ void initCore(void) {
     party[0].direction = kNorth;
     party[0].position.x = 15;
     party[0].position.y = 15;
-
+    party[0].name = "Lako";
+    party[0].inParty = 1;
+    party[1].name = "Hyme";
+    party[1].inParty = 1;
+    party[2].name = "Omar";
+    party[2].inParty = 1;
+    party[3].name = "Juka";
+    party[3].inParty = 1;
+    party[4].name = "Razu";
+    party[4].inParty = 1;
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }
