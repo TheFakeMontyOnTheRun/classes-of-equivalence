@@ -51,37 +51,34 @@ drawWindowWithOptions(const int x,
         int isCursor = (selectedOption == c);
 
         if (isCursor) {
-            fillRect((x) * 8,
+            fillRect((x) * 8 + 1,
                      (y + 2 + c) * 8,
-                     dx * 8,
+                     dx * 8 - 1,
                      8,
-                     getPaletteEntry(0xFF000000),
+                     getPaletteEntry(0xFFFFFFFF),
                      FALSE);
         }
 
         drawTextAt(x + 1,
                    y + 2 + c,
                    &options[c][0],
-                   isCursor ? getPaletteEntry(0xFFFFFFFF) : getPaletteEntry(0xFF000000));
+                   isCursor ? getPaletteEntry(0xFF000000) : getPaletteEntry(0xFFFFFFFF));
     }
 }
 
 void
 drawWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title) {
 
-    /* shadow */
-    fillRect((x + 1) * 8, (y + 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-
     /* background */
-    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
+    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), FALSE);
     /* frame */
-    drawRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
+    drawRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF));
     /* title tab */
-    fillRect((x) * 8, (y) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
+    fillRect((x) * 8, (y) * 8, dx * 8, 8, getPaletteEntry(0xFFFFFFFF), FALSE);
 
     /* title text */
     if (title != NULL) {
-        drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
+        drawTextAt(x + 1, y, title, getPaletteEntry(0xFF000000));
     }
 }
 
@@ -125,7 +122,7 @@ void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAt(x + 1, y + 2, content, getPaletteEntry(0xFF000000));
+    drawTextAt(x + 1, y + 2, content, getPaletteEntry(0xFFFFFFFF));
 }
 
 void
