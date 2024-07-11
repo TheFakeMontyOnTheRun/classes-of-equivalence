@@ -35,3 +35,4 @@
 unittests
 core/coverage
 mx_frontend/cmake-build-debug
+level-editor
