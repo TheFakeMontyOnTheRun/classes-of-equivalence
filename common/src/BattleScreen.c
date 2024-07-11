@@ -22,7 +22,7 @@
 
 
 extern struct Character party[4];
-
+struct Bitmap *foe;
 int currentCharacter;
 #define kDummyBattleOptionsCount  4
 
@@ -34,6 +34,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
+    foe = loadBitmap("helmet.img");
 }
 
 void BattleScreen_repaintCallback(void) {
@@ -48,6 +49,8 @@ void BattleScreen_repaintCallback(void) {
     }
 
     drawTextWindow(12, 1, 8, 3, "Robot", "HP: 36");
+
+    drawBitmap(0, 0, foe, 1);
 
     drawWindowWithOptions(
             0,
