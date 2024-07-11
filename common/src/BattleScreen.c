@@ -19,7 +19,6 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "SoundSystem.h"
-#include "HackingMinigameRules.h"
 
 
 extern struct Character party[4];
@@ -67,12 +66,7 @@ void BattleScreen_repaintCallback(void) {
 
 enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
 
-    uint8_t holdingDisk = getHoldingDisk();
     (void)data;
-
-    if (isHackingMinigameCompleted()) {
-        grantAccessToSafe();
-    }
 
     switch (cmd) {
         case kCommandUp:
