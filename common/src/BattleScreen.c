@@ -122,17 +122,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
 
     if (currentBattleState == kAttackPhase) {
-        animationTimer--;
-        if (animationTimer < 0) {
-            currentCharacter++;
-            animationTimer = 10;
 
+        if (animationTimer == 10) {
             if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) && party[currentCharacter].inParty && party[currentCharacter].hp > 0 ) {
                 if (battleDamages[currentCharacter] < 0) {
-                    if ((-battleDamages[currentCharacter]) >= party[currentCharacter + 1].hp) {
-                        party[currentCharacter + 1].hp = 0;
+                    if ((-battleDamages[currentCharacter]) >= party[currentCharacter].hp) {
+                        party[currentCharacter].hp = 0;
                     } else {
-                        party[currentCharacter + 1].hp += battleDamages[currentCharacter];
+                        party[currentCharacter].hp += battleDamages[currentCharacter];
                     }
 
                 } else {
@@ -145,8 +142,15 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
                     }
                 }
             }
+        }
 
-            if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY - 1)) {
+        animationTimer--;
+        if (animationTimer < 0) {
+            animationTimer = 10;
+
+            currentCharacter++;
+
+            if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
                 currentCharacter = 0;
                 currentBattleState = kPlayerSelectingMoves;
             }
