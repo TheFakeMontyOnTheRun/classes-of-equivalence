@@ -283,11 +283,6 @@ extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
-#ifdef TILED_BITMAPS
-extern struct Bitmap *mapTopLevel[8];
-#else
-extern struct Bitmap *mapTopLevel;
-#endif
 extern int dirtyLineY0;
 extern int dirtyLineY1;
 extern enum ECommand mTurnBuffer;

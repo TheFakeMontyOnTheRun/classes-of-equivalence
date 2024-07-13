@@ -25,10 +25,6 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
-void drawMenuBackground(void) {
-    fillRect(0, 0, (XRES_FRAMEBUFFER), (YRES_FRAMEBUFFER), getPaletteEntry(0xFF6cb1a3), FALSE);
-}
-
 void
 drawWindowWithOptions(const int x,
                       const int y,
@@ -82,121 +78,11 @@ drawWindow(const int x, const int y, const unsigned int dx, const unsigned int d
     }
 }
 
-int
-drawAppearingWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
-                    long remainingTime) {
-
-    if (remainingTime > 256) {
-        return 0;
-    }
-
-    if (remainingTime > 0) {
-
-        int middleX = x + (dx / 2);
-        int middleY = y + (dy / 2);
-
-        int invertedProgression = ((256 - (remainingTime)) / 32) * 32;
-        int lerpPositionX = lerpInt(middleX, x, invertedProgression, 256);
-        int lerpPositionWidth = lerpInt(0, dx, invertedProgression, 256);
-        int lerpPositionY = lerpInt(middleY, y, invertedProgression, 256);
-        int lerpPositionHeight = lerpInt(0, dy, invertedProgression, 256);
-
-        drawRect(lerpPositionX * 8,
-                 lerpPositionY * 8,
-                 lerpPositionWidth * 8,
-                 lerpPositionHeight * 8, getPaletteEntry(0xFF000000));
-
-        return 0;
-    }
-
-    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
-    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
-
-    return 1;
-}
-
 void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
     drawTextAt(x + 1, y + 2, content, getPaletteEntry(0xFFFFFFFF));
-}
-
-void
-drawImageWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
-                struct Bitmap *content) {
-    fillRect((x) * 8, (y) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000), TRUE);
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFFFFFFFF), FALSE);
-    drawBitmap((x - 1) * 8, (y) * 8, content, TRUE);
-    drawRect((x - 1) * 8, (y - 1) * 8, dx * 8, dy * 8, getPaletteEntry(0xFF000000));
-    fillRect((x - 1) * 8, (y - 1) * 8, dx * 8, 8, getPaletteEntry(0xFF000000), FALSE);
-    drawTextAt(x + 1, y, title, getPaletteEntry(0xFFFFFFFF));
-}
-
-void updateMap(void) {
-    int x, z;
-    struct WorldPosition visPos = *getPlayerPosition();
-
-    fillRect(XRES + 8 + (10 * 4) + (4 * -10), 2 + 8 + (8 * 4) + (4 * -8), 4 * 20, 4 * 16,
-             getPaletteEntry(0xFF000066), FALSE);
-
-    for (z = -8; z < 8; ++z) {
-        for (x = -10; x < 10; ++x) {
-            if (isPositionAllowed(visPos.x + x, visPos.y + z)) {
-                fillRect(XRES + 8 + (10 * 4) + (4 * x), 2 + 8 + (8 * 4) + (4 * z), 4, 4, getPaletteEntry(0xFF000099),
-                         FALSE);
-            }
-        }
-    }
-
-    fillRect(XRES + 8 + (10 * 4), 2 + 8 + (8 * 4), 4, 4, getPaletteEntry(0xFF0000FF), FALSE);
-}
-
-void redrawHUD(void) {
-    int line = 0;
-    struct ObjectNode *head;
-    int c;
-    struct Item *itemPtr;
-
-    drawTextAt((XRES / 8), 0, thisMissionName, getPaletteEntry(0xFFFFFFFF));
-
-#ifndef TILED_BITMAPS
-    if (mapTopLevel != NULL) {
-        drawBitmap(XRES, 72, mapTopLevel, 0);
-    }
-#else
-    if (mapTopLevel[0] != NULL) {
-        for (c = 0; c < 8; ++c) {
-            drawBitmap(XRES + ((c & 3) * 32), 72 + (c >> 2) * 32, mapTopLevel[c], 1);
-        }
-    }
-#endif
-
-    /* draw current item on the corner of the screen */
-    head = getPlayerItems();
-
-    while (head != NULL) {
-        itemPtr = getItem(head->item);
-        if (itemPtr != NULL) {
-            if (line == currentSelectedItem) {
-                char textBuffer[255];
-                sprintf(&textBuffer[0], "%s", itemPtr->name);
-                textBuffer[14] = 0;
-
-	     /*
-	        drawBitmapRaw(XRES + 8, 199 - 32 - 16 - 16, 32, 32,
-		itemSprites[itemPtr->index]->rotations[0], 1);
-	     */
-                drawTextAtWithMarginWithFiltering(((XRES) / 8), 22, XRES_FRAMEBUFFER, itemPtr->name,
-                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), '\n');
-            }
-            ++line;
-        }
-        head = head->next;
-    }
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {

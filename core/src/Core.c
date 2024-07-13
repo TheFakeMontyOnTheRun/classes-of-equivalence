@@ -72,7 +72,7 @@ enum EGameStates gameStatus;
  */
 ErrorHandlerCallback errorHandlerCallback = NULL;
 
-struct Character party[5];
+struct Character party[TOTAL_CHARACTERS_IN_PARTY];
 
 void writeToLog(const char *errorMsg) {
 #ifdef HAS_STDIO
@@ -801,14 +801,20 @@ void initCore(void) {
     party[0].position.y = 15;
     party[0].name = "Lako";
     party[0].inParty = 1;
+    party[0].hp = 20;
+    party[0].energy = 10;
     party[1].name = "Hyme";
     party[1].inParty = 1;
+    party[1].hp = 20;
+    party[1].energy = 10;
     party[2].name = "Omar";
     party[2].inParty = 1;
+    party[2].hp = 20;
+    party[2].energy = 10;
     party[3].name = "Juka";
     party[3].inParty = 1;
-    party[4].name = "Razu";
-    party[4].inParty = 1;
+    party[3].hp = 20;
+    party[3].energy = 10;
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }

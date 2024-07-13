@@ -65,7 +65,6 @@ long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
 const int distanceForPenumbra = 16;
-struct Bitmap *mapTopLevel = NULL;
 struct MapWithCharKey tileProperties;
 struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;

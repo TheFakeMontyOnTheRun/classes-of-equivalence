@@ -20,6 +20,11 @@ Created by Daniel Monteiro on 2019-07-26.
  * @see itemCount for the number of created items
  */
 #define TOTAL_ITEMS 39
+/**
+ * Defines the maximum characters allowed in a party.
+ * Please note that the game might only allow a smaller number of active members in the party
+ * */
+#define TOTAL_CHARACTERS_IN_PARTY 4
 
 /* just a forward declaration, don't bother */
 struct Item;
@@ -460,7 +465,17 @@ extern uint8_t itemsCount;
  */
 extern LogDelegate defaultLogger;
 /**
+ * Nodes to hold objects
  *
+ * @see TOTAL_ITEMS
+ * @see ObjectNode
+ * @see Item
  */
 extern struct ObjectNode objectNodes[TOTAL_ITEMS];
+/**
+ * Effective party of characters in the adventure
+ *
+ * @see TOTAL_CHARACTERS_IN_PARTY
+ * */
+extern struct Character party[TOTAL_CHARACTERS_IN_PARTY];
 #endif
