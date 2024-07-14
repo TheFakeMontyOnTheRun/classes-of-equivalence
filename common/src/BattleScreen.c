@@ -60,7 +60,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     currentCharacter = 0;
     foe = loadBitmap("cop.img");
 
-    aliveMonsters = monstersPresent = 1 + (rand() % TOTAL_MONSTER_COUNT);
+    aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
 
     for (int c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
