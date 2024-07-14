@@ -169,7 +169,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
 
     if (currentBattleState == kAttackPhase) {
 
-        if (animationTimer == 10) {
+        if (animationTimer == 5) {
 
             /* Monsters */
             if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
