@@ -3,7 +3,6 @@
 #else
 #include <stdint.h>
 #endif
-#include <string.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -38,10 +37,15 @@ struct Bitmap *foe;
 uint8_t currentCharacter;
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 4
+/* Life points of the monsters */
 uint8_t monsterHP[TOTAL_MONSTER_COUNT];
+/* Types of the monsters. For now, this has no meaning */
 uint8_t monsterType[TOTAL_MONSTER_COUNT];
+/* Action taken by a given participant*/
 uint8_t battleActions[TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY];
+/* Damage -caused by- a given participant */
 uint8_t battleDamages[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
+/* The target of a given participant */
 uint8_t battleTargets[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
 enum EBattleStates currentBattleState;
@@ -54,7 +58,7 @@ const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
 
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
-    (void)tag;
+    (void) tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
@@ -83,7 +87,10 @@ void BattleScreen_repaintCallback(void) {
     clearScreen();
 
     if (currentBattleState == kAttackPhase) {
-        if (animationTimer == 10) { /* only a single blink */
+
+        /* only a single blink */
+        if (animationTimer == 10) {
+
             int damage = battleDamages[currentCharacter];
 
             if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
@@ -94,11 +101,12 @@ void BattleScreen_repaintCallback(void) {
                 if (!party[currentCharacter].inParty || party[currentCharacter].hp == 0) {
                     goto done_flashing;
                 }
+                damage = -damage;
             }
 
-            if ( damage > 0 ) {
+            if (damage > 0) {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF0000FF), 0);
-            } else if ( damage < 0 ) {
+            } else if (damage < 0) {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
             } else {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), 0);
@@ -127,7 +135,7 @@ void BattleScreen_repaintCallback(void) {
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
          monster HPs from bottom to top.
          */
-        sprintf(&buffer[ c & 1 ? 0 : 1 ][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
+        sprintf(&buffer[c & 1 ? 0 : 1][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
     }
 
     /*
@@ -135,12 +143,12 @@ void BattleScreen_repaintCallback(void) {
      so I alternate once more, to ensure the desired result is in buffer[0]
      */
     if (((monstersPresent - 1) & 1) == 0) {
-        sprintf(&buffer[ c & 1 ? 0 : 1][0], "%s", &buffer[c & 1 ? 1 : 0][0]);
+        sprintf(&buffer[c & 1 ? 0 : 1][0], "%s", &buffer[c & 1 ? 1 : 0][0]);
     }
 
     drawTextWindow((XRES_FRAMEBUFFER / 8) - 9, 1, 6, 2 + monstersPresent, "Robot", &buffer[0][0]);
 
-    drawBitmap(13 * 8, - 16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
+    drawBitmap(13 * 8, -16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
 
 
     if (currentBattleState == kPlayerSelectingMoves) {
@@ -158,45 +166,71 @@ void BattleScreen_repaintCallback(void) {
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
         if (party[c].inParty) {
             sprintf(&buffer[0][0], "H %d\nE %d", party[c].hp, party[c].energy);
-            drawTextWindow( c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0] );
+            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
         }
     }
 }
 
-enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
+enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
-    (void)data;
+    (void) data;
 
     if (currentBattleState == kAttackPhase) {
 
         if (animationTimer == 5) {
 
-            /* Monsters */
-            if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
-                int monsterIndex = currentCharacter - TOTAL_CHARACTERS_IN_PARTY;
-                if (monsterHP[monsterIndex] > 0 ) {
-                    if (battleDamages[monsterIndex] >= monsterHP[monsterIndex] ) {
-                        monsterHP[monsterIndex] = 0;
-                        aliveMonsters--;
-                    } else {
-                        monsterHP[monsterIndex] -= battleDamages[monsterIndex];
-                    }
-                } else {
-                    /* Since the monster is dead or not present, this will advance the animation faster */
-                    animationTimer = 0;
-                }
+            int target = battleTargets[currentCharacter];
+            int attackerIsAlive;
 
-            }  else {
-                if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) && party[currentCharacter].inParty && party[currentCharacter].hp > 0 ) {
-                    if ((battleDamages[currentCharacter]) >= party[currentCharacter].hp) {
-                        party[currentCharacter].hp = 0;
-                        aliveHeroes--;
+            if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
+                attackerIsAlive = monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0;
+            } else {
+                attackerIsAlive = party[currentCharacter].hp > 0;
+            }
+
+            /* The target must still be alive to perform his attack */
+            if (attackerIsAlive) {
+                /* Monsters */
+                if (target >= TOTAL_CHARACTERS_IN_PARTY) {
+                    int monsterIndex = target - TOTAL_CHARACTERS_IN_PARTY;
+
+                    if (monsterHP[monsterIndex] > 0) {
+
+                        if (battleActions[currentCharacter] == kAttack) {
+                            if (battleDamages[currentCharacter] >= monsterHP[monsterIndex]) {
+                                monsterHP[monsterIndex] = 0;
+                                aliveMonsters--;
+                            } else {
+                                monsterHP[monsterIndex] -= battleDamages[currentCharacter];
+                            }
+                        }
+
+                        /* Other actions will go here, eventually */
                     } else {
-                        party[currentCharacter].hp -= battleDamages[currentCharacter];
+                        /* Since the monster is dead or not present, this will advance the animation faster */
+                        animationTimer = 0;
                     }
+
                 } else {
-                    /* Since the hero is dead or not present, this will advance the animation faster */
-                    animationTimer = 0;
+
+                    if (party[target].inParty && party[target].hp > 0) {
+
+                        if (battleActions[currentCharacter] == kAttack) {
+                            if ((battleDamages[currentCharacter]) >= party[target].hp) {
+                                party[target].hp = 0;
+                                aliveHeroes--;
+                            } else {
+                                party[target].hp -= battleDamages[currentCharacter];
+                            }
+                        } else if (battleActions[currentCharacter] == kSpecial) {
+                            party[target].hp += 2;
+                        }
+
+                        /* Other actions will go here, eventually */
+                    } else {
+                        /* Since the hero is dead or not present, this will advance the animation faster */
+                        animationTimer = 0;
+                    }
                 }
             }
         }
@@ -221,7 +255,6 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
             }
         }
     }
-
 
     if (currentBattleState == kPlayerSelectingMoves) {
 
@@ -254,7 +287,8 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
                 currentCharacter++;
 
                 /* skipping dead or absent characters */
-                if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY ) && (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
+                if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
+                    (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
                     currentCharacter++;
                 }
 
@@ -269,14 +303,23 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
 
 
                     for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
-                        battleTargets[c] = (rand() % aliveHeroes);
-                    }
+                        if (monsterHP[c] > 0) {
+                            int hero;
 
+                            do {
+                                hero = rand() % TOTAL_CHARACTERS_IN_PARTY;
+                            } while (party[hero].hp == 0 || !party[hero].inParty);
+
+                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = hero;
+                            battleActions[c + TOTAL_CHARACTERS_IN_PARTY] = kAttack;
+                        }
+                    }
 
                     for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
-                        battleTargets[c] = (rand() % aliveMonsters);
+                        if (battleActions[c] == kAttack) {
+                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % aliveMonsters);
+                        }
                     }
-
 
                     animationTimer = 10;
                 }
@@ -291,5 +334,5 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void* data) {
 }
 
 void BattleScreen_unloadStateCallback(enum EGameMenuState newState) {
-    (void)newState;
+    (void) newState;
 }
