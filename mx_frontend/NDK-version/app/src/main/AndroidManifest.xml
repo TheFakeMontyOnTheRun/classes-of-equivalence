@@ -4,7 +4,7 @@
 
     <application
         android:icon="@drawable/icon"
-        android:name="pt.b13h.spacetrashmanblues.DerelictApplication"
+        android:name="pt.b13h.spacetrashmanblues.SubMareImperiumApplication"
         android:label="@string/app_name"
         android:isGame="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

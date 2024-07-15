@@ -41,3 +41,4 @@ mx_frontend/derelict.gba
 mx_frontend/build/derelict.elf.map
 tools/wobj-compiler/target
 packer
+mx_frontend/NDK-version/.idea

@@ -7,7 +7,7 @@ import android.content.res.Configuration
 import android.media.AudioManager
 import android.view.InputDevice
 
-class DerelictApplication  : Application() {
+class SubMareImperiumApplication  : Application() {
 
     fun mayEnableSound(): Boolean {
         val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
