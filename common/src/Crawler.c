@@ -216,12 +216,19 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 
     if (currentPresentationState == kCheckingForRandomBattle) {
         struct Room* playerNewRoom = getRoom(getPlayerRoom());
-	int random = rand() % 10;
+	    int random = rand() % 10;
       	currentPresentationState = kWaitingForInput;
-	
+        texturesUsed = 0;
+        clearTextures();
+        nativeTextures[0] = makeTextureFrom("arch.img");
+        nativeTextures[1] = makeTextureFrom("floor.img");
+        texturesUsed = 2;
+
         if (random < playerNewRoom->chanceOfRandomBattle) {
-  	    return kBattleScreen;
-        }      
+  	        return kBattleScreen;
+        } else {
+            initRoom(getPlayerRoom());
+        }
     }
 
     return kResumeCurrentState;

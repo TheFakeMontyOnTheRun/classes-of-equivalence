@@ -20,6 +20,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "SoundSystem.h"
+#include "Dungeon.h"
 
 enum EBattleAction {
     kAttack,
@@ -251,6 +252,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
 
                 if (aliveMonsters == 0) {
+                    initRoom(getPlayerRoom());
                     return kBackToGame;
                 }
             }

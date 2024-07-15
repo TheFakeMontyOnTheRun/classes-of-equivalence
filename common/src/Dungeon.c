@@ -371,7 +371,6 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 setPlayerDirection((enum EDirection) enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
-                initRoom(room);
                 thisMissionName = getRoomDescription();
                 thisMissionNameLen = strlen(thisMissionName);
 
