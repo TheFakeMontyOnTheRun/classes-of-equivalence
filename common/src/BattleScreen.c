@@ -172,7 +172,7 @@ void BattleScreen_repaintCallback(void) {
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
         if (party[c].inParty) {
             sprintf(&buffer[0][0], "H %d\nE %d", party[c].hp, party[c].energy);
-            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0][0]);
         }
     }
 }
