@@ -58,6 +58,7 @@ const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
 
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
+    int c, d;
     (void) tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
@@ -66,13 +67,13 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 
     aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
 
-    for (int c = 0; c < aliveMonsters; ++c) {
+    for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
         monsterType[c] = rand() % 15;
     }
 
     aliveHeroes = 0;
-    for (int d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
+    for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
         if (party[d].inParty && party[d].hp > 0) {
             ++aliveHeroes;
         }
