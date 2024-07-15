@@ -119,7 +119,7 @@ void BattleScreen_repaintCallback(void) {
 
     needsToRedrawVisibleMeshes = 0;
 
-    for (c = 1; c < YRES_FRAMEBUFFER; c = c * 2) {
+    for (c = 1; c < (YRES_FRAMEBUFFER / 2); c = c * 2) {
         drawLine(0, c + YRES_FRAMEBUFFER / 2, XRES_FRAMEBUFFER, c + YRES_FRAMEBUFFER / 2, getPaletteEntry(0xFFFF0000));
     }
 
