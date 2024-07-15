@@ -96,11 +96,15 @@ void BattleScreen_repaintCallback(void) {
             int damage = battleDamages[currentCharacter];
 
             if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
-                if (monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] == 0) {
+                if (monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] == 0 || /* Attacking monster is dead */
+                    party[battleTargets[currentCharacter]].hp == 0 ) { /* or its target is dead */
+                    animationTimer = 0;
                     goto done_flashing;
                 }
             } else {
-                if (!party[currentCharacter].inParty || party[currentCharacter].hp == 0) {
+                if (!party[currentCharacter].inParty || /* attacking hero is dead */
+                    monsterHP[battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY] == 0) { /* or its target is dead */
+                    animationTimer = 0;
                     goto done_flashing;
                 }
                 damage = -damage;
