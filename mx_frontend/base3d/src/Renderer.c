@@ -232,7 +232,7 @@ void renderRoomTransition(void) {
         zCameraOffset -= Div(intToFix(1), intToFix(4));
 
         if (zCameraOffset == 0) {
-            currentPresentationState = kWaitingForInput;
+            currentPresentationState = kCheckingForRandomBattle;
             needsToRedrawHUD = TRUE;
         }
     }

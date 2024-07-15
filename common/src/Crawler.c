@@ -212,15 +212,28 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
         return kResumeCurrentState;
     }
 
+
+
+    if (currentPresentationState == kCheckingForRandomBattle) {
+        struct Room* playerNewRoom = getRoom(getPlayerRoom());
+	int random = rand() % 10;
+      	currentPresentationState = kWaitingForInput;
+	
+        if (random < playerNewRoom->chanceOfRandomBattle) {
+  	    return kBattleScreen;
+        }      
+    }
+
     return kResumeCurrentState;
 }
 
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
-        newState != kHackingGame &&
-        newState != kBattleScreen &&
-        newState != kBattleResultScreen) {
+	newState != kHackingGame &&
+	newState != kBattleScreen &&
+	newState != kBattleResultScreen) {
+
         clearTextures();
         clearTileProperties();
     }

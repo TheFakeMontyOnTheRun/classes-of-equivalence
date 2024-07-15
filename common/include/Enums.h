@@ -63,7 +63,8 @@ enum EGameMenuState {
 
 enum EPresentationState {
     kWaitingForInput,
-    kRoomTransitioning
+    kRoomTransitioning,
+    kCheckingForRandomBattle
 };
 
 enum ESoundDriver {

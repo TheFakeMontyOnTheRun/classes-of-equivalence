@@ -394,12 +394,6 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             setItem(itemPtr->position.x, itemPtr->position.y, itemPtr->index);
             head = head->next;
         }
-
-        int random = rand() % 100;
-
-        if (random < playerRoom->chanceOfRandomBattle) {
-            enterState(kBattleScreen);
-        }
     }
 
     return gameSnapshot;
