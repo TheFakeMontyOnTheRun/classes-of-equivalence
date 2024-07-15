@@ -47,12 +47,12 @@
 		F1293B212B41C8CE0094E02B /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B182B41C8CE0094E02B /* GameWindow.m */; };
 		F1293B222B41C8CE0094E02B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B192B41C8CE0094E02B /* main.m */; };
 		F1293B232B41C8CE0094E02B /* MyOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B1B2B41C8CE0094E02B /* MyOpenGLView.m */; };
-		F1293B242B41C8CE0094E02B /* Derelict128-OSX-info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1293B1C2B41C8CE0094E02B /* Derelict128-OSX-info.plist */; };
+		F1293B242B41C8CE0094E02B /* equivalence128-OSX-info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1293B1C2B41C8CE0094E02B /* equivalence128-OSX-info.plist */; };
 		F1293B382B41C9050094E02B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B272B41C9050094E02B /* AppDelegate.m */; };
 		F1293B392B41C9050094E02B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1293B282B41C9050094E02B /* Default-568h@2x.png */; };
 		F1293B3A2B41C9050094E02B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F1293B292B41C9050094E02B /* Default.png */; };
 		F1293B3B2B41C9050094E02B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1293B2A2B41C9050094E02B /* Default@2x.png */; };
-		F1293B3C2B41C9050094E02B /* Derelict128-iOS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1293B2B2B41C9050094E02B /* Derelict128-iOS-Info.plist */; };
+		F1293B3C2B41C9050094E02B /* equivalence128-iOS-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1293B2B2B41C9050094E02B /* equivalence128-iOS-Info.plist */; };
 		F1293B3D2B41C9050094E02B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1293B2C2B41C9050094E02B /* InfoPlist.strings */; };
 		F1293B3E2B41C9050094E02B /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1293B2E2B41C9050094E02B /* ViewController_iPad.xib */; };
 		F1293B3F2B41C9050094E02B /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1293B302B41C9050094E02B /* ViewController_iPhone.xib */; };
@@ -106,7 +106,7 @@
 
 /* Begin PBXFileReference section */
 		F109CCA72B40E8C200832AEF /* NullMusic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NullMusic.c; sourceTree = "<group>"; };
-		F1293ABD2B41C63D0094E02B /* Derelict128 OSX (GL 2.1).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Derelict128 OSX (GL 2.1).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1293ABD2B41C63D0094E02B /* equivalence128 OSX (GL 2.1).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "equivalence128 OSX (GL 2.1).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1293AEB2B41C7400094E02B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		F1293AED2B41C7480094E02B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework; sourceTree = DEVELOPER_DIR; };
 		F1293B0F2B41C8CE0094E02B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -119,13 +119,13 @@
 		F1293B192B41C8CE0094E02B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F1293B1A2B41C8CE0094E02B /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
 		F1293B1B2B41C8CE0094E02B /* MyOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOpenGLView.m; sourceTree = "<group>"; };
-		F1293B1C2B41C8CE0094E02B /* Derelict128-OSX-info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Derelict128-OSX-info.plist"; sourceTree = "<group>"; };
+		F1293B1C2B41C8CE0094E02B /* equivalence128-OSX-info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "equivalence128-OSX-info.plist"; sourceTree = "<group>"; };
 		F1293B262B41C9050094E02B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F1293B272B41C9050094E02B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F1293B282B41C9050094E02B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F1293B292B41C9050094E02B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F1293B2A2B41C9050094E02B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		F1293B2B2B41C9050094E02B /* Derelict128-iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Derelict128-iOS-Info.plist"; sourceTree = "<group>"; };
+		F1293B2B2B41C9050094E02B /* equivalence128-iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "equivalence128-iOS-Info.plist"; sourceTree = "<group>"; };
 		F1293B2D2B41C9050094E02B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1293B2F2B41C9050094E02B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		F1293B312B41C9050094E02B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 		F17FD54A2B8A23E7002C0D45 /* Matrices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrices.h; sourceTree = "<group>"; };
 		F17FD54B2B8A2462002C0D45 /* Matrices.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Matrices.c; sourceTree = "<group>"; };
 		F17FD54E2B8A26C3002C0D45 /* title_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_art.png; path = ../../art/title_art.png; sourceTree = "<group>"; };
-		F1A2C9D52B3EF09700F2E1CA /* Derelict128.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict128.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1A2C9D52B3EF09700F2E1CA /* equivalence128.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = equivalence128.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A2C9D82B3EF09700F2E1CA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F1A2C9DA2B3EF09700F2E1CA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1A2C9DC2B3EF09700F2E1CA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -233,7 +233,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F1293B0E2B41C8CE0094E02B /* Sub Mare Imperium Derelict (GL 2.1) */ = {
+		F1293B0E2B41C8CE0094E02B /* Sub Mare Imperium Classes of Equivalence (GL 2.1) */ = {
 			isa = PBXGroup;
 			children = (
 				F1293B0F2B41C8CE0094E02B /* AppDelegate.h */,
@@ -246,12 +246,13 @@
 				F1293B192B41C8CE0094E02B /* main.m */,
 				F1293B1A2B41C8CE0094E02B /* MyOpenGLView.h */,
 				F1293B1B2B41C8CE0094E02B /* MyOpenGLView.m */,
-				F1293B1C2B41C8CE0094E02B /* Derelict128-OSX-info.plist */,
+				F1293B1C2B41C8CE0094E02B /* equivalence128-OSX-info.plist */,
 			);
+			name = "Sub Mare Imperium Classes of Equivalence (GL 2.1)";
 			path = "Sub Mare Imperium Derelict (GL 2.1)";
 			sourceTree = "<group>";
 		};
-		F1293B252B41C9050094E02B /* Sub Mare Imperium Derelict (GL ES 2) */ = {
+		F1293B252B41C9050094E02B /* Sub Mare Imperium Classes of Equivalence (GL ES 2) */ = {
 			isa = PBXGroup;
 			children = (
 				F1293B262B41C9050094E02B /* AppDelegate.h */,
@@ -259,7 +260,7 @@
 				F1293B282B41C9050094E02B /* Default-568h@2x.png */,
 				F1293B292B41C9050094E02B /* Default.png */,
 				F1293B2A2B41C9050094E02B /* Default@2x.png */,
-				F1293B2B2B41C9050094E02B /* Derelict128-iOS-Info.plist */,
+				F1293B2B2B41C9050094E02B /* equivalence128-iOS-Info.plist */,
 				F1293B2C2B41C9050094E02B /* InfoPlist.strings */,
 				F1293B2E2B41C9050094E02B /* ViewController_iPad.xib */,
 				F1293B302B41C9050094E02B /* ViewController_iPhone.xib */,
@@ -272,6 +273,7 @@
 				F1F3E0FE2B46E77E00D86751 /* TitleScreen_iPad.xib */,
 				F1F3E1012B46ED1200D86751 /* TitleScreen_iPhone.xib */,
 			);
+			name = "Sub Mare Imperium Classes of Equivalence (GL ES 2)";
 			path = "Sub Mare Imperium Derelict (GL ES 2)";
 			sourceTree = "<group>";
 		};
@@ -415,8 +417,8 @@
 		F1A2C9CC2B3EF09700F2E1CA = {
 			isa = PBXGroup;
 			children = (
-				F1293B252B41C9050094E02B /* Sub Mare Imperium Derelict (GL ES 2) */,
-				F1293B0E2B41C8CE0094E02B /* Sub Mare Imperium Derelict (GL 2.1) */,
+				F1293B252B41C9050094E02B /* Sub Mare Imperium Classes of Equivalence (GL ES 2) */,
+				F1293B0E2B41C8CE0094E02B /* Sub Mare Imperium Classes of Equivalence (GL 2.1) */,
 				F1293AED2B41C7480094E02B /* OpenGL.framework */,
 				F1293AEB2B41C7400094E02B /* Cocoa.framework */,
 				F163B96E2B3EF18600C03D9E /* Other */,
@@ -428,8 +430,8 @@
 		F1A2C9D62B3EF09700F2E1CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F1A2C9D52B3EF09700F2E1CA /* Derelict128.app */,
-				F1293ABD2B41C63D0094E02B /* Derelict128 OSX (GL 2.1).app */,
+				F1A2C9D52B3EF09700F2E1CA /* equivalence128.app */,
+				F1293ABD2B41C63D0094E02B /* equivalence128 OSX (GL 2.1).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -461,9 +463,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1293ABC2B41C63D0094E02B /* Derelict128 OSX (GL 2.1) */ = {
+		F1293ABC2B41C63D0094E02B /* equivalence128 OSX (GL 2.1) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1293AD32B41C63D0094E02B /* Build configuration list for PBXNativeTarget "Derelict128 OSX (GL 2.1)" */;
+			buildConfigurationList = F1293AD32B41C63D0094E02B /* Build configuration list for PBXNativeTarget "equivalence128 OSX (GL 2.1)" */;
 			buildPhases = (
 				F1293AB92B41C63D0094E02B /* Sources */,
 				F1293ABA2B41C63D0094E02B /* Frameworks */,
@@ -473,14 +475,14 @@
 			);
 			dependencies = (
 			);
-			name = "Derelict128 OSX (GL 2.1)";
+			name = "equivalence128 OSX (GL 2.1)";
 			productName = "Sub Mare Imperium: Derelict (GL 2.1)";
-			productReference = F1293ABD2B41C63D0094E02B /* Derelict128 OSX (GL 2.1).app */;
+			productReference = F1293ABD2B41C63D0094E02B /* equivalence128 OSX (GL 2.1).app */;
 			productType = "com.apple.product-type.application";
 		};
-		F1A2C9D42B3EF09700F2E1CA /* Derelict128 iOS (GL ES) */ = {
+		F1A2C9D42B3EF09700F2E1CA /* equivalence128 iOS (GL ES) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1A2CA032B3EF09700F2E1CA /* Build configuration list for PBXNativeTarget "Derelict128 iOS (GL ES)" */;
+			buildConfigurationList = F1A2CA032B3EF09700F2E1CA /* Build configuration list for PBXNativeTarget "equivalence128 iOS (GL ES)" */;
 			buildPhases = (
 				F1A2C9D12B3EF09700F2E1CA /* Sources */,
 				F1A2C9D22B3EF09700F2E1CA /* Frameworks */,
@@ -490,9 +492,9 @@
 			);
 			dependencies = (
 			);
-			name = "Derelict128 iOS (GL ES)";
+			name = "equivalence128 iOS (GL ES)";
 			productName = "Sub Mare Imperium: Derelict (GL ES)";
-			productReference = F1A2C9D52B3EF09700F2E1CA /* Derelict128.app */;
+			productReference = F1A2C9D52B3EF09700F2E1CA /* equivalence128.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -504,7 +506,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Daniel Monteiro";
 			};
-			buildConfigurationList = F1A2C9D02B3EF09700F2E1CA /* Build configuration list for PBXProject "Derelict128" */;
+			buildConfigurationList = F1A2C9D02B3EF09700F2E1CA /* Build configuration list for PBXProject "equivalence128" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -516,8 +518,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1A2C9D42B3EF09700F2E1CA /* Derelict128 iOS (GL ES) */,
-				F1293ABC2B41C63D0094E02B /* Derelict128 OSX (GL 2.1) */,
+				F1A2C9D42B3EF09700F2E1CA /* equivalence128 iOS (GL ES) */,
+				F1293ABC2B41C63D0094E02B /* equivalence128 OSX (GL 2.1) */,
 			);
 		};
 /* End PBXProject section */
@@ -531,7 +533,7 @@
 				F1293B1E2B41C8CE0094E02B /* Credits.rtf in Resources */,
 				F1293B1F2B41C8CE0094E02B /* InfoPlist.strings in Resources */,
 				F1293B202B41C8CE0094E02B /* MainMenu.xib in Resources */,
-				F1293B242B41C8CE0094E02B /* Derelict128-OSX-info.plist in Resources */,
+				F1293B242B41C8CE0094E02B /* equivalence128-OSX-info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,7 +545,7 @@
 				F1293B392B41C9050094E02B /* Default-568h@2x.png in Resources */,
 				F1293B3A2B41C9050094E02B /* Default.png in Resources */,
 				F1293B3B2B41C9050094E02B /* Default@2x.png in Resources */,
-				F1293B3C2B41C9050094E02B /* Derelict128-iOS-Info.plist in Resources */,
+				F1293B3C2B41C9050094E02B /* equivalence128-iOS-Info.plist in Resources */,
 				F1293B3D2B41C9050094E02B /* InfoPlist.strings in Resources */,
 				F1293B3E2B41C9050094E02B /* ViewController_iPad.xib in Resources */,
 				F1293B3F2B41C9050094E02B /* ViewController_iPhone.xib in Resources */,
@@ -717,9 +719,9 @@
 					SUPPORTS_HACKING_MINIGAME,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL 2.1)/Derelict128-OSX-info.plist";
+				INFOPLIST_FILE = "Sub Mare Imperium Derelict (GL 2.1)/equivalence128-OSX-info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "equivalence128 OSX (GL 2.1)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -747,9 +749,9 @@
 					SUPPORTS_HACKING_MINIGAME,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL 2.1)/Derelict128-OSX-info.plist";
+				INFOPLIST_FILE = "Sub Mare Imperium Derelict (GL 2.1)/equivalence128-OSX-info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "equivalence128 OSX (GL 2.1)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -838,9 +840,9 @@
 					"XRES_FRAMEBUFFER=320",
 					SUPPORTS_HACKING_MINIGAME,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL ES 2)/Derelict128-iOS-Info.plist";
+				INFOPLIST_FILE = "Sub Mare Imperium Derelict (GL ES 2)/equivalence128-iOS-Info.plist";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = Derelict128;
+				PRODUCT_NAME = equivalence128;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -858,9 +860,9 @@
 					"XRES_FRAMEBUFFER=320",
 					SUPPORTS_HACKING_MINIGAME,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Sub Mare Imperium Derelict (GL ES 2)/Derelict128-iOS-Info.plist";
+				INFOPLIST_FILE = "Sub Mare Imperium Derelict (GL ES 2)/equivalence128-iOS-Info.plist";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
-				PRODUCT_NAME = Derelict128;
+				PRODUCT_NAME = equivalence128;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -868,7 +870,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F1293AD32B41C63D0094E02B /* Build configuration list for PBXNativeTarget "Derelict128 OSX (GL 2.1)" */ = {
+		F1293AD32B41C63D0094E02B /* Build configuration list for PBXNativeTarget "equivalence128 OSX (GL 2.1)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1293AD12B41C63D0094E02B /* Debug */,
@@ -877,7 +879,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1A2C9D02B3EF09700F2E1CA /* Build configuration list for PBXProject "Derelict128" */ = {
+		F1A2C9D02B3EF09700F2E1CA /* Build configuration list for PBXProject "equivalence128" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1A2CA012B3EF09700F2E1CA /* Debug */,
@@ -886,7 +888,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1A2CA032B3EF09700F2E1CA /* Build configuration list for PBXNativeTarget "Derelict128 iOS (GL ES)" */ = {
+		F1A2CA032B3EF09700F2E1CA /* Build configuration list for PBXNativeTarget "equivalence128 iOS (GL ES)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1A2CA042B3EF09700F2E1CA /* Debug */,
