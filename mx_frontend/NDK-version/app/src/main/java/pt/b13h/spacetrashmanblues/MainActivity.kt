@@ -18,7 +18,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import pt.b13h.derelictgles2.R
+import pt.b13h.equivalencegles2.R
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
