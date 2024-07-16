@@ -385,8 +385,8 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             return gameSnapshot;
         }
 
-        struct Room *playerRoom = getRoom(getPlayerRoom());
-        head = playerRoom->itemsPresent->next;
+
+        head = getRoom(getPlayerRoom())->itemsPresent->next;
 
         while (head != NULL) {
             struct Item *itemPtr = getItem(head->item);

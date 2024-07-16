@@ -152,7 +152,7 @@ void Crawler_repaintCallback(void) {
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (showPromptToAbandonMission) {
 
@@ -198,7 +198,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     }
 
     if (timeUntilNextState != kNonExpiringPresentationState) {
-        timeUntilNextState -= *((long*)data);
+        timeUntilNextState -= *((long *) data);
     }
 
     if (currentPresentationState == kWaitingForInput) {
@@ -213,11 +213,10 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     }
 
 
-
     if (currentPresentationState == kCheckingForRandomBattle) {
-        struct Room* playerNewRoom = getRoom(getPlayerRoom());
-	    int random = rand() % 10;
-      	currentPresentationState = kWaitingForInput;
+        struct Room *playerNewRoom = getRoom(getPlayerRoom());
+        int random = rand() % 10;
+        currentPresentationState = kWaitingForInput;
         texturesUsed = 0;
         clearTextures();
         nativeTextures[0] = makeTextureFrom("arch.img");
@@ -225,7 +224,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
         texturesUsed = 2;
 
         if (random < playerNewRoom->chanceOfRandomBattle) {
-  	        return kBattleScreen;
+            return kBattleScreen;
         } else {
             initRoom(getPlayerRoom());
         }
@@ -237,9 +236,9 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
-	newState != kHackingGame &&
-	newState != kBattleScreen &&
-	newState != kBattleResultScreen) {
+        newState != kHackingGame &&
+        newState != kBattleScreen &&
+        newState != kBattleResultScreen) {
 
         clearTextures();
         clearTileProperties();

@@ -42,3 +42,7 @@ mx_frontend/build/derelict.elf.map
 tools/wobj-compiler/target
 packer
 mx_frontend/NDK-version/.idea
+mx_frontend/Xcode2/build
+monty.mode1
+monty.pbxuser
+Derelict

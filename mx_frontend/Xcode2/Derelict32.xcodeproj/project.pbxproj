@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		F11957942A3B0F00004A2B3B /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
+		F155CC1E2C4664F4008C6603 /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F155CC1C2C4664F4008C6603 /* BattleScreen.c */; };
+		F155CC1F2C4664F4008C6603 /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F155CC1D2C4664F4008C6603 /* BattleResultScreen.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1627CFCCBD00C06E6F /* Common.c */; };
 		F1B8CB1C27CFCCBD00C06E6F /* FixP.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1727CFCCBD00C06E6F /* FixP.c */; };
@@ -88,6 +90,8 @@
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F155CC1C2C4664F4008C6603 /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../../common/src/BattleScreen.c; sourceTree = SOURCE_ROOT; };
+		F155CC1D2C4664F4008C6603 /* BattleResultScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleResultScreen.c; path = ../../common/src/BattleResultScreen.c; sourceTree = SOURCE_ROOT; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
 		F18B850825581D370012292B /* menu_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = menu_select.wav; path = ../data/wavogg/menu_select.wav; sourceTree = "<group>"; };
 		F18B850925581D370012292B /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../data/wavogg/click.wav; sourceTree = "<group>"; };
@@ -142,7 +146,7 @@
 		F1C623362AA3A90C0026195F /* EDirection_Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EDirection_Utils.h; path = ../../common/include/EDirection_Utils.h; sourceTree = SOURCE_ROOT; };
 		F1C623372AA3A90C0026195F /* UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UI.h; path = ../../common/include/UI.h; sourceTree = SOURCE_ROOT; };
 		F1CA76B32610A8BF00FD1E04 /* Derelict.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Derelict.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
+		F1CA76B52610A8BF00FD1E04 /* Derelict-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Derelict-Info.plist"; sourceTree = "<group>"; };
 		F1CD08C62450E41C00D4794D /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../base.pfs; sourceTree = SOURCE_ROOT; };
 		F1D5B5D22531D2BF0094ED78 /* Derelict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Derelict.c; path = ../../core/src/Derelict.c; sourceTree = "<group>"; };
 		F1D5B5D32531D2BF0094ED78 /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Parser.c; path = ../../core/src/Parser.c; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F155CC1C2C4664F4008C6603 /* BattleScreen.c */,
+				F155CC1D2C4664F4008C6603 /* BattleResultScreen.c */,
 				F1C623352AA3A90C0026195F /* Dungeon.h */,
 				F1C623362AA3A90C0026195F /* EDirection_Utils.h */,
 				F1C623372AA3A90C0026195F /* UI.h */,
@@ -428,6 +434,8 @@
 				F1C6231E2AA3A7F40026195F /* VisibilityStrategy.c in Sources */,
 				F1E3500C2AF7B835003A6154 /* HackingMinigameRules.c in Sources */,
 				F1E350232AF7BA13003A6154 /* Mesh.c in Sources */,
+				F155CC1E2C4664F4008C6603 /* BattleScreen.c in Sources */,
+				F155CC1F2C4664F4008C6603 /* BattleResultScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
