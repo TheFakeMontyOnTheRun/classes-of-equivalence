@@ -34,12 +34,18 @@ enum EBattleStates {
     kAttackPhase
 };
 
-struct Bitmap *foe;
-struct Bitmap *splat[3];
-uint8_t currentCharacter;
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 4
 #define kBattleAnimationInterval 9
+#define TOTAL_MONSTER_TYPES 2
+#define TOTAL_FRAMES_PER_MONSTER 2
+#define TOTAL_SPLAT_FRAMES 3
+
+struct Bitmap *foe[TOTAL_MONSTER_TYPES][TOTAL_FRAMES_PER_MONSTER];
+struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
+
+uint8_t currentCharacter;
+
 /* Life points of the monsters */
 uint8_t monsterHP[TOTAL_MONSTER_COUNT];
 /* Types of the monsters. For now, this has no meaning */
@@ -61,22 +67,29 @@ const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
 
 int8_t splatMonster = -1;
+int8_t monsterAttacking = -1;
+
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     int c, d;
     (void) tag;
     cursorPosition = 1;
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
-    foe = loadBitmap("cop.img");
 
     aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
     splat[0] = loadBitmap("splat0.img");
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
 
+    foe[0][0] = loadBitmap("cuco0.img");
+    foe[1][0] = loadBitmap("lady0.img");
+
+    foe[0][1] = loadBitmap("cuco1.img");
+    foe[1][1] = loadBitmap("lady1.img");
+
     for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
-        monsterType[c] = rand() % 15;
+        monsterType[c] = rand() % TOTAL_MONSTER_TYPES;
     }
 
     aliveHeroes = 0;
@@ -87,6 +100,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     }
 
     splatMonster = -1;
+    monsterAttacking = -1;
     currentBattleState = kPlayerSelectingMoves;
 }
 
@@ -108,6 +122,7 @@ void BattleScreen_repaintCallback(void) {
                     animationTimer = 0;
                     goto done_flashing;
                 }
+                monsterAttacking = currentCharacter - TOTAL_CHARACTERS_IN_PARTY;
             } else {
                 if (!party[currentCharacter].inParty || /* attacking hero is dead */
                     monsterHP[battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY] == 0) { /* or its target is dead */
@@ -152,7 +167,10 @@ void BattleScreen_repaintCallback(void) {
         sprintf(&buffer[c & 1 ? 0 : 1][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
-            drawBitmap(12 * 8 + ( c * (foe->width + 8)), -16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
+            int monsterTypeIndex = monsterType[monstersPresent - c - 1];
+            int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
+
+            drawBitmap(12 * 8 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
         }
 
         if (splatMonster == (monstersPresent - c - 1)) {
@@ -264,6 +282,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
             splatMonster = -1;
+            monsterAttacking = -1;
             currentCharacter++;
 
             if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
