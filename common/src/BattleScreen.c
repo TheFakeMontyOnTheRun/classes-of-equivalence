@@ -327,7 +327,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
                     for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
                         if (battleActions[c] == kAttack) {
-                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % aliveMonsters);
+                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % (aliveMonsters + 1));
                         }
                     }
 
