@@ -190,7 +190,7 @@ void BattleScreen_repaintCallback(void) {
         sprintf(&buffer[c & 1 ? 0 : 1][0], "%s", &buffer[c & 1 ? 1 : 0][0]);
     }
 
-    drawTextWindow((XRES_FRAMEBUFFER / 8) - 9, 1, 6, 2 + monstersPresent, "Robot", &buffer[0][0]);
+    drawTextWindow((XRES_FRAMEBUFFER / 8) - 9, 1, 7, 2 + monstersPresent, "Robot", &buffer[0][0]);
 
 
 
