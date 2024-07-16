@@ -35,6 +35,7 @@ enum EBattleStates {
 };
 
 struct Bitmap *foe;
+struct Bitmap *splat[3];
 uint8_t currentCharacter;
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 4
@@ -59,6 +60,7 @@ uint8_t aliveHeroes = 0;
 const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
 
+int8_t splatMonster = -1;
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     int c, d;
     (void) tag;
@@ -68,6 +70,9 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     foe = loadBitmap("cop.img");
 
     aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
+    splat[0] = loadBitmap("splat0.img");
+    splat[1] = loadBitmap("splat1.img");
+    splat[2] = loadBitmap("splat2.img");
 
     for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
@@ -81,6 +86,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
         }
     }
 
+    splatMonster = -1;
     currentBattleState = kPlayerSelectingMoves;
 }
 
@@ -109,6 +115,7 @@ void BattleScreen_repaintCallback(void) {
                     goto done_flashing;
                 }
                 damage = -damage;
+                splatMonster = battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY;
             }
 
             if (damage > 0) {
@@ -146,6 +153,14 @@ void BattleScreen_repaintCallback(void) {
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
             drawBitmap(12 * 8 + ( c * (foe->width + 8)), -16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
+        }
+
+        if (splatMonster == (monstersPresent - c - 1)) {
+            int frame = (animationTimer / 3) - 1;
+            /* Terrible kludge, but I'm in a hurry */
+            if (frame >= 0 ) {
+                drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
+            }
         }
     }
 
@@ -248,6 +263,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
         animationTimer--;
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
+            splatMonster = -1;
             currentCharacter++;
 
             if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
