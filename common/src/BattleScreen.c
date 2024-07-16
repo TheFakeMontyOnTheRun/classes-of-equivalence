@@ -143,6 +143,10 @@ void BattleScreen_repaintCallback(void) {
          monster HPs from bottom to top.
          */
         sprintf(&buffer[c & 1 ? 0 : 1][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
+
+        if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
+            drawBitmap(12 * 8 + ( c * (foe->width + 8)), -16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
+        }
     }
 
     /*
@@ -155,7 +159,6 @@ void BattleScreen_repaintCallback(void) {
 
     drawTextWindow((XRES_FRAMEBUFFER / 8) - 9, 1, 6, 2 + monstersPresent, "Robot", &buffer[0][0]);
 
-    drawBitmap(13 * 8, -16 + (YRES_FRAMEBUFFER - foe->height) / 2, foe, 1);
 
 
     if (currentBattleState == kPlayerSelectingMoves) {
