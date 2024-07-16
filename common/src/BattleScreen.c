@@ -37,7 +37,7 @@ enum EBattleStates {
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 4
 #define kBattleAnimationInterval 9
-#define TOTAL_MONSTER_TYPES 2
+#define TOTAL_MONSTER_TYPES 3
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
@@ -81,11 +81,14 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
 
-    foe[0][0] = loadBitmap("cuco0.img");
-    foe[1][0] = loadBitmap("lady0.img");
+    foe[0][0] = loadBitmap("bull0.img");
+    foe[1][0] = loadBitmap("cuco0.img");
+    foe[2][0] = loadBitmap("lady0.img");
 
-    foe[0][1] = loadBitmap("cuco1.img");
-    foe[1][1] = loadBitmap("lady1.img");
+    foe[0][1] = loadBitmap("bull1.img");
+    foe[1][1] = loadBitmap("cuco1.img");
+    foe[2][1] = loadBitmap("lady1.img");
+
 
     for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
