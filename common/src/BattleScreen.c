@@ -38,6 +38,7 @@ struct Bitmap *foe;
 uint8_t currentCharacter;
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 4
+#define kBattleAnimationInterval 9
 /* Life points of the monsters */
 uint8_t monsterHP[TOTAL_MONSTER_COUNT];
 /* Types of the monsters. For now, this has no meaning */
@@ -91,7 +92,7 @@ void BattleScreen_repaintCallback(void) {
     if (currentBattleState == kAttackPhase) {
 
         /* only a single blink */
-        if (animationTimer == 10) {
+        if (animationTimer == kBattleAnimationInterval) {
 
             int damage = battleDamages[currentCharacter];
 
@@ -243,8 +244,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
         animationTimer--;
         if (animationTimer < 0) {
-            animationTimer = 10;
-
+            animationTimer = kBattleAnimationInterval;
             currentCharacter++;
 
             if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
@@ -328,7 +328,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         }
                     }
 
-                    animationTimer = 10;
+                    animationTimer = kBattleAnimationInterval;
                 }
                 break;
 
