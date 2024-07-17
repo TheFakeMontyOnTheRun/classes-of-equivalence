@@ -19,6 +19,7 @@
 #include "Core.h"
 #include "Derelict.h"
 #include "SoundSystem.h"
+#include "Dungeon.h"
 
 
 void BattleResultScreen_initStateCallback(enum EGameMenuState tag) {
