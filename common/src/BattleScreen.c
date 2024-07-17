@@ -297,8 +297,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
 
                 if (aliveMonsters == 0) {
-                    initRoom(getPlayerRoom());
-                    return kBackToGame;
+                    return kBattleResultScreen;
                 }
             }
         }
@@ -312,18 +311,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     cursorPosition--;
                     firstFrameOnCurrentState = 1;
                 }
-#ifdef PAGE_FLIP_ANIMATION
-                turnTarget = turnStep;
-#endif
-                break;
+		break;
             case kCommandDown:
                 if (cursorPosition < kDummyBattleOptionsCount) {
                     cursorPosition++;
                     firstFrameOnCurrentState = 1;
                 }
-#ifdef PAGE_FLIP_ANIMATION
-                turnTarget = turnStep;
-#endif
                 break;
             case kCommandBack:
                 return kBackToGame;
