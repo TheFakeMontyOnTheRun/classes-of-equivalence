@@ -40,7 +40,6 @@ void BattleResultScreen_repaintCallback(void) {
 
 enum EGameMenuState BattleResultScreen_tickCallback(enum ECommand cmd, void* data) {
 
-    uint8_t holdingDisk = getHoldingDisk();
     (void)data;
 
     switch (cmd) {
