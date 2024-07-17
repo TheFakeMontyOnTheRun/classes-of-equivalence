@@ -46,6 +46,19 @@ struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 
 uint8_t currentCharacter;
 
+struct MonsterArchetype {
+    uint8_t defense: 4;
+    uint8_t attack: 4;
+    uint8_t agility: 4;
+    uint8_t wisdom: 4;
+};
+
+const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
+        {2, 3, 4, 5},
+        {3, 3, 2, 6},
+        {4, 3, 2, 1}
+};
+
 /* Life points of the monsters */
 uint8_t monsterHP[TOTAL_MONSTER_COUNT];
 /* Types of the monsters. For now, this has no meaning */

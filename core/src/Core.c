@@ -791,30 +791,60 @@ void initCore(void) {
 
     collectedObject = &collectedObjectHead;
     memFill(collectedObject, 0, sizeof(struct ObjectNode));
-    party[0].location = 1;
     itemsCount = 0;
     roomCount = 1; /* there's an implicit dummy first */
-    party[0].rank = 0;
     gameStatus = kNormalGameplay;
+
+    party[0].location = 1;
+    party[0].rank = 0;
     party[0].direction = kNorth;
     party[0].position.x = 15;
     party[0].position.y = 15;
+
     party[0].name = "Lako";
     party[0].inParty = 1;
     party[0].hp = 20;
+    party[0].defense = 4;
+    party[0].attack = 4;
+    party[0].agility = 4;
+    party[0].wisdom = 4;
     party[0].energy = 10;
+    party[0].experience = 0;
+    party[0].level = 1;
+
     party[1].name = "Hyme";
     party[1].inParty = 1;
     party[1].hp = 20;
     party[1].energy = 10;
+    party[1].defense = 6;
+    party[1].attack = 3;
+    party[1].agility = 2;
+    party[1].wisdom = 4;
+    party[1].experience = 0;
+    party[1].level = 1;
+
     party[2].name = "Omar";
     party[2].inParty = 1;
     party[2].hp = 20;
     party[2].energy = 10;
+    party[2].defense = 3;
+    party[2].attack = 8;
+    party[2].agility = 1;
+    party[2].wisdom = 3;
+    party[2].experience = 0;
+    party[2].level = 1;
+
     party[3].name = "Juka";
     party[3].inParty = 1;
     party[3].hp = 20;
     party[3].energy = 10;
+    party[3].defense = 3;
+    party[3].attack = 2;
+    party[3].agility = 4;
+    party[3].wisdom = 6;
+    party[3].experience = 0;
+    party[3].level = 1;
+
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }

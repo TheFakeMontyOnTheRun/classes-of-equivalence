@@ -119,6 +119,12 @@ struct Character {
     uint8_t rank;
     struct WorldPosition position;
     uint8_t inParty: 1;
+    uint8_t defense: 4;
+    uint8_t attack: 4;
+    uint8_t agility: 4;
+    uint8_t wisdom: 4;
+    uint8_t level: 4;
+    uint8_t experience: 4;
 };
 /**
  *
