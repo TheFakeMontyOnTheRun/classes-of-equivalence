@@ -176,6 +176,8 @@ void BattleScreen_repaintCallback(void) {
     sprintf(&buffer[1][0], "");
 
     for (c = 0; c < monstersPresent; c++) {
+        int monsterTypeIndex = monsterType[monstersPresent - c - 1];
+        int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
         /*
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
          monster HPs from bottom to top.
@@ -183,18 +185,26 @@ void BattleScreen_repaintCallback(void) {
         sprintf(&buffer[c & 1 ? 0 : 1][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
-            int monsterTypeIndex = monsterType[monstersPresent - c - 1];
-            int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
-
             drawBitmap(12 * 8 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
         }
 
-        if (splatMonster == (monstersPresent - c - 1)) {
+        if (splatMonster == (monstersPresent - c - 1) &&
+            battleDamages[currentCharacter] == (TOTAL_CHARACTERS_IN_PARTY + c) &&
+            battleDamages[currentCharacter] > 0 &&
+            party[currentCharacter].hp > 0) {
+
             int frame = (animationTimer / 3) - 1;
             /* Terrible kludge, but I'm in a hurry */
             if (frame >= 0 ) {
                 drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
             }
+
+            sprintf(&buffer[0][0], "-%d HP", battleDamages[currentCharacter] );
+            drawTextAt(
+            12 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8) ) / 8,
+            -1 + foe[monsterTypeIndex][spriteFrame]->height / 8 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 16,
+                       &buffer[0][0],
+                       getPaletteEntry(0xFF0000FF));
         }
     }
 
@@ -226,6 +236,17 @@ void BattleScreen_repaintCallback(void) {
         if (party[c].inParty) {
             sprintf(&buffer[0][0], "H %d\nE %d", party[c].hp, party[c].energy);
             drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0][0]);
+
+            if (currentBattleState == kAttackPhase &&
+                battleDamages[currentCharacter] > 0 &&
+                c == battleTargets[currentCharacter] &&
+                monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0) {
+
+                sprintf(&buffer[0][0], "-%d HP", battleDamages[currentCharacter] );
+                drawTextAt( c * 7, (YRES_FRAMEBUFFER / 8) - 7, &buffer[0][0],
+                       getPaletteEntry(0xFF0000FF));
+            }
+
         }
     }
 }
