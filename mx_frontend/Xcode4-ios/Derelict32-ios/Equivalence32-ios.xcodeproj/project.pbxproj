@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F19364D72C498B960033D00E /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F19364D52C498B960033D00E /* BattleResultScreen.c */; };
+		F19364D82C498B960033D00E /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F19364D62C498B960033D00E /* BattleScreen.c */; };
 		F1A986FA2B9F3C8C004DF107 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A986F92B9F3C8C004DF107 /* UIKit.framework */; };
 		F1A986FC2B9F3C8C004DF107 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A986FB2B9F3C8C004DF107 /* Foundation.framework */; };
 		F1A986FE2B9F3C8C004DF107 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A986FD2B9F3C8C004DF107 /* CoreGraphics.framework */; };
@@ -51,6 +53,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F19364D52C498B960033D00E /* BattleResultScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BattleResultScreen.c; sourceTree = "<group>"; };
+		F19364D62C498B960033D00E /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BattleScreen.c; sourceTree = "<group>"; };
 		F1A986F62B9F3C8C004DF107 /* Equivalence32-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Equivalence32-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A986F92B9F3C8C004DF107 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F1A986FB2B9F3C8C004DF107 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -255,6 +259,8 @@
 		F1A9874D2B9F3D02004DF107 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F19364D52C498B960033D00E /* BattleResultScreen.c */,
+				F19364D62C498B960033D00E /* BattleScreen.c */,
 				F1A987522B9F3D02004DF107 /* Common.c */,
 				F1A987562B9F3D02004DF107 /* Crawler.c */,
 				F1A987572B9F3D02004DF107 /* CreditsScreen.c */,
@@ -402,6 +408,8 @@
 				F1A987C42B9F3D80004DF107 /* Renderer.c in Sources */,
 				F1A987C52B9F3D80004DF107 /* RendererRasterization.c in Sources */,
 				F1A987C62B9F3D80004DF107 /* RendererTesselation.c in Sources */,
+				F19364D72C498B960033D00E /* BattleResultScreen.c in Sources */,
+				F19364D82C498B960033D00E /* BattleScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
