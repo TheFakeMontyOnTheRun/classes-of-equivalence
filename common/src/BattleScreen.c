@@ -47,6 +47,7 @@ struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 uint8_t currentCharacter;
 
 struct MonsterArchetype {
+    const char* name;
     uint8_t defense: 4;
     uint8_t attack: 4;
     uint8_t agility: 4;
@@ -54,9 +55,9 @@ struct MonsterArchetype {
 };
 
 const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
-        {2, 3, 4, 5},
-        {3, 3, 2, 6},
-        {4, 3, 2, 1}
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 4, 3, 2, 1}
 };
 
 /* Life points of the monsters */
@@ -182,10 +183,19 @@ void BattleScreen_repaintCallback(void) {
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
          monster HPs from bottom to top.
          */
-        sprintf(&buffer[c & 1 ? 0 : 1][0], "H %d\n%s", monsterHP[(monstersPresent - c - 1)], &buffer[c & 1 ? 1 : 0][0]);
+        sprintf(&buffer[0][0], "H %d", monsterHP[(monstersPresent - c - 1)]);
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
-            drawBitmap(12 * 8 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
+
+	  drawTextWindow(
+		     11 + ( c * (32 + 16) ) / 8,
+		     1,
+		     6,
+		     3,
+		     monsterArchetypes[monsterTypeIndex].name,
+		     &buffer[0][0]);
+	  
+            drawBitmap(4 + 11 * 8 + ( c * (32 + 16)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
 
             if (splatMonster == (monstersPresent - c - 1) &&
                 battleTargets[currentCharacter] == ((monstersPresent - c - 1) + TOTAL_CHARACTERS_IN_PARTY) &&
@@ -201,10 +211,10 @@ void BattleScreen_repaintCallback(void) {
                     drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
                 }
 
-                sprintf(&buffer3[0], "-%d HP", battleDamages[currentCharacter] );
+                sprintf(&buffer3[0], "%d HP", battleDamages[currentCharacter] );
                 drawTextAt(
-                           12 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8) ) / 8,
-                           -1 + foe[monsterTypeIndex][spriteFrame]->height / 8 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 16,
+			   12 + ( c * (32 + 16) ) / 8,
+                           2,
                            &buffer3[0],
                            getPaletteEntry(0xFF0000FF));
         }
@@ -218,10 +228,6 @@ void BattleScreen_repaintCallback(void) {
     if (((monstersPresent - 1) & 1) == 0) {
         sprintf(&buffer[c & 1 ? 0 : 1][0], "%s", &buffer[c & 1 ? 1 : 0][0]);
     }
-
-    drawTextWindow((XRES_FRAMEBUFFER / 8) - 9, 1, 7, 2 + monstersPresent, "Robot", &buffer[0][0]);
-
-
 
     if (currentBattleState == kPlayerSelectingMoves) {
         drawWindowWithOptions(
@@ -246,8 +252,8 @@ void BattleScreen_repaintCallback(void) {
                 party[c].hp > 0 &&
                 monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0) {
 
-                sprintf(&buffer[0][0], "-%d HP", battleDamages[currentCharacter] );
-                drawTextAt( c * 7, (YRES_FRAMEBUFFER / 8) - 7, &buffer[0][0],
+                sprintf(&buffer[0][0], "%d HP", battleDamages[currentCharacter] );
+                drawTextAt( 1 + (c * 7), (YRES_FRAMEBUFFER / 8) - 5, &buffer[0][0],
                        getPaletteEntry(0xFF0000FF));
             }
 
