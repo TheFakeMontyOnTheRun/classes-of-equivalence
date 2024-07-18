@@ -186,25 +186,28 @@ void BattleScreen_repaintCallback(void) {
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
             drawBitmap(12 * 8 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
+
+            if (splatMonster == (monstersPresent - c - 1) &&
+                battleTargets[currentCharacter] == ((monstersPresent - c - 1) + TOTAL_CHARACTERS_IN_PARTY) &&
+                battleDamages[currentCharacter] > 0 &&
+                currentBattleState == kAttackPhase &&
+                party[currentCharacter].hp > 0) {
+
+                char buffer3[16];
+                int frame = (animationTimer / 3) - 1;
+
+                /* Terrible kludge, but I'm in a hurry */
+                if (frame >= 0 ) {
+                    drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
+                }
+
+                sprintf(&buffer3[0], "-%d HP", battleDamages[currentCharacter] );
+                drawTextAt(
+                           12 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8) ) / 8,
+                           -1 + foe[monsterTypeIndex][spriteFrame]->height / 8 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 16,
+                           &buffer3[0],
+                           getPaletteEntry(0xFF0000FF));
         }
-
-        if (splatMonster == (monstersPresent - c - 1) &&
-            battleDamages[currentCharacter] == (TOTAL_CHARACTERS_IN_PARTY + c) &&
-            battleDamages[currentCharacter] > 0 &&
-            party[currentCharacter].hp > 0) {
-
-            int frame = (animationTimer / 3) - 1;
-            /* Terrible kludge, but I'm in a hurry */
-            if (frame >= 0 ) {
-                drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
-            }
-
-            sprintf(&buffer[0][0], "-%d HP", battleDamages[currentCharacter] );
-            drawTextAt(
-            12 + ( c * (foe[monsterTypeIndex][spriteFrame]->width + 8) ) / 8,
-            -1 + foe[monsterTypeIndex][spriteFrame]->height / 8 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 16,
-                       &buffer[0][0],
-                       getPaletteEntry(0xFF0000FF));
         }
     }
 
@@ -240,6 +243,7 @@ void BattleScreen_repaintCallback(void) {
             if (currentBattleState == kAttackPhase &&
                 battleDamages[currentCharacter] > 0 &&
                 c == battleTargets[currentCharacter] &&
+                party[c].hp > 0 &&
                 monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0) {
 
                 sprintf(&buffer[0][0], "-%d HP", battleDamages[currentCharacter] );
