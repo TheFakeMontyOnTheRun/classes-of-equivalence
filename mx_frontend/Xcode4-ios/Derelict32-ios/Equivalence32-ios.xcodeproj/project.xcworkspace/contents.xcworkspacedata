@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Derelict32-ios.xcodeproj">
+      location = "self:Equivalence32-ios.xcodeproj">
    </FileRef>
 </Workspace>

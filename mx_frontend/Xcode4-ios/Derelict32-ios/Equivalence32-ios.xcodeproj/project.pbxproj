@@ -51,11 +51,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F1A986F62B9F3C8C004DF107 /* Derelict32-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Derelict32-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1A986F62B9F3C8C004DF107 /* Equivalence32-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Equivalence32-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A986F92B9F3C8C004DF107 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F1A986FB2B9F3C8C004DF107 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1A986FD2B9F3C8C004DF107 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		F1A987012B9F3C8C004DF107 /* Derelict32-ios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Derelict32-ios-Info.plist"; sourceTree = "<group>"; };
+		F1A987012B9F3C8C004DF107 /* Equivalence32-ios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Equivalence32-ios-Info.plist"; sourceTree = "<group>"; };
 		F1A987032B9F3C8C004DF107 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1A987052B9F3C8C004DF107 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F1A987072B9F3C8C004DF107 /* Derelict32-ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Derelict32-ios-Prefix.pch"; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		F1A986F72B9F3C8C004DF107 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F1A986F62B9F3C8C004DF107 /* Derelict32-ios.app */,
+				F1A986F62B9F3C8C004DF107 /* Equivalence32-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,7 +181,7 @@
 		F1A987002B9F3C8C004DF107 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F1A987012B9F3C8C004DF107 /* Derelict32-ios-Info.plist */,
+				F1A987012B9F3C8C004DF107 /* Equivalence32-ios-Info.plist */,
 				F1A987022B9F3C8C004DF107 /* InfoPlist.strings */,
 				F1A987052B9F3C8C004DF107 /* main.m */,
 				F1A987072B9F3C8C004DF107 /* Derelict32-ios-Prefix.pch */,
@@ -306,9 +306,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1A986F52B9F3C8C004DF107 /* Derelict32-ios */ = {
+		F1A986F52B9F3C8C004DF107 /* Equivalence32-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1A9871C2B9F3C8C004DF107 /* Build configuration list for PBXNativeTarget "Derelict32-ios" */;
+			buildConfigurationList = F1A9871C2B9F3C8C004DF107 /* Build configuration list for PBXNativeTarget "Equivalence32-ios" */;
 			buildPhases = (
 				F1A986F22B9F3C8C004DF107 /* Sources */,
 				F1A986F32B9F3C8C004DF107 /* Frameworks */,
@@ -318,9 +318,9 @@
 			);
 			dependencies = (
 			);
-			name = "Derelict32-ios";
+			name = "Equivalence32-ios";
 			productName = "Derelict32-ios";
-			productReference = F1A986F62B9F3C8C004DF107 /* Derelict32-ios.app */;
+			productReference = F1A986F62B9F3C8C004DF107 /* Equivalence32-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -332,7 +332,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Daniel Monteiro";
 			};
-			buildConfigurationList = F1A986F12B9F3C8C004DF107 /* Build configuration list for PBXProject "Derelict32-ios" */;
+			buildConfigurationList = F1A986F12B9F3C8C004DF107 /* Build configuration list for PBXProject "Equivalence32-ios" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -344,7 +344,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1A986F52B9F3C8C004DF107 /* Derelict32-ios */,
+				F1A986F52B9F3C8C004DF107 /* Equivalence32-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -523,8 +523,8 @@
 					"YRES_FRAMEBUFFER=200",
 					SUPPORTS_HACKING_MINIGAME,
 				);
-				INFOPLIST_FILE = "Derelict32-ios/Derelict32-ios-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "Derelict32-ios/Equivalence32-ios-Info.plist";
+				PRODUCT_NAME = "Equivalence32-ios";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -543,8 +543,8 @@
 					"YRES_FRAMEBUFFER=200",
 					SUPPORTS_HACKING_MINIGAME,
 				);
-				INFOPLIST_FILE = "Derelict32-ios/Derelict32-ios-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "Derelict32-ios/Equivalence32-ios-Info.plist";
+				PRODUCT_NAME = "Equivalence32-ios";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -552,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F1A986F12B9F3C8C004DF107 /* Build configuration list for PBXProject "Derelict32-ios" */ = {
+		F1A986F12B9F3C8C004DF107 /* Build configuration list for PBXProject "Equivalence32-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1A9871A2B9F3C8C004DF107 /* Debug */,
@@ -561,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1A9871C2B9F3C8C004DF107 /* Build configuration list for PBXNativeTarget "Derelict32-ios" */ = {
+		F1A9871C2B9F3C8C004DF107 /* Build configuration list for PBXNativeTarget "Equivalence32-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1A9871D2B9F3C8C004DF107 /* Debug */,
