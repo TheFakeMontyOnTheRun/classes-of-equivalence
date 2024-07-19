@@ -157,6 +157,10 @@ void BattleScreen_repaintCallback(void) {
             } else {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), 0);
             }
+
+            if (battleActions[currentCharacter] == kSpecial) {
+                fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFF0000), 0);
+            }
         }
     }
 
@@ -280,6 +284,32 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
             /* The target must still be alive to perform his attack */
             if (attackerIsAlive) {
+
+                if (currentCharacter < TOTAL_CHARACTERS_IN_PARTY) {
+                    if (battleActions[currentCharacter] == kSpecial) {
+
+                        if (currentCharacter & 1) {
+                            int c = 0;
+                            party[currentCharacter].energy -= 4;
+
+                            for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
+                                if (party[c].inParty && party[c].hp > 0) {
+                                    ++party[c].hp;
+                                }
+                            }
+                        } else {
+                            int c;
+                            party[currentCharacter].energy -= 4;
+
+                            for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
+                                if (monsterHP[c] > 0) {
+                                    --monsterHP[c];
+                                }
+                            }
+                        }
+                    }
+                }
+
                 /* Monsters */
                 if (target >= TOTAL_CHARACTERS_IN_PARTY) {
                     int monsterIndex = target - TOTAL_CHARACTERS_IN_PARTY;
@@ -365,6 +395,11 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
             case kCommandBack:
                 return kBackToGame;
             case kCommandFire1:
+                if (cursorPosition == kSpecial &&
+                    party[currentCharacter].energy < 4) {
+                    return kResumeCurrentState;
+                }
+
                 firstFrameOnCurrentState = 1;
 
                 battleActions[currentCharacter] = cursorPosition;
