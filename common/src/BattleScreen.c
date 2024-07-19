@@ -122,7 +122,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 }
 
 void BattleScreen_repaintCallback(void) {
-    char buffer[2][32];
+    char buffer[32];
     int c;
     clearScreen();
 
@@ -172,14 +172,6 @@ void BattleScreen_repaintCallback(void) {
         drawLine(0, c + YRES_FRAMEBUFFER / 2, XRES_FRAMEBUFFER, c + YRES_FRAMEBUFFER / 2, getPaletteEntry(0xFFFF0000));
     }
 
-    /*
-     This is seriously weird, but there is method to my madness. I need to append strings and this seemed like the most
-     economical way to do so. I alternate using buffers on sprintf (since I don't think it's wise to feed the same
-     buffer as src and dst).
-    */
-    sprintf(&buffer[0][0], "");
-    sprintf(&buffer[1][0], "");
-
     for (c = 0; c < monstersPresent; c++) {
         int monsterTypeIndex = monsterType[monstersPresent - c - 1];
         int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
@@ -187,7 +179,7 @@ void BattleScreen_repaintCallback(void) {
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
          monster HPs from bottom to top.
          */
-        sprintf(&buffer[0][0], "H %d", monsterHP[(monstersPresent - c - 1)]);
+        sprintf(&buffer[0], "H %d", monsterHP[(monstersPresent - c - 1)]);
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
 
@@ -197,7 +189,7 @@ void BattleScreen_repaintCallback(void) {
 		     6,
 		     3,
 		     monsterArchetypes[monsterTypeIndex].name,
-		     &buffer[0][0]);
+		     &buffer[0]);
 	  
             drawBitmap(4 + 11 * 8 + ( c * (32 + 16)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
 
@@ -225,14 +217,6 @@ void BattleScreen_repaintCallback(void) {
         }
     }
 
-    /*
-     It might happen that if we have an odd number of monsters, the "final" version of the buffer ends on buffer[1],
-     so I alternate once more, to ensure the desired result is in buffer[0]
-     */
-    if (((monstersPresent - 1) & 1) == 0) {
-        sprintf(&buffer[c & 1 ? 0 : 1][0], "%s", &buffer[c & 1 ? 1 : 0][0]);
-    }
-
     if (currentBattleState == kPlayerSelectingMoves) {
         drawWindowWithOptions(
                 0,
@@ -247,8 +231,8 @@ void BattleScreen_repaintCallback(void) {
 
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
         if (party[c].inParty) {
-            sprintf(&buffer[0][0], "H %d\nE %d", party[c].hp, party[c].energy);
-            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0][0]);
+            sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
+            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
 
             if (currentBattleState == kAttackPhase &&
                 battleDamages[currentCharacter] > 0 &&
@@ -256,8 +240,8 @@ void BattleScreen_repaintCallback(void) {
                 party[c].hp > 0 &&
                 monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0) {
 
-                sprintf(&buffer[0][0], "%d HP", battleDamages[currentCharacter] );
-                drawTextAt( 1 + (c * 7), (YRES_FRAMEBUFFER / 8) - 5, &buffer[0][0],
+                sprintf(&buffer[0], "%d HP", battleDamages[currentCharacter] );
+                drawTextAt( 1 + (c * 7), (YRES_FRAMEBUFFER / 8) - 5, &buffer[0],
                        getPaletteEntry(0xFF0000FF));
             }
 
