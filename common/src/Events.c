@@ -103,27 +103,6 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     buffer = loadBinaryFileFromPath(nameBuffer);
     dungeon_loadMap(buffer.data, collisions, map);
 
-    sprintf(nameBuffer, "map%d.img", map);
-
-#ifndef TILED_BITMAPS
-    if (mapTopLevel) {
-        releaseBitmap(mapTopLevel);
-    }
-    mapTopLevel = loadBitmap(nameBuffer);
-#else
-    if (mapTopLevel[0]) {
-        for (c = 0; c < 8; ++c) {
-            releaseBitmap(mapTopLevel[c]);
-        }
-    }
-
-    for (c = 0; c < 8; ++c) {
-        char buffer[32];
-        sprintf(buffer, "map%d_tile%04d.img", map, c);
-        mapTopLevel[c] = loadBitmap(buffer);
-    }
-#endif
-
     disposeDiskBuffer(buffer);
 }
 

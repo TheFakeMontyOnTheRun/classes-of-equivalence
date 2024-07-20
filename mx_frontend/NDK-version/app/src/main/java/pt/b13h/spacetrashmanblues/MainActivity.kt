@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.MediaRouter
 import android.media.SoundPool
 import android.os.Build
@@ -19,7 +18,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import pt.b13h.derelictgles2.R
+import pt.b13h.equivalencegles2.R
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
 
-        if  ( (application as DerelictApplication).mayEnableSound() ) {
+        if  ( (application as SubMareImperiumApplication).mayEnableSound() ) {
             initAudio()
         } else {
             soundPool = null
@@ -103,7 +102,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val btnStrafeLeft = findViewById<ImageButton>(R.id.btnStrafeLeft)
                     val btnStrafeRight = findViewById<ImageButton>(R.id.btnStrafeRight)
 
-                    if (!(application as DerelictApplication).hasPhysicalController()) {
+                    if (!(application as SubMareImperiumApplication).hasPhysicalController()) {
 
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             llActions.visibility = View.VISIBLE

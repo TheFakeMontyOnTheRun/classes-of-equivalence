@@ -38,6 +38,8 @@ add_library( # Sets the name of the library.
         ../../../../../../common/src/Crawler.c
         ../../../../../../common/src/HelpScreen.c
         ../../../../../../common/src/CreditsScreen.c
+        ../../../../../../common/src/BattleScreen.c
+        ../../../../../../common/src/BattleResultScreen.c
         ../../../../../../common/src/HackingScreen.c
         ../../../../../../common/src/GameMenu.c
         ../../../../../../common/src/Globals.c

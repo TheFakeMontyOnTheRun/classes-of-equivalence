@@ -35,3 +35,17 @@
 unittests
 core/coverage
 mx_frontend/cmake-build-debug
+mx_frontend/.idea
+mx_frontend/derelict.elf
+mx_frontend/derelict.gba
+mx_frontend/build/derelict.elf.map
+tools/wobj-compiler/target
+packer
+mx_frontend/NDK-version/.idea
+mx_frontend/Xcode2/build
+monty.mode1
+monty.pbxuser
+Derelict
+mx_frontend/Xcode2/Equivalence32.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+mx_frontend/Xcode2/Equivalence32.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
+mx_frontend/Xcode2/Equivalence32.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist

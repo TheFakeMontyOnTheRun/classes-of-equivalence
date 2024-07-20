@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "pt.b13h.derelictgles2"
+    namespace = "pt.b13h.equivalencegles2"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "pt.b13h.derelictgles2"
+        applicationId = "pt.b13h.equivalencegles2"
         minSdk = 22
         targetSdk = 34
         versionCode = 1

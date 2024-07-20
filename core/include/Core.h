@@ -20,6 +20,11 @@ Created by Daniel Monteiro on 2019-07-26.
  * @see itemCount for the number of created items
  */
 #define TOTAL_ITEMS 39
+/**
+ * Defines the maximum characters allowed in a party.
+ * Please note that the game might only allow a smaller number of active members in the party
+ * */
+#define TOTAL_CHARACTERS_IN_PARTY 4
 
 /* just a forward declaration, don't bother */
 struct Item;
@@ -101,6 +106,26 @@ struct Room {
     uint8_t sizeX;
     uint8_t sizeY;
     uint8_t rankRequired;
+};
+/**
+ *
+ */
+struct Character {
+    const char *name;
+    uint8_t hp;
+    uint8_t energy;
+    uint8_t location;
+    enum EDirection direction;
+    uint8_t rank;
+    struct WorldPosition position;
+    uint8_t inParty: 1;
+    uint8_t defense: 4;
+    uint8_t attack: 4;
+    uint8_t agility: 4;
+    uint8_t wisdom: 4;
+    uint8_t level: 4;
+    uint8_t kills;
+    enum ESpecialStype specialStype;
 };
 /**
  *
@@ -447,7 +472,17 @@ extern uint8_t itemsCount;
  */
 extern LogDelegate defaultLogger;
 /**
+ * Nodes to hold objects
  *
+ * @see TOTAL_ITEMS
+ * @see ObjectNode
+ * @see Item
  */
 extern struct ObjectNode objectNodes[TOTAL_ITEMS];
+/**
+ * Effective party of characters in the adventure
+ *
+ * @see TOTAL_CHARACTERS_IN_PARTY
+ * */
+extern struct Character party[TOTAL_CHARACTERS_IN_PARTY];
 #endif

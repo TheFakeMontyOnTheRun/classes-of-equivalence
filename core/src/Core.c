@@ -66,27 +66,13 @@ struct ObjectNode *collectedObject = NULL;
 /**
  *
  */
-uint8_t playerLocation = 1;
-/**
- *
- */
-enum EDirection playerDirection;
-/**
- *
- */
-uint8_t playerRank;
-/**
- *
- */
 enum EGameStates gameStatus;
 /**
  *
  */
-struct WorldPosition playerPosition;
-/**
- *
- */
 ErrorHandlerCallback errorHandlerCallback = NULL;
+
+struct Character party[TOTAL_CHARACTERS_IN_PARTY];
 
 void writeToLog(const char *errorMsg) {
 #ifdef HAS_STDIO
@@ -174,12 +160,12 @@ void setErrorHandlerCallback(ErrorHandlerCallback callback) {
 }
 
 struct WorldPosition *getPlayerPosition(void) {
-    return &playerPosition;
+    return &party[0].position;
 }
 
 void setPlayerPosition(struct WorldPosition *pos) {
-    playerPosition.x = pos->x;
-    playerPosition.y = pos->y;
+    party[0].position.x = pos->x;
+    party[0].position.y = pos->y;
 }
 
 #ifndef CAN_PICK_OBJECT_AT_ANY_DISTANCE
@@ -327,23 +313,23 @@ void pickObject(struct Item *itemToPick) {
 }
 
 uint8_t getPlayerRank(void) {
-    return playerRank;
+    return party[0].rank;
 }
 
 void setPlayerRank(uint8_t newRank) {
-    playerRank = newRank;
+    party[0].rank = newRank;
 }
 
 void moveBy(uint8_t direction) {
     uint8_t c;
-    uint8_t previousLocation = playerLocation;
+    uint8_t previousLocation = party[0].location;
 
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     if (direction <= 5 && room->connections[direction] != 0) {
         struct Item *coupling = getItemNamed("magnetic-coupling");
-        room = &rooms[playerLocation];
+        room = &rooms[party[0].location];
 
-        if (rooms[room->connections[direction]].rankRequired > playerRank) {
+        if (rooms[room->connections[direction]].rankRequired > party[0].rank) {
             defaultLogger("Insufficient rank to enter room");
             return;
         }
@@ -353,8 +339,8 @@ void moveBy(uint8_t direction) {
             return;
         }
 
-        playerLocation = room->connections[direction];
-        room = &rooms[playerLocation];
+        party[0].location = room->connections[direction];
+        room = &rooms[party[0].location];
 
         if (direction < 4) {
             for (c = 0; c < 6; ++c) {
@@ -368,23 +354,23 @@ void moveBy(uint8_t direction) {
 
         switch (direction) {
             case 2:
-                playerPosition.x = rooms[playerLocation].sizeX / 2;
-                playerPosition.y = rooms[playerLocation].sizeY - 1;
+                party[0].position.x = rooms[party[0].location].sizeX / 2;
+                party[0].position.y = rooms[party[0].location].sizeY - 1;
                 break;
 
             case 3:
-                playerPosition.x = 0;
-                playerPosition.y = rooms[playerLocation].sizeY / 2;
+                party[0].position.x = 0;
+                party[0].position.y = rooms[party[0].location].sizeY / 2;
                 break;
 
             case 1:
-                playerPosition.x = rooms[playerLocation].sizeX - 1;
-                playerPosition.y = rooms[playerLocation].sizeY / 2;
+                party[0].position.x = rooms[party[0].location].sizeX - 1;
+                party[0].position.y = rooms[party[0].location].sizeY / 2;
                 break;
             case 0:
             default:
-                playerPosition.x = rooms[playerLocation].sizeX / 2;
-                playerPosition.y = 0;
+                party[0].position.x = rooms[party[0].location].sizeX / 2;
+                party[0].position.y = 0;
                 break;
         }
 #ifdef CLI_BUILD
@@ -395,7 +381,7 @@ void moveBy(uint8_t direction) {
 }
 
 void pickObjectByName(const char *objName) {
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     struct ObjectNode *itemToPick = room->itemsPresent->next;
 
     while (itemToPick != NULL) {
@@ -416,7 +402,7 @@ void dropObjectByName(const char *objName) {
 
     while (itemToPick != NULL) {
         if (!strcmp(getItem(itemToPick->item)->name, objName)) {
-            dropObjectToRoom(playerLocation, getItem(itemToPick->item));
+            dropObjectToRoom(party[0].location, getItem(itemToPick->item));
             return;
         }
         itemToPick = itemToPick->next;
@@ -478,14 +464,14 @@ uint8_t playerHasObject(const char *itemName) {
 
 
 uint8_t isPlayerAtRoom(const char *roomName) {
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     const char *name = room->name;
     uint8_t returnValue = !strcmp(name, roomName);
     return returnValue;
 }
 
 const char *getRoomDescription(void) {
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     return room->name;
 }
 
@@ -498,7 +484,7 @@ struct Item *getItem(uint8_t index) {
 }
 
 uint8_t getPlayerRoom(void) {
-    return playerLocation;
+    return party[0].location;
 }
 
 void useObjectNamed(const char *operand) {
@@ -515,7 +501,7 @@ void useObjectNamed(const char *operand) {
         itemToPick = itemToPick->next;
     }
 
-    itemToPick = getRoom(playerLocation)->itemsPresent->next;
+    itemToPick = getRoom(party[0].location)->itemsPresent->next;
 
     while (itemToPick != NULL) {
         struct Item *_item = getItem(itemToPick->item);
@@ -550,7 +536,7 @@ void walkTo(const char *operands) {
 void infoAboutItemNamed(const char *itemName) {
 
     struct ObjectNode *object1 = collectedObject->next;
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     struct ObjectNode *object2 = room->itemsPresent->next;
 
     if (itemName == NULL || strlen(itemName) == 0) {
@@ -590,7 +576,7 @@ void infoAboutItemNamed(const char *itemName) {
 void useObjectsTogether(const char *operands) {
 
     struct ObjectNode *object1 = collectedObject->next;
-    struct Room *room = &rooms[playerLocation];
+    struct Room *room = &rooms[party[0].location];
     struct ObjectNode *object2 = room->itemsPresent->next;
 
     char *operand1 = (char*)operands;
@@ -603,7 +589,7 @@ void useObjectsTogether(const char *operands) {
         return;
     }
 
-    if (!hasItemInRoom(getRoom(playerLocation)->name, operand2)) {
+    if (!hasItemInRoom(getRoom(party[0].location)->name, operand2)) {
 #ifdef CLI_BUILD
         defaultLogger("That object is not present in the room");
 #endif
@@ -643,121 +629,121 @@ void useObjectsTogether(const char *operands) {
 #endif
 
 void turnLeft(void) {
-	uint8_t pDir = (uint8_t) playerDirection;
+	uint8_t pDir = (uint8_t) party[0].direction;
 	pDir--;
     
     pDir = pDir & 3;
-	playerDirection = (enum EDirection)pDir;
+    party[0].direction = (enum EDirection)pDir;
 }
 
 void turnRight(void) {
-	uint8_t pDir = (uint8_t) playerDirection;
+	uint8_t pDir = (uint8_t) party[0].direction;
     pDir++;
 
     pDir = pDir & 3;
-	playerDirection = (enum EDirection)pDir;
+    party[0].direction = (enum EDirection)pDir;
 }
 
 void setPlayerLocation(uint8_t location) {
-    playerLocation = location;
+    party[0].location = location;
 }
 
 void walkBy(uint8_t direction) {
 
     switch (direction) {
         case 1:
-            switch (playerDirection) {
+            switch (party[0].direction) {
                 case 1:
-                    playerPosition.y += WALK_STEP;
+                    party[0].position.y += WALK_STEP;
                     break;
                 case 2:
-                    playerPosition.x -= WALK_STEP;
+                    party[0].position.x -= WALK_STEP;
                     break;
                 case 3:
-                    playerPosition.y -= WALK_STEP;
+                    party[0].position.y -= WALK_STEP;
                     break;
                 case 0:
                 default:
-                    playerPosition.x += WALK_STEP;
+                    party[0].position.x += WALK_STEP;
                     break;
             }
             break;
         case 2:
-            switch (playerDirection) {
+            switch (party[0].direction) {
                 case 1:
-                    playerPosition.x -= WALK_STEP;
+                    party[0].position.x -= WALK_STEP;
                     break;
                 case 2:
-                    playerPosition.y -= WALK_STEP;
+                    party[0].position.y -= WALK_STEP;
                     break;
                 case 3:
-                    playerPosition.x += WALK_STEP;
+                    party[0].position.x += WALK_STEP;
                     break;
                 case 0:
                 default:
-                    playerPosition.y += WALK_STEP;
+                    party[0].position.y += WALK_STEP;
                     break;
             }
             break;
         case 3:
-            switch (playerDirection) {
+            switch (party[0].direction) {
                 case 1:
-                    playerPosition.y -= WALK_STEP;
+                    party[0].position.y -= WALK_STEP;
                     break;
                 case 2:
-                    playerPosition.x += WALK_STEP;
+                    party[0].position.x += WALK_STEP;
                     break;
                 case 3:
-                    playerPosition.y += WALK_STEP;
+                    party[0].position.y += WALK_STEP;
                     break;
                 case 0:
                 default:
-                    playerPosition.x -= WALK_STEP;
+                    party[0].position.x -= WALK_STEP;
                     break;
             }
             break;
         case 0:
         default:
-            switch (playerDirection) {
+            switch (party[0].direction) {
                 case 1:
-                    playerPosition.x += WALK_STEP;
+                    party[0].position.x += WALK_STEP;
                     break;
                 case 2:
-                    playerPosition.y += WALK_STEP;
+                    party[0].position.y += WALK_STEP;
                     break;
                 case 3:
-                    playerPosition.x -= WALK_STEP;
+                    party[0].position.x -= WALK_STEP;
                     break;
                 case 0:
                 default:
-                    playerPosition.y -= WALK_STEP;
+                    party[0].position.y -= WALK_STEP;
                     break;
             }
             break;
     }
 
 #ifdef CLI_BUILD
-    if (playerPosition.x < 0) {
-      playerPosition.x = 0;
+    if (party[0].position.x < 0) {
+        party[0].position.x = 0;
     }
 
-    if (playerPosition.y < 0) {
-        playerPosition.y = 0;
+    if (party[0].position.y < 0) {
+        party[0].position.y = 0;
     }
 
 
-    if (playerPosition.x >= rooms[playerLocation].sizeX) {
-        playerPosition.x = rooms[playerLocation].sizeX - 1;
+    if (party[0].position.x >= rooms[party[0].location].sizeX) {
+        party[0].position.x = rooms[party[0].location].sizeX - 1;
     }
 
-    if (playerPosition.y >= rooms[playerLocation].sizeY) {
-        playerPosition.y = rooms[playerLocation].sizeY - 1;
+    if (party[0].position.y >= rooms[party[0].location].sizeY) {
+        party[0].position.y = rooms[party[0].location].sizeY - 1;
     }
 #endif
 }
 
 enum EDirection getPlayerDirection(void) {
-    return playerDirection;
+    return party[0].direction;
 }
 
 void addToRoom(const char *roomName, struct Item *itemName) {
@@ -790,7 +776,7 @@ void setLoggerDelegate(LogDelegate newDelegate) {
 
 
 void setPlayerDirection(enum EDirection direction) {
-    playerDirection = direction;
+    party[0].direction = direction;
 }
 
 void setGameStatus(enum EGameStates newStatus) {
@@ -800,19 +786,68 @@ void setGameStatus(enum EGameStates newStatus) {
 void initCore(void) {
     defaultLogger = writeToLog;
     /* prepare for a single player in the game */
-    memFill(&playerPosition, 0, sizeof(struct WorldPosition));
+    memFill(&party[0].position, 0, sizeof(struct WorldPosition));
     setErrorHandlerCallback(NULL);
 
     collectedObject = &collectedObjectHead;
     memFill(collectedObject, 0, sizeof(struct ObjectNode));
-    playerLocation = 1;
     itemsCount = 0;
     roomCount = 1; /* there's an implicit dummy first */
-    playerRank = 0;
     gameStatus = kNormalGameplay;
-    playerDirection = kNorth;
-    playerPosition.x = 15;
-    playerPosition.y = 15;
+
+    party[0].location = 1;
+    party[0].rank = 0;
+    party[0].direction = kNorth;
+    party[0].position.x = 15;
+    party[0].position.y = 15;
+
+    party[0].name = "Lako";
+    party[0].inParty = 1;
+    party[0].hp = 20;
+    party[0].defense = 4;
+    party[0].attack = 4;
+    party[0].agility = 4;
+    party[0].wisdom = 4;
+    party[0].energy = 10;
+    party[0].level = 1;
+    party[0].specialStype = kNone;
+    party[0].kills = 0;
+
+    party[1].name = "Omar";
+    party[1].inParty = 1;
+    party[1].hp = 20;
+    party[1].energy = 10;
+    party[1].defense = 6;
+    party[1].attack = 3;
+    party[1].agility = 2;
+    party[1].wisdom = 4;
+    party[1].level = 1;
+    party[1].specialStype = kHeal;
+    party[1].kills = 0;
+
+    party[2].name = "Lena";
+    party[2].inParty = 1;
+    party[2].hp = 20;
+    party[2].energy = 10;
+    party[2].defense = 3;
+    party[2].attack = 8;
+    party[2].agility = 1;
+    party[2].wisdom = 3;
+    party[2].level = 1;
+    party[2].specialStype = kOffense;
+    party[2].kills = 0;
+
+    party[3].name = "Juka";
+    party[3].inParty = 1;
+    party[3].hp = 20;
+    party[3].energy = 10;
+    party[3].defense = 3;
+    party[3].attack = 2;
+    party[3].agility = 4;
+    party[3].wisdom = 6;
+    party[3].level = 1;
+    party[3].specialStype = kOffense;
+    party[3].kills = 0;
 
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));

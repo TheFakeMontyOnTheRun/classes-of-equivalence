@@ -294,7 +294,7 @@ void initStation(void) {
             "corner, there's a escape pod entrance.\n"
             "Apparently, only one pod was launched.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 3 */
     connections[2] = 0;

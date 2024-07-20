@@ -5,15 +5,15 @@
 
 #ifdef AGS
 #define PAGE_FLIP_TARGET 128
-#define XRES 130
+#define XRES 240
 #define YRES 160
-#define HALF_XRES 65
+#define HALF_XRES 120
 #define HALF_YRES 80
 #else
 #define PAGE_FLIP_TARGET 200
-#define XRES 216
+#define XRES 320
 #define YRES 200
-#define HALF_XRES 100
+#define HALF_XRES 160
 #define HALF_YRES 100
 #endif
 /*
@@ -283,15 +283,11 @@ extern FixP_t yCameraOffset;
 extern FixP_t zCameraOffset;
 extern int enable3DRendering;
 extern uint8_t enableSmoothMovement;
-#ifdef TILED_BITMAPS
-extern struct Bitmap *mapTopLevel[8];
-#else
-extern struct Bitmap *mapTopLevel;
-#endif
 extern int dirtyLineY0;
 extern int dirtyLineY1;
 extern enum ECommand mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
-extern FixP_t divLut[320];
+#define DIV_LUT_COUNT XRES_FRAMEBUFFER
+extern FixP_t divLut[DIV_LUT_COUNT];
 #endif

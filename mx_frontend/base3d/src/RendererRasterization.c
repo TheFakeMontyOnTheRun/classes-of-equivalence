@@ -994,9 +994,11 @@ void drawRect(const int x,
         *destinationLineStart = pixel;
     }
 
-    for (px = 0; px < dx; ++px) {
-        *destination = pixel;
-        destination++;
+    destinationLineStart = destination + (XRES_FRAMEBUFFER * (y + py)) + x;
+
+    for (px = 0; px <= dx; ++px) {
+        *destinationLineStart = pixel;
+        destinationLineStart++;
     }
 }
 
