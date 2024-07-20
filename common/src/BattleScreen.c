@@ -288,6 +288,10 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
                                 if (monsterHP[c] > 0) {
                                     --monsterHP[c];
+                                    
+                                    if (monsterHP[c] == 0) {
+                                        aliveMonsters--;
+                                    }
                                 }
                             }
                         }
@@ -303,9 +307,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         if (battleActions[currentCharacter] == kAttack) {
                             if (battleDamages[currentCharacter] >= monsterHP[monsterIndex]) {
                                 monsterHP[monsterIndex] = 0;
-                                aliveMonsters--;
                             } else {
                                 monsterHP[monsterIndex] -= battleDamages[currentCharacter];
+                            }
+                            
+                            if (monsterHP[monsterIndex] == 0) {
+                                aliveMonsters--;
                             }
                         }
 
