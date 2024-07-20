@@ -1,0 +1,67 @@
+LDFLAGS=`sdl2-config --libs` -R/usr/pkg/lib -R/usr/X11R7/lib  -L/usr/pkg/lib -L/usr/X11R7/lib  -lm -lGL
+
+CFLAGS= `sdl2-config --cflags `  \
+    -Ibase3d/include        \
+    -Imenu/include          \
+    -DCLI_BUILD \
+    -I../core/include \
+    -I../common/include \
+    -DINCLUDE_ITEM_DESCRIPTIONS -DSUPPORTS_HACKING_MINIGAME -DTILED_BITMAPS -Wall -Wextra -Wno-unused-parameter -Wno-switch -Wno-unused-variable \
+    -pedantic -DEMIT_QUIT_OPTION -DENDIANESS_AWARE -DSDL_DISABLE_IMMINTRIN_H \
+    -DXRES_FRAMEBUFFER=320 -DYRES_FRAMEBUFFER=200 -DXRES_SCREEN=320 -DYRES_SCREEN=240
+
+MENU_TARGET=game
+
+MENU_OBJ= menu/src/Main.o \
+          	  ../common/src/FixP.o \
+          	  ../common/src/Mesh.o \
+          	  ../common/src/Vec.o \
+          	  ../common/src/Common.o \
+          	  ../common/src/PackedFileReader.o \
+          	  ../common/src/MapWithCharKey.o \
+          	  ../common/src/CTile3DProperties.o \
+          	  ../common/src/EDirection_Utils.o \
+          	  ../common/src/Globals.o \
+          	  ../common/src/VisibilityStrategy.o \
+          	  ../common/src/Events.o \
+          	  ../common/src/Dungeon.o \
+          	  GL1Common/LoadBitmap.o \
+          	  GL1Common/Renderer.o \
+          	  GL1Common/RendererRasterization.o \
+          	  GL1Common/RendererTesselation.o \
+          	  ../common/src/GameMenu.o \
+          	  ../common/src/MainMenu.o \
+          	  ../common/src/Engine.o \
+          	  ../common/src/UI.o \
+          	  ../common/src/HackingScreen.o \
+          	  ../common/src/HelpScreen.o \
+          	  ../common/src/CreditsScreen.o \
+          	  ../common/src/Crawler.o \
+          	  ../core/src/Derelict.o \
+          	  ../core/src/Core.o \
+          	  ../core/src/Parser.o \
+          	  ../common/src/NullMusic.o \
+          	  ../common/src/HackingMinigameRules.o \
+         	  base3d/src/SDLVersion/CSDL2Renderer.o
+
+
+$(MENU_TARGET):	$(MENU_OBJ)
+	$(CC) -o$(MENU_TARGET) $(MENU_OBJ) $(LDFLAGS)
+
+all:   $(MENU_TARGET)
+
+
+menudata: packager
+	rm -f ./menu.pfs
+	ls res/*.*  | xargs ./packer
+	mv ./data.pfs ./menu.pfs
+
+clean:
+	rm -f menu/src/*.o
+	rm -f ../core/src/*.o
+	rm -f ../common/src/*.o
+	rm -f base3d/src/*.o
+	rm -f common/src/*.o
+	rm -f SoundSystem/*.o
+	rm -f base3d/src/SDLVersion/*.o
+	rm -f GL1Common/*.o
