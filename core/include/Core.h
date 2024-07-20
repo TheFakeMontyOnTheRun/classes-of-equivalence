@@ -125,6 +125,7 @@ struct Character {
     uint8_t wisdom: 4;
     uint8_t level: 4;
     uint8_t experience: 4;
+    enum ESpecialStype specialStype;
 };
 /**
  *

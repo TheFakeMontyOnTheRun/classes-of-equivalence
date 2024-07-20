@@ -811,8 +811,9 @@ void initCore(void) {
     party[0].energy = 10;
     party[0].experience = 0;
     party[0].level = 1;
+    party[0].specialStype = kNone;
 
-    party[1].name = "Hyme";
+    party[1].name = "Omar";
     party[1].inParty = 1;
     party[1].hp = 20;
     party[1].energy = 10;
@@ -822,8 +823,9 @@ void initCore(void) {
     party[1].wisdom = 4;
     party[1].experience = 0;
     party[1].level = 1;
+    party[1].specialStype = kHeal;
 
-    party[2].name = "Omar";
+    party[2].name = "Lena";
     party[2].inParty = 1;
     party[2].hp = 20;
     party[2].energy = 10;
@@ -833,6 +835,7 @@ void initCore(void) {
     party[2].wisdom = 3;
     party[2].experience = 0;
     party[2].level = 1;
+    party[2].specialStype = kOffense;
 
     party[3].name = "Juka";
     party[3].inParty = 1;
@@ -844,6 +847,7 @@ void initCore(void) {
     party[3].wisdom = 6;
     party[3].experience = 0;
     party[3].level = 1;
+    party[3].specialStype = kOffense;
 
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));

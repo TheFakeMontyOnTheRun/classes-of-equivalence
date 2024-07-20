@@ -71,6 +71,10 @@ enum ESoundDriver {
     kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib, kSN76489, kAY38910
 };
 
+enum ESpecialStype {
+    kNone, kHeal, kOffense
+};
+
 #define MENU_SELECTION_CHANGE_SOUND 1
 #define STATE_CHANGE_SOUND 2
 #define MAIN_MENU_THEME 3

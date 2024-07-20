@@ -272,7 +272,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 if (currentCharacter < TOTAL_CHARACTERS_IN_PARTY) {
                     if (battleActions[currentCharacter] == kSpecial) {
 
-                        if (currentCharacter & 1) {
+                        if (party[currentCharacter].specialStype == kHeal) {
                             int c = 0;
                             party[currentCharacter].energy -= 4;
 
@@ -281,7 +281,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                                     ++party[c].hp;
                                 }
                             }
-                        } else {
+                        } else if (party[currentCharacter].specialStype == kOffense) {
                             int c;
                             party[currentCharacter].energy -= 4;
 
