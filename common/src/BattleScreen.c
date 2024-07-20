@@ -291,6 +291,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                                     
                                     if (monsterHP[c] == 0) {
                                         aliveMonsters--;
+                                        ++party[currentCharacter].kills;
                                     }
                                 }
                             }
@@ -313,6 +314,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             
                             if (monsterHP[monsterIndex] == 0) {
                                 aliveMonsters--;
+                                ++party[currentCharacter].kills;
                             }
                         }
 
