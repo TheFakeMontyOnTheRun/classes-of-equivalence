@@ -283,7 +283,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             }
                         } else if (party[currentCharacter].specialStype == kOffense) {
                             int c;
-                            party[currentCharacter].energy -= 4;
+                            party[currentCharacter].energy -= 2;
 
                             for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
                                 if (monsterHP[c] > 0) {
