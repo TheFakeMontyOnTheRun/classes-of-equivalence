@@ -57,7 +57,7 @@ struct MonsterArchetype {
 const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
-  {"lady", 4, 3, 2, 1}
+  {"lady", 1, 3, 2, 1}
 };
 
 /* Life points of the monsters */
@@ -401,11 +401,6 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     currentCharacter = 0;
                     currentBattleState = kAttackPhase;
 
-                    for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT); ++c) {
-                        battleDamages[c] = (rand() % 10);
-                    }
-
-
                     for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
                         if (monsterHP[c] > 0) {
                             int hero;
@@ -420,9 +415,38 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     }
 
                     for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
+                        
+                        
+                        
                         if (battleActions[c] == kAttack) {
-                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % (aliveMonsters + 1));
+                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % (aliveMonsters));
                         }
+                    }
+
+                    for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
+                        int monsterTargetted = battleTargets[c];
+                        int attack = (rand() % party[c].attack);
+                        int agil1 = party[c].agility;
+                        int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
+                        int diffAgility = 1 + abs( agil1 - agil2);
+                        int roll = rand();
+                        int hit = roll % diffAgility;
+                        int defense = monsterArchetypes[monsterType[monsterTargetted]].defense;
+                        int calc = attack - ((hit == 0) ? 0 : defense);
+                        battleDamages[c] = max(0, calc);
+                    }
+
+                    for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
+                        int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
+                        int attack = (rand() % monsterArchetypes[monsterType[c]].attack);
+                        int agil1 = party[heroTargetted].agility;
+                        int agil2 = monsterArchetypes[monsterType[c]].agility;
+                        int diffAgility = 1 + abs( agil1 - agil2 );
+                        int roll = rand();
+                        int hit = roll % diffAgility;
+                        int defense = party[heroTargetted].defense;
+                        int calc = attack - ((hit == 0) ? 0 : defense);
+                        battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
                     }
 
                     animationTimer = kBattleAnimationInterval;
