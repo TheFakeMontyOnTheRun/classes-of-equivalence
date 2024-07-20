@@ -132,34 +132,34 @@ void BattleScreen_repaintCallback(void) {
         if (animationTimer == kBattleAnimationInterval) {
 
             int damage = battleDamages[currentCharacter];
-
-            if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
-                if (monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] == 0 || /* Attacking monster is dead */
-                    party[battleTargets[currentCharacter]].hp == 0 ) { /* or its target is dead */
-                    animationTimer = 0;
-                    goto done_flashing;
-                }
-                monsterAttacking = currentCharacter - TOTAL_CHARACTERS_IN_PARTY;
-            } else {
-                if (!party[currentCharacter].inParty || /* attacking hero is dead */
-                    monsterHP[battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY] == 0) { /* or its target is dead */
-                    animationTimer = 0;
-                    goto done_flashing;
-                }
-                damage = -damage;
-                splatMonster = battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY;
-            }
-
-            if (damage > 0) {
-                fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF0000FF), 0);
-            } else if (damage < 0) {
-                fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
-            } else {
-                fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), 0);
-            }
-
+            
             if (battleActions[currentCharacter] == kSpecial) {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFF0000), 0);
+            } else if (battleActions[currentCharacter] == kAttack) {
+                if (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY) {
+                    if (monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] == 0 || /* Attacking monster is dead */
+                        party[battleTargets[currentCharacter]].hp == 0 ) { /* or its target is dead */
+                        animationTimer = 0;
+                        goto done_flashing;
+                    }
+                    monsterAttacking = currentCharacter - TOTAL_CHARACTERS_IN_PARTY;
+                } else {
+                    if (!party[currentCharacter].inParty || /* attacking hero is dead */
+                        monsterHP[battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY] == 0) { /* or its target is dead */
+                        animationTimer = 0;
+                        goto done_flashing;
+                    }
+                    damage = -damage;
+                    splatMonster = battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY;
+                }
+                
+                if (damage > 0) {
+                    fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF0000FF), 0);
+                } else if (damage < 0) {
+                    fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF00FF00), 0);
+                } else {
+                    fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFFFFFF), 0);
+                }
             }
         }
     }
@@ -380,7 +380,8 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 return kBackToGame;
             case kCommandFire1:
                 if (cursorPosition == kSpecial &&
-                    party[currentCharacter].energy < 4) {
+                    ( party[currentCharacter].specialStype == kNone ||
+                      party[currentCharacter].energy < 4)) {
                     return kResumeCurrentState;
                 }
 
@@ -432,6 +433,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
                             int calc = attack - ((hit == 0) ? 0 : defense);
                             battleDamages[c] = max(0, calc);
+                        } else if (battleActions[c] == kSpecial) {
+                            int wisdom = party[c].wisdom;
+                            int roll = rand();
+                            int hit = roll % wisdom;
+                            battleDamages[c] = hit;
+                            battleTargets[c] = 0;
                         } else {
                             battleDamages[c] = 0;
                         }
@@ -449,6 +456,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
                             int calc = attack - ((hit == 0) ? 0 : defense);
                             battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
+                        } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
+                            int wisdom = monsterArchetypes[monsterType[c]].wisdom;
+                            int roll = rand();
+                            int hit = roll % wisdom;
+                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
+                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                         } else {
                             battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                         }
