@@ -809,7 +809,6 @@ void initCore(void) {
     party[0].agility = 4;
     party[0].wisdom = 4;
     party[0].energy = 10;
-    party[0].experience = 0;
     party[0].level = 1;
     party[0].specialStype = kNone;
     party[0].kills = 0;
@@ -822,7 +821,6 @@ void initCore(void) {
     party[1].attack = 3;
     party[1].agility = 2;
     party[1].wisdom = 4;
-    party[1].experience = 0;
     party[1].level = 1;
     party[1].specialStype = kHeal;
     party[1].kills = 0;
@@ -835,7 +833,6 @@ void initCore(void) {
     party[2].attack = 8;
     party[2].agility = 1;
     party[2].wisdom = 3;
-    party[2].experience = 0;
     party[2].level = 1;
     party[2].specialStype = kOffense;
     party[2].kills = 0;
@@ -848,7 +845,6 @@ void initCore(void) {
     party[3].attack = 2;
     party[3].agility = 4;
     party[3].wisdom = 6;
-    party[3].experience = 0;
     party[3].level = 1;
     party[3].specialStype = kOffense;
     party[3].kills = 0;
