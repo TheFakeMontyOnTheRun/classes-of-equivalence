@@ -13,11 +13,11 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "Core.h"
 #include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Common.h"
+#include "Core.h"
 #include "LoadBitmap.h"
 #include "CActor.h"
 #include "Dungeon.h"

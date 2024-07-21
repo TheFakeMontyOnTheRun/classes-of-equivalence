@@ -60,6 +60,10 @@
 		F1293B412B41C9050094E02B /* Shader.fsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B342B41C9050094E02B /* Shader.fsh */; };
 		F1293B422B41C9050094E02B /* Shader.vsh in Sources */ = {isa = PBXBuildFile; fileRef = F1293B352B41C9050094E02B /* Shader.vsh */; };
 		F1293B432B41C9050094E02B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1293B372B41C9050094E02B /* ViewController.m */; };
+		F136DE9E2C4D9E1E00BB20DA /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DE9C2C4D9E1E00BB20DA /* BattleResultScreen.c */; };
+		F136DE9F2C4D9E1E00BB20DA /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DE9C2C4D9E1E00BB20DA /* BattleResultScreen.c */; };
+		F136DEA02C4D9E1E00BB20DA /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DE9D2C4D9E1E00BB20DA /* BattleScreen.c */; };
+		F136DEA12C4D9E1E00BB20DA /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DE9D2C4D9E1E00BB20DA /* BattleScreen.c */; };
 		F163B9B72B3EF1A200C03D9E /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B98D2B3EF1A200C03D9E /* Common.c */; };
 		F163B9BA2B3EF1A200C03D9E /* Crawler.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9902B3EF1A200C03D9E /* Crawler.c */; };
 		F163B9BB2B3EF1A200C03D9E /* CreditsScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F163B9912B3EF1A200C03D9E /* CreditsScreen.c */; };
@@ -134,6 +138,8 @@
 		F1293B352B41C9050094E02B /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		F1293B362B41C9050094E02B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F1293B372B41C9050094E02B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F136DE9C2C4D9E1E00BB20DA /* BattleResultScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BattleResultScreen.c; sourceTree = "<group>"; };
+		F136DE9D2C4D9E1E00BB20DA /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BattleScreen.c; sourceTree = "<group>"; };
 		F163B9712B3EF1A200C03D9E /* CActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CActor.h; sourceTree = "<group>"; };
 		F163B9722B3EF1A200C03D9E /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		F163B9732B3EF1A200C03D9E /* controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = controller.h; sourceTree = "<group>"; };
@@ -332,6 +338,8 @@
 		F163B9882B3EF1A200C03D9E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F136DE9C2C4D9E1E00BB20DA /* BattleResultScreen.c */,
+				F136DE9D2C4D9E1E00BB20DA /* BattleScreen.c */,
 				F163B98D2B3EF1A200C03D9E /* Common.c */,
 				F163B9902B3EF1A200C03D9E /* Crawler.c */,
 				F163B9912B3EF1A200C03D9E /* CreditsScreen.c */,
@@ -597,6 +605,8 @@
 				F1293B232B41C8CE0094E02B /* MyOpenGLView.m in Sources */,
 				F17FD5492B8A23B7002C0D45 /* Renderer.c in Sources */,
 				F17FD54D2B8A2462002C0D45 /* Matrices.c in Sources */,
+				F136DE9F2C4D9E1E00BB20DA /* BattleResultScreen.c in Sources */,
+				F136DEA12C4D9E1E00BB20DA /* BattleScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,6 +651,8 @@
 				F1F3E0FF2B46E77E00D86751 /* TitleScreen.m in Sources */,
 				F17FD5482B8A23B7002C0D45 /* Renderer.c in Sources */,
 				F17FD54C2B8A2462002C0D45 /* Matrices.c in Sources */,
+				F136DE9E2C4D9E1E00BB20DA /* BattleResultScreen.c in Sources */,
+				F136DEA02C4D9E1E00BB20DA /* BattleScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
