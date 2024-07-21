@@ -29,6 +29,8 @@ MENU_OBJ=../common/src/MainMenu.o \
 	../common/src/Globals.o \
 	../common/src/VisibilityStrategy.o \
 	../common/src/Events.o \
+	../common/src/BattleScreen.o \
+	../common/src/BattleResultScreen.o \
 	../common/src/Dungeon.o \
 	../common/src/Crawler.o \
 	../common/src/Engine.o \
@@ -57,7 +59,7 @@ $(MENU_TARGET):	$(MENU_OBJ)
 all:   $(MENU_TARGET)
 
 serve: $(MENU_TARGET)
-	python3 -m http.server
+	python3 -m http.server 4321
 
 menudata: packager
 	rm -f ./menu.pfs
