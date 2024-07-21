@@ -64,6 +64,8 @@ MENU_OBJ= menu/src/Main.o \
 	  base3d/src/RendererTesselation.o \
 	  ../common/src/GameMenu.o \
 	  ../common/src/MainMenu.o \
+	  ../common/src/BattleScreen.o \
+	  ../common/src/BattleResultScreen.o \
 	  ../common/src/Engine.o \
 	  ../common/src/UI.o \
 	  ../common/src/HackingScreen.o \
