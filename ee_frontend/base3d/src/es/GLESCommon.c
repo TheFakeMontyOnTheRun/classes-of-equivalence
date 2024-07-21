@@ -6,11 +6,11 @@
 #include <math.h>
 #include <string.h>
 
-#include "Core.h"
 #include "FixP.h"
 #include "Matrices.h"
 #include "Enums.h"
 #include "Common.h"
+#include "Core.h"
 #include "Vec.h"
 #include "CActor.h"
 #include "Dungeon.h"
