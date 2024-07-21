@@ -29,13 +29,13 @@ void BattleResultScreen_initStateCallback(enum EGameMenuState tag) {
 
 void BattleResultScreen_repaintCallback(void) {
     int line = 3;
-
+    int c;
 
     clearScreen();
 
 
     drawTextAt(1, 2, "Victory!", getPaletteEntry(0xFF999999));
-    for (int c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
+    for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
         if (party[c].inParty && party[c].hp > 0) {
             char buffer[32];
             sprintf(&buffer[0], "%s - %d %s", party[c].name, party[c].kills, party[c].kills == 1 ? "kill" : "kills" );
