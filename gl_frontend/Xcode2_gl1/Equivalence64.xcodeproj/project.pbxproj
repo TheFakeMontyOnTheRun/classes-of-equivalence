@@ -12,6 +12,8 @@
 		F136B296293CDB1A00131388 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B291293CDB1A00131388 /* RendererTesselation.c */; };
 		F136B297293CDB1A00131388 /* Renderer.c in Sources */ = {isa = PBXBuildFile; fileRef = F136B292293CDB1A00131388 /* Renderer.c */; };
 		F136B29A293CDB3900131388 /* MainMenuGL1.nib in Resources */ = {isa = PBXBuildFile; fileRef = F136B298293CDB3900131388 /* MainMenuGL1.nib */; };
+		F136DEA42C4DA0B800BB20DA /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DEA22C4DA0B800BB20DA /* BattleResultScreen.c */; };
+		F136DEA52C4DA0B800BB20DA /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F136DEA32C4DA0B800BB20DA /* BattleScreen.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
 		F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A1322F2AA6276B00D2EEFC /* GameWindow.m */; };
 		F1B8CB1B27CFCCBD00C06E6F /* Common.c in Sources */ = {isa = PBXBuildFile; fileRef = F1B8CB1627CFCCBD00C06E6F /* Common.c */; };
@@ -79,6 +81,8 @@
 		F136B292293CDB1A00131388 /* Renderer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Renderer.c; path = ../GL1Common/Renderer.c; sourceTree = "<group>"; };
 		F136B298293CDB3900131388 /* MainMenuGL1.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MainMenuGL1.nib; sourceTree = "<group>"; };
 		F136B29C293CDC2300131388 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../base3d/include/Renderer.h; sourceTree = "<group>"; };
+		F136DEA22C4DA0B800BB20DA /* BattleResultScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleResultScreen.c; path = ../../common/src/BattleResultScreen.c; sourceTree = "<group>"; };
+		F136DEA32C4DA0B800BB20DA /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../../common/src/BattleScreen.c; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
 		F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundSystem.h; path = ../../common/include/SoundSystem.h; sourceTree = SOURCE_ROOT; };
@@ -223,6 +227,8 @@
 			isa = PBXGroup;
 			children = (
 				F15E9FEA2AC833B2003E6C7F /* SoundSystem.h */,
+				F136DEA22C4DA0B800BB20DA /* BattleResultScreen.c */,
+				F136DEA32C4DA0B800BB20DA /* BattleScreen.c */,
 				F1C623612AA3A9B00026195F /* Crawler.c */,
 				F1C623622AA3A9B00026195F /* CreditsScreen.c */,
 				F1C623632AA3A9B00026195F /* Dungeon.c */,
@@ -426,6 +432,8 @@
 				F1A132302AA6276B00D2EEFC /* GameWindow.m in Sources */,
 				F1E350512AF7BB01003A6154 /* HackingMinigameRules.c in Sources */,
 				F1E350522AF7BB01003A6154 /* Mesh.c in Sources */,
+				F136DEA42C4DA0B800BB20DA /* BattleResultScreen.c in Sources */,
+				F136DEA52C4DA0B800BB20DA /* BattleScreen.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

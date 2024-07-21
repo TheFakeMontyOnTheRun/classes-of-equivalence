@@ -1031,8 +1031,5 @@ void render(const long ms) {
 
             drawTextAt(1, 1, &messageLogBuffer[0], getPaletteEntry(0xFFFFFFFF));
         }
-
-        redrawHUD();
-        updateMap();
     }
 }
