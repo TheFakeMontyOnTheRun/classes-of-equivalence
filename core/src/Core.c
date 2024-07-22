@@ -387,7 +387,7 @@ void pickObjectByName(const char *objName) {
     while (itemToPick != NULL) {
         if (!strcmp(getItem(itemToPick->item)->name, objName)) {
 #ifdef MOVE_TO_OBJECT_POSITION_WHEN_PICKING
-            playerPosition = getItem(itemToPick->item)->position;
+            party[0].position = getItem(itemToPick->item)->position;
 #endif
             pickObject(getItem(itemToPick->item));
             return;

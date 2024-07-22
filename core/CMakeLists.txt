@@ -11,7 +11,7 @@ find_package(Threads REQUIRED)
 
 set(DERELICT_CORE_FEATURE_FLAGS "-D_FORTIFY_SOURCE=3 -DCLI_BUILD -DHAS_STDIO -DMOVE_TO_OBJECT_POSITION_WHEN_PICKING -DMORE_OBJECTS ")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} -W -Wall -Wextra -Wno-unused-parameter")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} -Wno-writable-strings ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DERELICT_CORE_FEATURE_FLAGS} ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_LANG_CXX11=0")
 
 if (APPLE)
@@ -26,8 +26,8 @@ include_directories(../common/include)
 include_directories(gtest)
 include_directories(gtest/include)
 
-include_directories(gmock/googlemock)
-include_directories(gmock/googlemock/include)
+include_directories(gmock/include)
+include_directories(gmock)
 
 set(TEST_SOURCE_FILES
 		tests/TestMovement.cpp
@@ -38,8 +38,8 @@ set(TEST_SOURCE_FILES
 		tests/TestDerelict.cpp
 
 		gtest/src/gtest-all.cc
-		gmock/googlemock/src/gmock-all.cc
-		gmock/googlemock/src/gmock_main.cc
+		gmock/src/gmock-all.cc
+		gmock/src/gmock_main.cc
 
 		)
 
