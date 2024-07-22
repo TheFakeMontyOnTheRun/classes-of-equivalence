@@ -401,7 +401,7 @@ void renderRoomTransition(void) {
     zCameraOffset -= Div(intToFix(1), intToFix(32));
 
     if (zCameraOffset == 0) {
-        currentPresentationState = kWaitingForInput;
+        currentPresentationState = kCheckingForRandomBattle;
         needsToRedrawVisibleMeshes = TRUE;
         gameTicks = 0;
         needsToRedrawHUD = TRUE;
