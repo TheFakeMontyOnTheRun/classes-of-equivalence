@@ -52,3 +52,8 @@ mx_frontend/Xcode2/Equivalence32.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugg
 ee_frontend/NDK-version/.idea
 ee_frontend/.idea
 CWSDPMI.SWP
+mx_frontend/CMakeFiles
+mx_frontend/cmake_install.cmake
+mx_frontend/CMakeCache.txt
+mx_frontend/equivalence32
+mx_frontend/Makefile
