@@ -57,3 +57,9 @@ mx_frontend/cmake_install.cmake
 mx_frontend/CMakeCache.txt
 mx_frontend/equivalence32
 mx_frontend/Makefile
+ee_frontend/Xcode4_gl2/equivalence128.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+ee_frontend/Xcode4_gl2/equivalence128.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
+ee_frontend/Xcode4_gl2/equivalence128.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
+gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
+gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
