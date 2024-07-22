@@ -35,7 +35,7 @@ enum EBattleStates {
 };
 
 #define kDummyBattleOptionsCount  4
-#define TOTAL_MONSTER_COUNT 4
+#define TOTAL_MONSTER_COUNT 3
 #define kBattleAnimationInterval 9
 #define TOTAL_MONSTER_TYPES 3
 #define TOTAL_FRAMES_PER_MONSTER 2
