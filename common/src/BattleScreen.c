@@ -42,6 +42,7 @@ enum EBattleStates {
 #define TOTAL_SPLAT_FRAMES 3
 
 struct Bitmap *foe[TOTAL_MONSTER_TYPES][TOTAL_FRAMES_PER_MONSTER];
+struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 
 uint8_t currentCharacter;
 
@@ -93,6 +94,9 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     currentCharacter = 0;
 
     aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
+    splat[0] = loadBitmap("splat0.img");
+    splat[1] = loadBitmap("splat1.img");
+    splat[2] = loadBitmap("splat2.img");
 
     foe[0][0] = loadBitmap("bull0.img");
     foe[1][0] = loadBitmap("cuco0.img");
@@ -203,12 +207,7 @@ void BattleScreen_repaintCallback(void) {
 
                 /* Terrible kludge, but I'm in a hurry */
                 if (frame >= 0 ) {
-                    fillRect( 12 * 8 + ( c * (32 + 8)) - (2 * animationTimer),
-                             -16 - animationTimer + (YRES_FRAMEBUFFER - 32) / 2,
-                             32 + (4 * animationTimer),
-                             32 - (32 - (2 * animationTimer)),
-                             getPaletteEntry(0xFF0000FF),
-                             1);
+                    drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
                 }
 
                 sprintf(&buffer3[0], "%d HP", battleDamages[currentCharacter] );
