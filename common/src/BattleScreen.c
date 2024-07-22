@@ -70,6 +70,9 @@ uint8_t battleDamages[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 /* The target of a given participant */
 uint8_t battleTargets[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
+uint8_t battleOrder[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
+uint8_t batteCharacterOrder = 0;
+
 enum EBattleStates currentBattleState;
 int8_t animationTimer;
 uint8_t monstersPresent = 0;
@@ -354,10 +357,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
             animationTimer = kBattleAnimationInterval;
             splatMonster = -1;
             monsterAttacking = -1;
-            currentCharacter++;
+            batteCharacterOrder++;
+                        
+            do {
+                currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+            } while( battleOrder[currentCharacter] != 0 );
 
-            if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
-                currentCharacter = 0;
+            battleOrder[currentCharacter] = 1;
+
+            if (batteCharacterOrder == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
+                currentCharacter = batteCharacterOrder = 0;
                 currentBattleState = kPlayerSelectingMoves;
 
                 if (aliveHeroes == 0) {
@@ -409,8 +418,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
                 if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
                     int c;
-                    currentCharacter = 0;
+                    currentCharacter = batteCharacterOrder = 0;
                     currentBattleState = kAttackPhase;
+                    
+                    for (c = 0; c < (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY); ++c) {
+                        battleOrder[c] = 0;
+                    }
 
                     for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
                         if (monsterHP[c] > 0) {
