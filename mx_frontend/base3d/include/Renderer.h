@@ -34,7 +34,7 @@
 #else
 #define TRANSPARENCY_COLOR 0
 #endif
-#define VISIBILITY_CONE_NARROWING 3
+#define VISIBILITY_CONE_NARROWING 6
 #define MASK_LEFT 1
 #define MASK_FRONT 2
 #define MASK_RIGHT 4
