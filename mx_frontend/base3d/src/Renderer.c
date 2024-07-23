@@ -100,7 +100,7 @@ void enter3D(void) {
 
 void printMessageTo3DView(const char *message) {
     strcpy(messageLogBuffer, message);
-    messageLogBufferCoolDown = 5000;
+    messageLogBufferCoolDown = 1000;
 }
 
 void loadTileProperties(const uint8_t levelNumber) {
