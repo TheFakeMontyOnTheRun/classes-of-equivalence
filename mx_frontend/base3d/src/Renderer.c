@@ -876,9 +876,9 @@ void render(const long ms) {
                     }
                 }
 
-                fillRect(0, 0, 216, lines * 8, 0, 1);
+                fillRect(0, 0, XRES, (lines * 8), 0, 1);
 
-                drawTextAt(1, 1, messageLogBuffer, 255);
+                drawTextAt(0, 0, messageLogBuffer, 255);
             }
         }
 
