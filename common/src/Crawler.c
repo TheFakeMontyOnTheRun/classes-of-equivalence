@@ -41,6 +41,8 @@ int leanY = 0;
 int showPromptToAbandonMission = FALSE;
 int needsToRedrawHUD = FALSE;
 
+void printMessageTo3DView(const char *message);
+
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
@@ -58,6 +60,13 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     } else {
         timeUntilNextState = 0;
     }
+
+    if (tag == kEscapedBattle) {
+        timeUntilNextState = kDefaultPresentationStateInterval;
+        printMessageTo3DView("You managed to escape!");
+    }
+
+    currentPresentationState = kWaitingForInput;
 
     showPromptToAbandonMission = FALSE;
 
@@ -202,13 +211,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
 
     if (currentPresentationState == kWaitingForInput) {
-        /* Not sure why this is here? */
-        if (cmd == kCommandFire4) {
-            needsToRedrawHUD = TRUE;
-        }
-
         loopTick(cmd);
-
         return kResumeCurrentState;
     }
 
@@ -236,6 +239,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
+        newState != kEscapedBattle &&
         newState != kHackingGame &&
         newState != kBattleScreen &&
         newState != kBattleResultScreen) {

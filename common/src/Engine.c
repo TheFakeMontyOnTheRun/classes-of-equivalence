@@ -75,6 +75,7 @@ void enterState(enum EGameMenuState newState) {
             break;
         case kPlayGame:
         case kBackToGame:
+        case kEscapedBattle:
             menuStateToReturn = kMainMenu;
             initStateCallback = Crawler_initStateCallback;
             repaintCallback = Crawler_repaintCallback;
@@ -113,7 +114,7 @@ void enterState(enum EGameMenuState newState) {
 
     initStateCallback(newState);
 
-    if (newState == kBackToGame) {
+    if (newState == kBackToGame || newState == kEscapedBattle) {
         newState = kPlayGame;
     }
 

@@ -299,6 +299,13 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                                 }
                             }
                         }
+                    } else if (battleActions[currentCharacter] == kRun) {
+                        int roll = rand() % 10;
+                        int agility = party[currentCharacter].agility;
+                        if (roll < agility) {
+                            initRoom(getPlayerRoom());
+                            return kEscapedBattle;
+                        }
                     }
                 }
 
@@ -394,8 +401,6 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     firstFrameOnCurrentState = 1;
                 }
                 break;
-            case kCommandBack:
-                return kBackToGame;
             case kCommandFire1:
                 if (cursorPosition == kSpecial &&
                     ( party[currentCharacter].specialStype == kNone ||

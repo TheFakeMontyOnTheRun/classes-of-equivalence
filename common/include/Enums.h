@@ -47,6 +47,7 @@ enum EGameMenuState {
     kQuit,
 #endif
     kBackToGame,
+    kEscapedBattle,
     kEndGame,
 #ifdef SUPPORTS_HACKING_MINIGAME
     kHackingGame,

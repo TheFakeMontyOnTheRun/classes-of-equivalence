@@ -157,6 +157,7 @@ void handleSystemEvents() {
         case 123:
             mBufferedCommand = kCommandLeft;
             if ((currentGameMenuState == kPlayGame ||
+                currentGameMenuState == kEscapedBattle ||
                 currentGameMenuState == kBackToGame) &&
                 currentPresentationState == kWaitingForInput
                 ) {
@@ -169,6 +170,7 @@ void handleSystemEvents() {
         case 124:
             mBufferedCommand = kCommandRight;
             if ((currentGameMenuState == kPlayGame ||
+                 currentGameMenuState == kEscapedBattle ||
                  currentGameMenuState == kBackToGame) &&
                 currentPresentationState == kWaitingForInput
                 ) {
