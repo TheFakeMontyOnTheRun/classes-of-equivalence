@@ -230,6 +230,10 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 }
             }
                 break;
+            case kCommandFire4: {
+                gameSnapshot.turn++;
+            }
+                break;
             case kCommandNone:
                 break;
             case kCommandBack:
