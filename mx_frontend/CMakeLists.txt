@@ -23,6 +23,8 @@ add_executable(equivalence32
         ../common/src/Crawler.c
         ../common/src/MainMenu.c
         ../common/src/HelpScreen.c
+        ../common/src/BattleScreen.c
+        ../common/src/BattleResultScreen.c
         ../common/src/CreditsScreen.c
         ../common/src/GameMenu.c
         menu/src/Main.c

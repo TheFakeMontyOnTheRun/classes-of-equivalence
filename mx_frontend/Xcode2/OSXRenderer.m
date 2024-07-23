@@ -39,7 +39,6 @@ extern uint8_t *collisionMap;
 extern struct Texture* textures;
 
 void initHW(int argc, char** argv) {
-    textBuffer = (char*)allocMem(TEXT_BUFFER_SIZE, GENERAL_MEMORY, TRUE);
     messageLogBuffer = (char*)allocMem(256, GENERAL_MEMORY, TRUE);
     collisionMap = (uint8_t*)allocMem(256, GENERAL_MEMORY, TRUE);
     visMap = (enum EVisibility*)allocMem(MAP_SIZE * MAP_SIZE * sizeof(enum EVisibility), GENERAL_MEMORY, TRUE);
@@ -158,6 +157,7 @@ void handleSystemEvents() {
         case 123:
             mBufferedCommand = kCommandLeft;
             if ((currentGameMenuState == kPlayGame ||
+                currentGameMenuState == kEscapedBattle ||
                 currentGameMenuState == kBackToGame) &&
                 currentPresentationState == kWaitingForInput
                 ) {
@@ -170,6 +170,7 @@ void handleSystemEvents() {
         case 124:
             mBufferedCommand = kCommandRight;
             if ((currentGameMenuState == kPlayGame ||
+                 currentGameMenuState == kEscapedBattle ||
                  currentGameMenuState == kBackToGame) &&
                 currentPresentationState == kWaitingForInput
                 ) {

@@ -47,10 +47,13 @@ enum EGameMenuState {
     kQuit,
 #endif
     kBackToGame,
+    kEscapedBattle,
     kEndGame,
 #ifdef SUPPORTS_HACKING_MINIGAME
     kHackingGame,
 #endif
+    kBattleScreen,
+    kBattleResultScreen,
     kGoodVictoryEpilogue,
     kBadVictoryEpilogue,
     kGoodGameOverEpilogue,
@@ -61,11 +64,16 @@ enum EGameMenuState {
 
 enum EPresentationState {
     kWaitingForInput,
-    kRoomTransitioning
+    kRoomTransitioning,
+    kCheckingForRandomBattle
 };
 
 enum ESoundDriver {
     kNoSound, kPcSpeaker, kOpl2Lpt, kAdlib, kSN76489, kAY38910
+};
+
+enum ESpecialStype {
+    kNone, kHeal, kOffense
 };
 
 #define MENU_SELECTION_CHANGE_SOUND 1

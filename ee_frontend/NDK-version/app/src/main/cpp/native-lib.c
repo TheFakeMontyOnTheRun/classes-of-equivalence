@@ -81,7 +81,7 @@ void flipRenderer(void) {
 
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
+Java_pt_b13h_equivalencegles2_DerelictJNI_initAssets(JNIEnv *env, jclass clazz,
                                                        jobject assetManager) {
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
@@ -104,19 +104,19 @@ void soundTick(void) {}
 void muteSound(void) {}
 
 JNIEXPORT jint JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_getSoundToPlay(JNIEnv *env, jclass clazz) {
     int toReturn = soundToPlay;
     soundToPlay = -1;
     return toReturn;
 }
 
 JNIEXPORT jint JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_isOnMainMenu(JNIEnv *env, jclass clazz) {
     return currentGameMenuState == (kMainMenu);
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jchar cmd) {
     switch (cmd) {
         case 'w':
             mBufferedCommand = kCommandUp;
@@ -168,7 +168,7 @@ Java_pt_b13h_derelictgles2_DerelictJNI_sendCommand(JNIEnv *env, jclass clazz, jc
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_init(JNIEnv *env, jclass clazz, jint jwidth, jint jheight) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_init(JNIEnv *env, jclass clazz, jint jwidth, jint jheight) {
     width = jwidth;
     height = jheight;
 
@@ -179,7 +179,7 @@ Java_pt_b13h_derelictgles2_DerelictJNI_init(JNIEnv *env, jclass clazz, jint jwid
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_drawFrame(JNIEnv *env, jclass clazz) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_drawFrame(JNIEnv *env, jclass clazz) {
     if (enable3DRendering) {
         startFrame(0, 0, width, height);
 
@@ -191,7 +191,7 @@ Java_pt_b13h_derelictgles2_DerelictJNI_drawFrame(JNIEnv *env, jclass clazz) {
 }
 
 JNIEXPORT void JNICALL
-Java_pt_b13h_derelictgles2_DerelictJNI_onDestroy(JNIEnv *env, jclass clazz) {
+Java_pt_b13h_equivalencegles2_DerelictJNI_onDestroy(JNIEnv *env, jclass clazz) {
     enable3DRendering = FALSE;
     unloadTextures();
 }

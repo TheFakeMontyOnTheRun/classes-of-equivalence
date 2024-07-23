@@ -83,7 +83,7 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
 
 void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
     struct Item *coupling = getItemNamed("magnetic-coupling");
-    struct Item *boots = getItemNamed("magnetic-boots");
+    struct Item *boots = getItemNamed("metal-pipe");
     if (item1 == boots && item2 == coupling) {
         coupling->active = FALSE;
         defaultLogger("Magnetic lock disengaged");
@@ -201,7 +201,7 @@ void useCloggedFlush(struct Item *item) {
 
 void useRegularFlush(struct Item *item) {
     (void)item;
-    defaultLogger("*FLUSH*");
+    defaultLogger("Nothing to be found");
 }
 
 void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
@@ -294,7 +294,7 @@ void initStation(void) {
             "corner, there's a escape pod entrance.\n"
             "Apparently, only one pod was launched.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 3 */
     connections[2] = 0;
@@ -598,7 +598,7 @@ void initStation(void) {
     addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
 
-    newItem = addItem("magnetic-boots",
+    newItem = addItem("metal-pipe",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
             "Boots with strong electro-magnets.\n"
             "Ideal for walking underwater...\n"
@@ -880,9 +880,9 @@ void initStation(void) {
     addToRoom("wc", newItem);
 
 
-    newItem = addItem("clogged-flush",
+    newItem = addItem("janitor-corpse",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "There is so much matter in the pipe...",
+            "This poor soul was at the wrong place, at the wrong time",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             1,
@@ -891,9 +891,9 @@ void initStation(void) {
     newItem->useCallback = useCloggedFlush;
     addToRoom("wc", newItem);
 
-    newItem = addItem("flush",
+    newItem = addItem("warden-corpse",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Working dispose valve for a very basic need.",
+            "Savagely beaten warden corpse.",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             1,

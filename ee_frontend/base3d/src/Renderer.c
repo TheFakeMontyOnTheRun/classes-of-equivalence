@@ -4,10 +4,10 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "Core.h"
 #include "FixP.h"
 #include "Enums.h"
 #include "Common.h"
+#include "Core.h"
 #include "Vec.h"
 #include "CActor.h"
 #include "Dungeon.h"
@@ -193,7 +193,7 @@ void renderRoomTransition(void) {
     zCameraOffset -= Div(intToFix(1), intToFix(32));
 
     if (zCameraOffset == 0) {
-        currentPresentationState = kWaitingForInput;
+        currentPresentationState = kCheckingForRandomBattle;
         needsToRedrawVisibleMeshes = TRUE;
         gameTicks = 0;
         needsToRedrawHUD = TRUE;
@@ -947,8 +947,5 @@ void render(const long ms) {
 
             drawTextAt(1, 1, &messageLogBuffer[0], 255);
         }
-
-        redrawHUD();
-        updateMap();
     }
 }

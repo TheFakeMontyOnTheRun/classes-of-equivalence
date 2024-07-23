@@ -230,6 +230,10 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 }
             }
                 break;
+            case kCommandFire4: {
+                gameSnapshot.turn++;
+            }
+                break;
             case kCommandNone:
                 break;
             case kCommandBack:
@@ -339,7 +343,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
         if (currentPlayerRoom != getPlayerRoom()) {
             enable3DRendering = FALSE;
             enteredThru = 0;
-            setPlayerDirection((enum EDirection)enteredThru);
+            setPlayerDirection((enum EDirection) enteredThru);
             initRoom(getPlayerRoom());
 
             thisMissionName = getRoomDescription();
@@ -368,10 +372,9 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 }
 
                 enable3DRendering = FALSE;
-                setPlayerDirection((enum EDirection)enteredThru);
+                setPlayerDirection((enum EDirection) enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
-                initRoom(room);
                 thisMissionName = getRoomDescription();
                 thisMissionNameLen = strlen(thisMissionName);
 
@@ -385,6 +388,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
 
             return gameSnapshot;
         }
+
 
         head = getRoom(getPlayerRoom())->itemsPresent->next;
 

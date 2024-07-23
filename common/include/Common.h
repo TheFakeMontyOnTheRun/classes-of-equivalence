@@ -64,7 +64,6 @@ uint32_t toNativeEndianess(const uint32_t val);
 int countLines(const char* text);
 
 extern const char *mainText;
-extern char *textBuffer;
 extern size_t biggestOption;
 extern const char *focusItemName;
 extern int currentSelectedItem;

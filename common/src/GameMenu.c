@@ -48,7 +48,6 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
     int c;
 
     GameMenu_StateTitle = NULL;
-    memFill(textBuffer, 0, TEXT_BUFFER_SIZE);
     drawFilter = FALSE;
 
     switch (tag) {
@@ -57,7 +56,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             timeUntilNextState = 0;
             drawFilter = TRUE;
             GameMenu_StateTitle = "End session?";
-            mainText = textBuffer;
+            mainText = "";
             GameMenu_optionsCount = 2;
             GameMenu_options = GameMenu_EndGame_options;
             GameMenu_nextStateNavigation = &GameMenu_EndGame_nextStateNavigation[0];
@@ -65,8 +64,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
 
 
         case kGoodVictoryEpilogue:
-            sprintf (textBuffer, "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n");
-            mainText = textBuffer;
+            mainText = "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n";
 
             GameMenu_StateTitle = "Victory";
 
@@ -76,8 +74,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kBadVictoryEpilogue:
-            sprintf (textBuffer, "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n");
-            mainText = textBuffer;
+            mainText = "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n";
             GameMenu_StateTitle = "Victory";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
@@ -85,12 +82,10 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kGoodGameOverEpilogue:
-            sprintf (textBuffer,
-                     "You failed! While you fled the ship\n"
-                     "alive, you failed to prevent the \n"
-                     "worst scenario and now EVERYBODY is\n"
-                     "dead (and that includes you!)\n\n\n\n\n");
-            mainText = textBuffer;
+            mainText = "You failed! While you fled the ship\n"
+                       "alive, you failed to prevent the \n"
+                       "worst scenario and now EVERYBODY is\n"
+                       "dead (and that includes you!)\n\n\n\n\n";
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
@@ -98,11 +93,9 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kBadGameOverEpilogue:
-            sprintf (textBuffer,
-                     "You're dead! And so are millions of\n"
-                     "other people on the path of\n"
-                     "destruction faulty reactor\n\n\n\n\n\n");
-            mainText = textBuffer;
+            mainText = "You're dead! And so are millions of\n"
+                       "other people on the path of\n"
+                       "destruction faulty reactor\n\n\n\n\n\n";
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
@@ -134,7 +127,7 @@ void GameMenu_repaintCallback(void) {
     }
 
     if (mainText != NULL) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, textBuffer);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 5, GameMenu_StateTitle, mainText);
     }
 
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - biggestOption - 4,

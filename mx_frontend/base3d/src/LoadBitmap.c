@@ -29,7 +29,6 @@
 
 struct Texture *textures;
 uint8_t usedTexture = 0;
-extern struct Bitmap *mapTopLevel;
 
 extern struct Bitmap *itemSprites[TOTAL_ITEMS];
 
@@ -44,13 +43,6 @@ void clearTextures(void) {
             itemSprites[c] = NULL;
         }
     }
-
-    if (mapTopLevel) {
-        releaseBitmap(mapTopLevel);
-        mapTopLevel = NULL;
-    }
-
-    /* The level textures don't need to be free'd */
 }
 
 struct Texture *makeTextureFrom(const char *__restrict__ filename) {

@@ -3397,11 +3397,11 @@ void MainMenu_repaintCallback(void) {
     }
 
     drawWindowWithOptions(
-            (XRES_FRAMEBUFFER / 8) - (int) 9 - 4,
+            (XRES_FRAMEBUFFER / 8) - (int) 9 - 6,
             (YRES_FRAMEBUFFER / 8) - 4 - kMainMenuOptionsCount,
-            9 + 2,
+            9 + 4,
             kMainMenuOptionsCount + 2,
-            "Derelict",
+            "Equivalence",
             MainMenu_options,
             kMainMenuOptionsCount,
             cursorPosition);

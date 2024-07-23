@@ -41,6 +41,8 @@ int leanY = 0;
 int showPromptToAbandonMission = FALSE;
 int needsToRedrawHUD = FALSE;
 
+void printMessageTo3DView(const char *message);
+
 const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
@@ -51,13 +53,20 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
 
     if (tag == kPlayGame) {
         initStation();
-        timeUntilNextState = kDefaultPresentationStateInterval;
+        timeUntilNextState = 1000;
         gameTicks = 0;
         enteredThru = 0;
         memFill(&gameSnapshot, 0, sizeof(struct GameSnapshot));
     } else {
         timeUntilNextState = 0;
     }
+
+    if (tag == kEscapedBattle) {
+        timeUntilNextState = 1000;
+        printMessageTo3DView("You managed to escape!");
+    }
+
+    currentPresentationState = kWaitingForInput;
 
     showPromptToAbandonMission = FALSE;
 
@@ -144,15 +153,20 @@ void Crawler_repaintCallback(void) {
         if (currentPresentationState == kRoomTransitioning) {
             renderRoomTransition();
         } else if (currentPresentationState == kWaitingForInput) {
-
+            char buffer[64];
             renderTick(30);
 
             recenterView();
+
+            sprintf(&buffer[0], "turn: %zu\ntime: %ld", gameSnapshot.turn, timeUntilNextState);
+
+            drawTextAt(0, (YRES_FRAMEBUFFER / 8) - 2, &buffer[0], getPaletteEntry(0xFFFFFFFF));
+
         }
     }
 }
 
-enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
+enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (showPromptToAbandonMission) {
 
@@ -160,10 +174,12 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
             case kCommandBack:
                 return kMainMenu;
             case kCommandUp:
+                timeUntilNextState = 1000;
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 --cursorPosition;
                 break;
             case kCommandDown:
+                timeUntilNextState = 1000;
                 playSound(MENU_SELECTION_CHANGE_SOUND);
                 ++cursorPosition;
                 break;
@@ -176,7 +192,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
                     needsToRedrawVisibleMeshes = TRUE;
                     return kResumeCurrentState;
                 }
-                timeUntilNextState = 0;
+                timeUntilNextState = 1000;
                 return AbandonMission_navigation[cursorPosition];
         }
 
@@ -198,18 +214,37 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
     }
 
     if (timeUntilNextState != kNonExpiringPresentationState) {
-        timeUntilNextState -= *((long*)data);
+        timeUntilNextState -= *((long *) data);
     }
 
     if (currentPresentationState == kWaitingForInput) {
-        /* Not sure why this is here? */
-        if (cmd == kCommandFire4) {
-            needsToRedrawHUD = TRUE;
+        if (timeUntilNextState < 0) {
+            if (cmd == kCommandNone) {
+                timeUntilNextState = 1000;
+                cmd = kCommandFire4;
+            }
         }
-
         loopTick(cmd);
 
         return kResumeCurrentState;
+    }
+
+
+    if (currentPresentationState == kCheckingForRandomBattle) {
+        struct Room *playerNewRoom = getRoom(getPlayerRoom());
+        int random = rand() % 10;
+        currentPresentationState = kWaitingForInput;
+        texturesUsed = 0;
+        clearTextures();
+        nativeTextures[0] = makeTextureFrom("arch.img");
+        nativeTextures[1] = makeTextureFrom("floor.img");
+        texturesUsed = 2;
+
+        if (random < playerNewRoom->chanceOfRandomBattle) {
+            return kBattleScreen;
+        } else {
+            initRoom(getPlayerRoom());
+        }
     }
 
     return kResumeCurrentState;
@@ -218,7 +253,11 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void* data) {
 void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
-        newState != kHackingGame) {
+        newState != kEscapedBattle &&
+        newState != kHackingGame &&
+        newState != kBattleScreen &&
+        newState != kBattleResultScreen) {
+
         clearTextures();
         clearTileProperties();
     }

@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sub Mare Imperium - Derelict (Software Renderer)"
-include(":app")
+rootProject.name = "Sub Mare Imperium - Classes of Equivalence (Software Renderer)"
 include(":app")

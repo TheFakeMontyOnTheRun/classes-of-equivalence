@@ -18,6 +18,8 @@ OBJS = 		menu/src/Main.o \
        		../common/src/MainMenu.o \
        		../common/src/Crawler.o \
        		../common/src/HelpScreen.o \
+       		../common/src/BattleScreen.o \
+       		../common/src/BattleResultScreen.o \
        		../common/src/CreditsScreen.o \
        		../common/src/GameMenu.o \
        		../common/src/Engine.o \
@@ -52,7 +54,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 serve: $(TARGET)
-	python3 -m http.server 5050
+	python3 -m http.server 5151
 
 dist: $(TARGET)
 	zip dist.zip index.html index.data index.js index.wasm

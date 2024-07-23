@@ -38,6 +38,8 @@ add_library(native-lib SHARED
         ../../../../../../common/src/MainMenu.c
         ../../../../../../common/src/HackingMinigameRules.c
         ../../../../../../common/src/Mesh.c
+        ../../../../../../common/src/BattleScreen.c
+        ../../../../../../common/src/BattleResultScreen.c
         ../../../../../../common/src/Crawler.c
         ../../../../../../common/src/HelpScreen.c
         ../../../../../../common/src/CreditsScreen.c

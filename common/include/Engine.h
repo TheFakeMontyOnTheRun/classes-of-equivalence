@@ -63,6 +63,22 @@ enum EGameMenuState HackingScreen_tickCallback(enum ECommand, void* data);
 
 void HackingScreen_unloadStateCallback(enum EGameMenuState newState);
 
+void BattleScreen_initStateCallback(enum EGameMenuState tag);
+
+void BattleScreen_repaintCallback(void);
+
+enum EGameMenuState BattleScreen_tickCallback(enum ECommand, void* data);
+
+void BattleScreen_unloadStateCallback(enum EGameMenuState newState);
+
+void BattleResultScreen_initStateCallback(enum EGameMenuState tag);
+
+void BattleResultScreen_repaintCallback(void);
+
+enum EGameMenuState BattleResultScreen_tickCallback(enum ECommand, void* data);
+
+void BattleResultScreen_unloadStateCallback(enum EGameMenuState newState);
+
 void enterState(enum EGameMenuState State);
 
 int loopTick(enum ECommand cmd);

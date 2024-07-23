@@ -34,6 +34,8 @@ add_executable(derelict64
         ../common/src/CreditsScreen.c
         ../common/src/GameMenu.c
         ../common/src/Engine.c
+        ../common/src/BattleScreen.c
+        ../common/src/BattleResultScreen.c
         ../common/src/UI.c
         ../common/src/HackingScreen.c
         ../common/src/VisibilityStrategy.c

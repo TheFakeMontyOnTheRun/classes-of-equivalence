@@ -401,7 +401,7 @@ void renderRoomTransition(void) {
     zCameraOffset -= Div(intToFix(1), intToFix(32));
 
     if (zCameraOffset == 0) {
-        currentPresentationState = kWaitingForInput;
+        currentPresentationState = kCheckingForRandomBattle;
         needsToRedrawVisibleMeshes = TRUE;
         gameTicks = 0;
         needsToRedrawHUD = TRUE;
@@ -1031,8 +1031,5 @@ void render(const long ms) {
 
             drawTextAt(1, 1, &messageLogBuffer[0], getPaletteEntry(0xFFFFFFFF));
         }
-
-        redrawHUD();
-        updateMap();
     }
 }

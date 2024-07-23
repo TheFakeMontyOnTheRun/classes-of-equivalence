@@ -81,7 +81,7 @@ TEST_F(TestDerelict, canUseCardWriterToHackKeycards) {
 }
 
 TEST_F(TestDerelict, cantUseCardWriterToHackOtherThings) {
-    struct Item *boots = getItemNamed("magnetic-boots");
+    struct Item *boots = getItemNamed("metal-pipe");
     struct Item *cardWritter = getItemNamed("card-writer");
 
     ASSERT_FALSE(hasItemInRoom("computer-core", "hacked-keycard"));
@@ -90,7 +90,7 @@ TEST_F(TestDerelict, cantUseCardWriterToHackOtherThings) {
 }
 
 TEST_F(TestDerelict, canUseMagneticBootsToDisableMagneticCoupling) {
-    struct Item *boots = getItemNamed("magnetic-boots");
+    struct Item *boots = getItemNamed("metal-pipe");
     struct Item *coupling = getItemNamed("magnetic-coupling");
 
     ASSERT_TRUE(coupling->active);
@@ -109,7 +109,7 @@ TEST_F(TestDerelict, usingOtherObjectsWithMagneticCoupleAchievesNothing) {
 
 TEST_F(TestDerelict, usingTheCloggedFlushWillProduceTheHighRankKeycard) {
     struct Item *highRankCard = getItemNamed("high-rank-keycard");
-    struct Item *cloggedFlush = getItemNamed("clogged-flush");
+    struct Item *cloggedFlush = getItemNamed("janitor-corpse");
 
     ASSERT_FALSE(hasItemInRoom("wc", "high-rank-keycard"));
     useCloggedFlush(NULL);
@@ -118,7 +118,7 @@ TEST_F(TestDerelict, usingTheCloggedFlushWillProduceTheHighRankKeycard) {
 
 TEST_F(TestDerelict, usingTheRegularFlushWillNotProduceTheHighRankKeycard) {
     struct Item *highRankCard = getItemNamed("high-rank-keycard");
-    struct Item *cloggedFlush = getItemNamed("clogged-flush");
+    struct Item *cloggedFlush = getItemNamed("janitor-corpse");
 
     ASSERT_FALSE(hasItemInRoom("wc", "high-rank-keycard"));
     useRegularFlush(NULL);
@@ -303,9 +303,9 @@ TEST_F(TestDerelict, usingTheReactorCoreWillCauseMeltdown) {
 }
 
 TEST_F(TestDerelict, cantToggleMagneticBoots) {
-    ASSERT_TRUE(getItemNamed("magnetic-boots")->active);
-    parseCommand("use", "magnetic-boots");
-    ASSERT_TRUE(getItemNamed("magnetic-boots")->active);
+    ASSERT_TRUE(getItemNamed("metal-pipe")->active);
+    parseCommand("use", "metal-pipe");
+    ASSERT_TRUE(getItemNamed("metal-pipe")->active);
 }
 
 TEST_F(TestDerelict, cantToggleCommTerminal1ByUsingWithHigherRankKeycards) {
@@ -340,17 +340,17 @@ TEST_F(TestDerelict, cantUseCloggedFlushTwice) {
     ASSERT_FALSE(playerHasObject("high-rank-keycard"));
     ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
 
-    parseCommand("use", "clogged-flush");
+    parseCommand("use", "janitor-corpse");
     ASSERT_NE(0, getItemNamed("high-rank-keycard")->roomId);
     ASSERT_FALSE(playerHasObject("high-rank-keycard"));
 
     parseCommand("pick", "high-rank-keycard");
 
-    parseCommand("use", "clogged-flush");
+    parseCommand("use", "janitor-corpse");
     ASSERT_TRUE(playerHasObject("high-rank-keycard"));
     ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
 
-    parseCommand("use", "clogged-flush");
+    parseCommand("use", "janitor-corpse");
     ASSERT_TRUE(playerHasObject("high-rank-keycard"));
     ASSERT_EQ(0, getItemNamed("high-rank-keycard")->roomId);
 }
