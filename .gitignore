@@ -63,3 +63,5 @@ ee_frontend/Xcode4_gl2/equivalence128.xcodeproj/xcuserdata/monty.xcuserdatad/xcs
 gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
 gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
+core/.idea
+core/cmake-build-debug
