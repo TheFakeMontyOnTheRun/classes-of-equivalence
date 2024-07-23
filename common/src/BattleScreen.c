@@ -93,7 +93,14 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
 
-    aliveMonsters = monstersPresent = 1 + (rand() % (TOTAL_MONSTER_COUNT - 1));
+    aliveHeroes = 0;
+    for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
+        if (party[d].inParty && party[d].hp > 0) {
+            ++aliveHeroes;
+        }
+    }
+    
+    aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
     splat[0] = loadBitmap("splat0.img");
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
@@ -112,12 +119,6 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
         monsterType[c] = rand() % TOTAL_MONSTER_TYPES;
     }
 
-    aliveHeroes = 0;
-    for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
-        if (party[d].inParty && party[d].hp > 0) {
-            ++aliveHeroes;
-        }
-    }
 
     splatMonster = -1;
     monsterAttacking = -1;
