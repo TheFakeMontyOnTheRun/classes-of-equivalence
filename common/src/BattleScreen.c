@@ -84,6 +84,10 @@ uint8_t aliveHeroes = 0;
 const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
 
+const char *BattleScreen_optionsNoSpecial[kDummyBattleOptionsCount] = {
+        "Attack", "Defend", "-", "Run"};
+
+
 int8_t splatMonster = -1;
 int8_t monsterAttacking = -1;
 
@@ -223,15 +227,27 @@ void BattleScreen_repaintCallback(void) {
     }
 
     if (currentBattleState == kPlayerSelectingMoves) {
-        drawWindowWithOptions(
-                0,
-                (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
-                9 + 2,
-                kDummyBattleOptionsCount + 2,
-                party[currentCharacter].name,
-                BattleScreen_options,
-                kDummyBattleOptionsCount,
-                cursorPosition);
+        if (party[currentCharacter].specialStype == kNone) {
+            drawWindowWithOptions(
+                    0,
+                    (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                    9 + 2,
+                    kDummyBattleOptionsCount + 2,
+                    party[currentCharacter].name,
+                    BattleScreen_optionsNoSpecial,
+                    kDummyBattleOptionsCount,
+                    cursorPosition);
+        } else {
+            drawWindowWithOptions(
+                    0,
+                    (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                    9 + 2,
+                    kDummyBattleOptionsCount + 2,
+                    party[currentCharacter].name,
+                    BattleScreen_options,
+                    kDummyBattleOptionsCount,
+                    cursorPosition);
+        }
     }
 
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
