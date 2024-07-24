@@ -416,7 +416,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 currentCharacter++;
 
                 /* skipping dead or absent characters */
-                if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
+                while (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
                     (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
                     currentCharacter++;
                 }
