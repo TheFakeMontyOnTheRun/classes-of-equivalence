@@ -526,4 +526,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
 void BattleScreen_unloadStateCallback(enum EGameMenuState newState) {
     (void) newState;
+
+    releaseBitmap(splat[0]);
+    releaseBitmap(splat[1]);
+    releaseBitmap(splat[2]);
+
+    releaseBitmap(foe[0][0]);
+    releaseBitmap(foe[1][0]);
+    releaseBitmap(foe[2][0]);
+
+    releaseBitmap(foe[0][1]);
+    releaseBitmap(foe[1][1]);
+    releaseBitmap(foe[2][1]);
 }
