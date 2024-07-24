@@ -75,7 +75,8 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
         addToRoom("computer-core", card);
         dropObjectByName("low-rank-keycard");
         removeObjectFromRoom(getItemNamed("low-rank-keycard"));
-        defaultLogger("Card credentials overridden.\nHacked card emitted.");
+        defaultLogger("Lena liberated. Intrusion implant upgrade found.");
+        party[2].inParty = 1;
     } else {
         defaultLogger("No effect");
     }
@@ -86,7 +87,8 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
     struct Item *boots = getItemNamed("metal-pipe");
     if (item1 == boots && item2 == coupling) {
         coupling->active = FALSE;
-        defaultLogger("Magnetic lock disengaged");
+        defaultLogger("Omar recruited to the escape effort.");
+        party[1].inParty = 1;
     } else {
         defaultLogger("No effect");
     }
@@ -240,8 +242,9 @@ void useComputerRack(struct Item *item) {
 
 
     if (accessGrantedToSafe) {
-        defaultLogger("Safe unlocked");
+        defaultLogger("Juka joined the party");
         addToRoom("situation-room", getItemNamed("root-keycard"));
+        party[3].inParty = 1;
         return;
     }
 
@@ -274,7 +277,7 @@ void initStation(void) {
             "the predicted path, I will sink into\n"
             "the abyss myself.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 2 */
     connections[2] = 1;
@@ -308,7 +311,7 @@ void initStation(void) {
             "being right next to the hangar and\n"
             "the control room, it's rather quiet.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 4 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -322,7 +325,7 @@ void initStation(void) {
             "typical only of ships with 5 levels\n"
             "or more.",
 #endif
-            64, 64, 0, connections)->rankRequired = 1;
+            64, 64, 5, connections)->rankRequired = 1;
 
     /* 5 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -338,7 +341,7 @@ void initStation(void) {
             "cloth and broken plastic on the floor,\n"
             "but nothing really useful.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
 
     /* 6 */
@@ -353,7 +356,7 @@ void initStation(void) {
             "what it is, but I guess I already\n"
             "know. Ick.",
 #endif
-            64, 9, 0, connections);
+            64, 9, 5, connections);
 
 
     /* 7 */
@@ -368,7 +371,7 @@ void initStation(void) {
             "There are some burn marks on the \n"
             "walls.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 8 */
     connections[2] = 0;
@@ -380,7 +383,7 @@ void initStation(void) {
             "see some of the factory stickers \n"
             "in it.",
 #endif
-            32, 32, 0, connections)->rankRequired = 2;
+            32, 32, 5, connections)->rankRequired = 2;
 
     /* 9 */
     connections[1] = 12;
@@ -394,7 +397,7 @@ void initStation(void) {
             "well. These parts of the quarters \n"
             "were probably the more prestigious ones.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 10 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -406,7 +409,7 @@ void initStation(void) {
             "badly mixed up. It's hard to make \n"
             "the age of girl, but she was young.",
 #endif
-            32, 32, 0, connections)->rankRequired = 3;
+            32, 32, 5, connections)->rankRequired = 3;
 
     /* 11 */
     connections[2] = 0;
@@ -418,7 +421,7 @@ void initStation(void) {
             "much around. He had a strange \n"
             "fixation on redheads.",
 #endif
-            32, 32, 0, connections)->rankRequired = 4;
+            32, 32, 5, connections)->rankRequired = 4;
 
     /* 12 */
     connections[0] = 0;
@@ -427,7 +430,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 13 */
     connections[3] = 0;
@@ -439,7 +442,7 @@ void initStation(void) {
             "has an elevator. This is was typical \n"
             "only of ships with 5 levels or more.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 14 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -455,7 +458,7 @@ void initStation(void) {
             "middle of a day-to-day routine and had\n"
             "to quickly run.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 15 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -464,7 +467,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections)->rankRequired = 4;
+            32, 32, 5, connections)->rankRequired = 4;
 
     /* 16 */
     connections[1] = 0;
@@ -473,7 +476,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections)->rankRequired = 3;
+            32, 32, 5, connections)->rankRequired = 3;
 
     /* 17 */
     connections[0] = 0;
@@ -483,7 +486,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 18 */
     connections[1] = 0;
@@ -492,7 +495,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-            32, 32, 0, connections)->rankRequired = 3;
+            32, 32, 5, connections)->rankRequired = 3;
 
     /* 19 */
     connections[3] = 0;
@@ -504,7 +507,7 @@ void initStation(void) {
             "elevator. This is was typical only of ships \n"
             "with 5 levels or more.",
 #endif
-            32, 32, 0, connections)->rankRequired = 1;
+            32, 32, 5, connections)->rankRequired = 1;
 
     /* 20 */
     memFill(&connections[0], 0, 6 * sizeof(int8_t));
@@ -515,7 +518,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 21 */
     connections[0] = 0;
@@ -525,7 +528,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections);
+            32, 32, 5, connections);
 
     /* 22 */
     connections[1] = 0;
@@ -534,7 +537,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD.",
 #endif
-            32, 32, 0, connections)->rankRequired = 4;
+            32, 32, 5, connections)->rankRequired = 4;
 
     /* 23 */
     connections[3] = 0;
@@ -543,7 +546,7 @@ void initStation(void) {
 #ifdef INCLUDE_ROOM_DESCRIPTIONS
             "TBD",
 #endif
-            32, 32, 0, connections)->rankRequired = 2;
+            32, 32, 5, connections)->rankRequired = 2;
 
 
     /*Items*/
