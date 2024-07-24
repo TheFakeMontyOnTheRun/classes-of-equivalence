@@ -67,9 +67,7 @@ public class CompilerApp {
 		String ouputFile = "";
 
 		if (args.length == 0) {
-			inputOBJFile = "/Users/monty/Desktop/fighter.obj";
-			inputMTLFile = "/Users/monty/Desktop/fighter.mtl";
-			ouputFile = "assets/output.mdl";
+		    return;
 		} else {
 			String radical = args[0].substring(args[0].lastIndexOf("/") + 1).replace(".obj", "");
 			inputOBJFile = "src/" + radical + ".obj";

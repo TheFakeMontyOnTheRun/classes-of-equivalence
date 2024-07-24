@@ -19,7 +19,6 @@ models: $(CRUNCHER)
 	ls src/*.obj  | xargs java -jar ../../tools/wobj-compiler/target/wobj-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 data:	$(PACKAGER)
-	#python3 ./check_textures.py
 	rm -f ./base.pfs
 	ls assets/*.*  | xargs ./packer
 	mkdir -p output
