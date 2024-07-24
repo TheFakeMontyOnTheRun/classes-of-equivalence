@@ -129,6 +129,31 @@ void recenterView(void) {
     }
 }
 
+void redrawHUD(void) {
+    int line = 0;
+    struct ObjectNode *head;
+    int c;
+    struct Item *itemPtr;
+    
+    /* draw current item on the corner of the screen */
+    head = getPlayerItems();
+    
+    while (head != NULL) {
+        itemPtr = getItem(head->item);
+        if (itemPtr != NULL) {
+            if (line == currentSelectedItem) {
+                char textBuffer[255];
+                sprintf(&textBuffer[0], "%s", itemPtr->name);
+                
+                drawTextAtWithMarginWithFiltering(0, (YRES_FRAMEBUFFER / 8) - 2, XRES_FRAMEBUFFER, itemPtr->name,
+                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), ' ');
+            }
+            ++line;
+        }
+        head = head->next;
+    }
+}
+
 void Crawler_repaintCallback(void) {
 
     needsToRedrawVisibleMeshes = TRUE;
@@ -153,14 +178,25 @@ void Crawler_repaintCallback(void) {
         if (currentPresentationState == kRoomTransitioning) {
             renderRoomTransition();
         } else if (currentPresentationState == kWaitingForInput) {
+            int c;
             char buffer[64];
             renderTick(30);
 
             recenterView();
+            redrawHUD();
 
             sprintf(&buffer[0], "turn: %zu\ntime: %ld", gameSnapshot.turn, timeUntilNextState);
 
-            drawTextAt(0, (YRES_FRAMEBUFFER / 8) - 2, &buffer[0], getPaletteEntry(0xFFFFFFFF));
+            drawTextAt(0, (YRES_FRAMEBUFFER / 8) - 8, &buffer[0], getPaletteEntry(0xFFFFFFFF));
+            
+            for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
+                if (party[c].inParty) {
+                    sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
+                    drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+                    
+                }
+            }
+
 
         }
     }
