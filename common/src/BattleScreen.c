@@ -54,6 +54,7 @@ struct MonsterArchetype {
     uint8_t wisdom: 4;
 };
 
+uint8_t plzdontfail[224];
 const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
