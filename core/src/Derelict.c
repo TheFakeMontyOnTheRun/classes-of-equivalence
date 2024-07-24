@@ -103,7 +103,7 @@ void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
 void bombActivatedCallback(struct Item *item) {
     uint8_t empOnReactor = hasItemInRoom("reactor-core", "emp-bomb");
     uint8_t playerLocation = getPlayerRoom();
-    uint8_t playerAtDaedaus = (playerLocation == 1);
+    uint8_t playerAtDaedaus = !strcmp(getRoom(playerLocation)->name, "rls-bohr-2");
     uint8_t playerAtSameLocationAsBomb = hasItemInRoom(getRoom(playerLocation)->name, "emp-bomb");
     (void)item;
 
