@@ -133,7 +133,7 @@ void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
 
     dialog = XtVaCreateManagedWidget("save_dialog", dialogWidgetClass, popup,
                                      XtNlabel, "Enter filename:",
-                                     XtNvalue, "",
+                                     XtNvalue, "mapfile.txt",
                                      NULL);
     
     save_button = XtVaCreateManagedWidget("save_button", commandWidgetClass, dialog,
@@ -158,7 +158,7 @@ void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     
     dialog = XtVaCreateManagedWidget("load_dialog", dialogWidgetClass, popup,
                                      XtNlabel, "Enter filename:",
-                                     XtNvalue, "",
+                                     XtNvalue, "mapfile.txt",
                                      NULL);
     
     load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, dialog,
