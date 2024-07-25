@@ -1,7 +1,7 @@
-LDFLAGS=-L/opt/local/lib -lXt -lXaw -lX11
+CXXFLAGS=-I/usr/X11R7/include
+LDFLAGS=-L/opt/local/lib -L/usr/X11R7/lib -lXt -lXaw -lX11
 TARGET=level-editor
 OBJ=mainwindow.o canvas.o loadmap.o savemap.o editor.o
-
 
 $(TARGET): $(OBJ)
 	$(CC) -o$(TARGET) $(OBJ) $(LDFLAGS)
