@@ -31,7 +31,7 @@
 #define VRAM_PAGE_B ((uint8_t*)0x600A000)
 
 
-#define COOLDOWN 0x5
+#define COOLDOWN 0x4
 int snapshotSignal = '.';
 int cooldown = 0;
 

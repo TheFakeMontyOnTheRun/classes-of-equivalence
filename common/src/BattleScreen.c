@@ -54,6 +54,7 @@ struct MonsterArchetype {
     uint8_t wisdom: 4;
 };
 
+uint8_t plzdontfail[224];
 const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
@@ -82,6 +83,10 @@ uint8_t aliveHeroes = 0;
 
 const char *BattleScreen_options[kDummyBattleOptionsCount] = {
         "Attack", "Defend", "Special", "Run"};
+
+const char *BattleScreen_optionsNoSpecial[kDummyBattleOptionsCount] = {
+        "Attack", "Defend", "-", "Run"};
+
 
 int8_t splatMonster = -1;
 int8_t monsterAttacking = -1;
@@ -222,15 +227,27 @@ void BattleScreen_repaintCallback(void) {
     }
 
     if (currentBattleState == kPlayerSelectingMoves) {
-        drawWindowWithOptions(
-                0,
-                (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
-                9 + 2,
-                kDummyBattleOptionsCount + 2,
-                party[currentCharacter].name,
-                BattleScreen_options,
-                kDummyBattleOptionsCount,
-                cursorPosition);
+        if (party[currentCharacter].specialStype == kNone) {
+            drawWindowWithOptions(
+                    0,
+                    (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                    9 + 2,
+                    kDummyBattleOptionsCount + 2,
+                    party[currentCharacter].name,
+                    BattleScreen_optionsNoSpecial,
+                    kDummyBattleOptionsCount,
+                    cursorPosition);
+        } else {
+            drawWindowWithOptions(
+                    0,
+                    (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                    9 + 2,
+                    kDummyBattleOptionsCount + 2,
+                    party[currentCharacter].name,
+                    BattleScreen_options,
+                    kDummyBattleOptionsCount,
+                    cursorPosition);
+        }
     }
 
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
@@ -416,7 +433,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 currentCharacter++;
 
                 /* skipping dead or absent characters */
-                if (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
+                while (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
                     (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
                     currentCharacter++;
                 }
@@ -509,4 +526,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
 void BattleScreen_unloadStateCallback(enum EGameMenuState newState) {
     (void) newState;
+
+    releaseBitmap(splat[0]);
+    releaseBitmap(splat[1]);
+    releaseBitmap(splat[2]);
+
+    releaseBitmap(foe[0][0]);
+    releaseBitmap(foe[1][0]);
+    releaseBitmap(foe[2][0]);
+
+    releaseBitmap(foe[0][1]);
+    releaseBitmap(foe[1][1]);
+    releaseBitmap(foe[2][1]);
 }
