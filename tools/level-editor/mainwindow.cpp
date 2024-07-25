@@ -14,33 +14,35 @@
 #include <X11/Xlib.h>
 #include <X11/Shell.h>
 
+#include "level-editor.h"
+
 #define GRID_SIZE 32
 
-typedef struct {
-    int x;
-    int y;
-    bool is_horizontal;
-    int thickness;
-} Segment;
+
+struct Map map;
 
 Widget draw_area;
-Segment segments[GRID_SIZE * GRID_SIZE * 2]; // Enough space for all possible segments
-int segment_count = 0;
 
 void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data);
+
+void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data);
+void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data);
+
+
 void ClosePopup(Widget widget, XtPointer client_data, XtPointer call_data);
 void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch);
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch);
 
 int main(int argc, char **argv) {
     XtAppContext app_context;
-    Widget topLevel, form, button, save_button, viewport;
+    Widget topLevel, form, button, save_button, load_button, viewport;
     Display *display;
     int screen;
     Window window;
-
+    map = initMap(32, 32);
     topLevel = XtVaAppInitialize(&app_context, "XawExample", NULL, 0, &argc, argv, NULL, NULL);
     
     form = XtVaCreateManagedWidget("form", formWidgetClass, topLevel, NULL);
@@ -59,8 +61,15 @@ int main(int argc, char **argv) {
                                           XtNheight, 30,
                                           NULL);
     
+    load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, form,
+                                          XtNlabel, "Load",
+                                          XtNfromVert, save_button,
+                                          XtNwidth, 100,
+                                          XtNheight, 30,
+                                          NULL);
+    
     viewport = XtVaCreateManagedWidget("viewport", viewportWidgetClass, form,
-                                       XtNfromVert, save_button,
+                                       XtNfromVert, load_button,
                                        XtNwidth, 200,
                                        XtNheight, 200,
                                        NULL);
@@ -72,6 +81,7 @@ int main(int argc, char **argv) {
     
     XtAddCallback(button, XtNcallback, PopupDialog, (XtPointer)topLevel);
     XtAddCallback(save_button, XtNcallback, SaveAsDialog, (XtPointer)topLevel);
+    XtAddCallback(load_button, XtNcallback, LoadDialog, (XtPointer)topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
     XtAddEventHandler(draw_area, ButtonPressMask, False, ClickCallback, NULL);
     
@@ -136,15 +146,46 @@ void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     XtPopup(popup, XtGrabNone);
 }
 
-void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
+void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
+    Widget popup, dialog, load_button;
+    XtAppContext app_context = XtWidgetToApplicationContext(widget);
+    
+    popup = XtVaCreatePopupShell("load_popup", transientShellWidgetClass, (Widget)client_data,
+                                 XtNwidth, 300,
+                                 XtNheight, 150,
+                                 XtNlabel, "Load",
+                                 NULL);
+    
+    dialog = XtVaCreateManagedWidget("load_dialog", dialogWidgetClass, popup,
+                                     XtNlabel, "Enter filename:",
+                                     XtNvalue, "",
+                                     NULL);
+    
+    load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, dialog,
+                                          XtNlabel, "Load",
+                                          NULL);
+    
+    XtAddCallback(load_button, XtNcallback, LoadFile, (XtPointer)dialog);
+    XtAddCallback(load_button, XtNcallback, ClosePopup, (XtPointer)popup);
+    
+    XtPopup(popup, XtGrabNone);
+}
+
+void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data) {
     Widget dialog = (Widget)client_data;
     char *filename = XawDialogGetValueString(dialog);
 
     if (filename != NULL && *filename != '\0') {
-        FILE *file = fopen(filename, "w");
-        if (file != NULL) {
-            fclose(file);
-        }
+        map = loadMap(filename);
+    }
+}
+
+void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
+    Widget dialog = (Widget)client_data;
+    char *filename = XawDialogGetValueString(dialog);
+    
+    if (filename != NULL && *filename != '\0') {
+        saveMap(filename, &map);
     }
 }
 
@@ -173,21 +214,46 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
         for (int x = 1; x <= GRID_SIZE; ++x) {
             XDrawLine(display, window, gc, x * (attr.width / GRID_SIZE), 0, x * (attr.width / GRID_SIZE), attr.height);
         }
-
-        for (int i = 0; i < segment_count; ++i) {
-            XSetLineAttributes(display, gc, segments[i].thickness, LineSolid, CapButt, JoinMiter);
-
-            if (segments[i].is_horizontal) {
-                XDrawLine(display, window, gc,
-                          segments[i].x * (attr.width / GRID_SIZE), segments[i].y * (attr.height / GRID_SIZE),
-                          (segments[i].x + 1) * (attr.width / GRID_SIZE), segments[i].y * (attr.height / GRID_SIZE));
-            } else {
-                XDrawLine(display, window, gc,
-                          segments[i].x * (attr.width / GRID_SIZE), segments[i].y * (attr.height / GRID_SIZE),
-                          segments[i].x * (attr.width / GRID_SIZE), (segments[i].y + 1) * (attr.height / GRID_SIZE));
+        
+        
+        for (int y = 0; y < GRID_SIZE; ++y) {
+            for (int x = 0; x < GRID_SIZE; ++x ) {
+                uint32_t flags = getFlags(&map, x, y);
+                XSetLineAttributes(display, gc, 4, LineSolid, CapButt, JoinMiter);
+                
+                if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
+                    XDrawLine(display, window, gc,
+                              x * (attr.width / GRID_SIZE),
+                              y * (attr.height / GRID_SIZE),
+                              (x + 1) * (attr.width / GRID_SIZE),
+                              y * (attr.height / GRID_SIZE)
+                              );
+                }
+                
+                if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
+                    XDrawLine(display, window, gc,
+                              x * (attr.width / GRID_SIZE),
+                              y * (attr.height / GRID_SIZE),
+                              x * (attr.width / GRID_SIZE),
+                              (y + 1) * (attr.height / GRID_SIZE)
+                              );
+                }
+                
+                if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
+                    
+                }
+                
+                if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
+                    XDrawLine(display, window, gc,
+                              x * (attr.width / GRID_SIZE),
+                              y * (attr.height / GRID_SIZE),
+                              (x + 1) * (attr.width / GRID_SIZE),
+                              (y + 1) * (attr.height / GRID_SIZE)
+                              );
+                }
+                XSetLineAttributes(display, gc, 1, LineSolid, CapButt, JoinMiter);
             }
         }
-
         XFreeGC(display, gc);
     }
 }
@@ -208,24 +274,31 @@ void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean 
 
         int x_offset = button_event->x % grid_width;
         int y_offset = button_event->y % grid_height;
-
+        
+        uint32_t flags = getFlags(&map, x, y);
+        
         if (x_offset <= grid_width / 2) {
-            // Vertical segment clicked
-            segments[segment_count].x = x;
-            segments[segment_count].y = y;
-            segments[segment_count].is_horizontal = false;
+            if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
+                flags &= ~VERTICAL_LINE;
+            } else {
+                flags |= VERTICAL_LINE;
+            }
         } else if (y_offset <= grid_height / 2) {
-            // Horizontal segment clicked
-            segments[segment_count].x = x;
-            segments[segment_count].y = y;
-            segments[segment_count].is_horizontal = true;
+            if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
+                flags &= ~HORIZONTAL_LINE;
+            } else {
+                flags |= HORIZONTAL_LINE;
+            }
         } else {
-            return; // Click is too far from any segment center
+            if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
+                flags &= ~LEFT_FAR_LINE;
+            } else {
+                flags |= LEFT_FAR_LINE;
+            }
+
         }
-
-        segments[segment_count].thickness = 4; // Example thickness, can be changed
-        segment_count++;
-
+        
+        setFlags(&map, x, y, flags);
         XClearArea(display, window, 0, 0, 0, 0, True);
     }
 }
