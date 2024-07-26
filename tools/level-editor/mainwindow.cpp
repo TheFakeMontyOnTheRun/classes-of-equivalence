@@ -27,7 +27,7 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 
 void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data);
-
+void QuitButton(Widget widget, XtPointer client_data, XtPointer call_data);
 void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data);
 
@@ -38,7 +38,7 @@ void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean 
 
 int main(int argc, char **argv) {
     XtAppContext app_context;
-    Widget topLevel, form, button, save_button, load_button, viewport;
+    Widget topLevel, form, button, save_button, load_button, viewport, quit_button;
     Display *display;
     int screen;
     Window window;
@@ -67,9 +67,16 @@ int main(int argc, char **argv) {
                                           XtNwidth, 100,
                                           XtNheight, 30,
                                           NULL);
+
+    quit_button = XtVaCreateManagedWidget("quit_button", commandWidgetClass, form,
+                                          XtNlabel, "Quit",
+                                          XtNfromVert, load_button,
+                                          XtNwidth, 100,
+                                          XtNheight, 30,
+                                          NULL);
     
     viewport = XtVaCreateManagedWidget("viewport", viewportWidgetClass, form,
-                                       XtNfromVert, load_button,
+                                       XtNfromVert, quit_button,
                                        XtNwidth, 200,
                                        XtNheight, 200,
                                        NULL);
@@ -82,6 +89,7 @@ int main(int argc, char **argv) {
     XtAddCallback(button, XtNcallback, PopupDialog, (XtPointer)topLevel);
     XtAddCallback(save_button, XtNcallback, SaveAsDialog, (XtPointer)topLevel);
     XtAddCallback(load_button, XtNcallback, LoadDialog, (XtPointer)topLevel);
+    XtAddCallback(quit_button, XtNcallback, QuitButton, (XtPointer)topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
     XtAddEventHandler(draw_area, ButtonPressMask, False, ClickCallback, NULL);
     
@@ -144,6 +152,10 @@ void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     XtAddCallback(save_button, XtNcallback, ClosePopup, (XtPointer)popup);
 
     XtPopup(popup, XtGrabNone);
+}
+
+void QuitButton(Widget widget, XtPointer client_data, XtPointer call_data) {
+  exit(0);
 }
 
 void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
@@ -240,7 +252,12 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                 }
                 
                 if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
-                    
+                    XDrawLine(display, window, gc,
+                              (x + 1) * (attr.width / GRID_SIZE),
+                              y * (attr.height / GRID_SIZE),
+                              (x) * (attr.width / GRID_SIZE),
+                              (y + 1) * (attr.height / GRID_SIZE)
+                              );                    
                 }
                 
                 if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
@@ -276,27 +293,38 @@ void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean 
         int y_offset = button_event->y % grid_height;
         
         uint32_t flags = getFlags(&map, x, y);
-        
-        if (x_offset <= grid_width / 2) {
+
+	if (y_offset <= grid_height / 2) {
+	  if (x_offset <= grid_width / 2) {
             if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
-                flags &= ~VERTICAL_LINE;
+	      flags &= ~VERTICAL_LINE;
             } else {
-                flags |= VERTICAL_LINE;
+	      flags |= VERTICAL_LINE;
             }
-        } else if (y_offset <= grid_height / 2) {
+	  } else {
             if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
                 flags &= ~HORIZONTAL_LINE;
             } else {
                 flags |= HORIZONTAL_LINE;
             }
+	  }
         } else {
+	  if (x_offset <= grid_width / 2) {
+            if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
+                flags &= ~LEFT_NEAR_LINE;
+            } else {
+                flags |= LEFT_NEAR_LINE;
+            }
+	  } else {
             if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
                 flags &= ~LEFT_FAR_LINE;
             } else {
                 flags |= LEFT_FAR_LINE;
             }
-
-        }
+	  }
+	}
+	
+    expose:
         
         setFlags(&map, x, y, flags);
         XClearArea(display, window, 0, 0, 0, 0, True);
