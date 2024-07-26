@@ -20,6 +20,8 @@ MENU_OBJ= menu/src/Main.o \
          	  ../common/src/Globals.o \
          	  ../common/src/VisibilityStrategy.o \
          	  ../common/src/Dungeon.o \
+         	  ../common/src/BattleScreen.o \
+         	  ../common/src/BattleResultScreen.o \
          	  ../common/src/Events.o \
          	  base3d/src/LoadBitmap.o \
          	  base3d/src/Renderer.o \
