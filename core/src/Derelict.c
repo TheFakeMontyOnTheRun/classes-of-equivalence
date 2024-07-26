@@ -356,7 +356,7 @@ void initStation(void) {
             "what it is, but I guess I already\n"
             "know. Ick.",
 #endif
-            64, 9, 5, connections);
+            32, 32, 5, connections);
 
 
     /* 7 */
@@ -672,7 +672,7 @@ void initStation(void) {
             17,
 #endif
                       FALSE, 2, 2);
-    addToRoom("hangar", newItem);
+    addToRoom("rls-bohr-2", newItem);
     newItem->active = TRUE;
 
     /* Comm terminals*/
