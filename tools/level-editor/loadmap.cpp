@@ -18,7 +18,37 @@ struct Map loadMap(const char* filename) {
             uint8_t byte;
             for (int x = 0; x < map.sizeX; ++x) {
                 fread(&byte, 1, 1, file);
-                setFlags( &map, x, y, byte - 'a');
+                uint32_t flags = 0;
+                switch(byte) {
+                    case '<':
+                        flags = ( HORIZONTAL_LINE + VERTICAL_LINE );
+                        break;
+
+                    case '.':
+                        flags = 0;
+                        break;
+
+                    case '|':
+                        flags = (VERTICAL_LINE );
+                        break;
+
+                    case '-':
+                        flags = (HORIZONTAL_LINE );
+                        break;
+
+                    case '\\':
+                        flags = (LEFT_FAR_LINE );
+                        break;
+
+                    case '/':
+                        flags = (LEFT_NEAR_LINE );
+                        break;
+                    default:
+                        puts("deu merda!");
+                        putchar(byte);
+                }
+
+                setFlags( &map, x, y, flags);
             }
             // \n
             fread(&byte, 1, 1, file);

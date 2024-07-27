@@ -188,7 +188,12 @@ void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data) {
     char *filename = XawDialogGetValueString(dialog);
 
     if (filename != NULL && *filename != '\0') {
+        Display *display = XtDisplay(draw_area);
+        Window window = XtWindow(draw_area);
+
         map = loadMap(filename);
+
+        XClearArea(display, window, 0, 0, 0, 0, True);
     }
 }
 
