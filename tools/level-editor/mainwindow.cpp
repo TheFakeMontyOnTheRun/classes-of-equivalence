@@ -25,9 +25,10 @@ enum EDrawingMode {
 };
 
 int pivotX, pivotY;
+int cursorX, cursorY;
 
 struct Map map;
-
+Widget topLevel;
 Widget draw_area;
 enum EDrawingMode drawingMode = kPicker;
 
@@ -52,9 +53,11 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
 
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch);
 
+void handle_motion(Widget w, XtPointer client_data, XEvent *event, Boolean *continue_to_dispatch);
+
 int main(int argc, char **argv) {
     XtAppContext app_context;
-    Widget topLevel, form, button, save_button, load_button, viewport, quit_button;
+    Widget form, button, save_button, load_button, viewport, quit_button;
     Widget pick_square_button, draw_square_button;
     Display *display;
     int screen;
@@ -116,6 +119,7 @@ int main(int argc, char **argv) {
     XtAddCallback(quit_button, XtNcallback, QuitButton, (XtPointer) topLevel);
     XtAddCallback(draw_square_button, XtNcallback, DrawSquare, (XtPointer) topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
+    XtAddEventHandler(draw_area, PointerMotionMask, False, handle_motion, NULL);
     XtAddEventHandler(draw_area, ButtonPressMask, False, ClickCallback, NULL);
 
     XtRealizeWidget(topLevel);
@@ -129,6 +133,26 @@ int main(int argc, char **argv) {
     XtAppMainLoop(app_context);
 
     return 0;
+}
+
+void handle_motion(Widget w, XtPointer client_data, XEvent *event, Boolean *continue_to_dispatch) {
+    if (event->type == MotionNotify && drawingMode == kSquare && pivotX != -1) {
+        Display *display = XtDisplay(draw_area);
+        Window window = XtWindow(draw_area);
+        XMotionEvent *motion_event = (XMotionEvent *)event;
+        XWindowAttributes attr;
+        XGetWindowAttributes(display, window, &attr);
+
+        cursorX = motion_event->x * (GRID_SIZE / attr.width );
+        cursorY = motion_event->y * (GRID_SIZE / attr.height );
+
+        XClearArea(display, window,
+                   pivotX * (attr.width / GRID_SIZE ),
+                   pivotY * (attr.height / GRID_SIZE ),
+                   motion_event->x,
+                   motion_event->y,
+                   True);
+    }
 }
 
 void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
@@ -253,7 +277,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
 
         gc = XCreateGC(display, window, 0, &values);
         XSetForeground(display, gc, BlackPixel(display, DefaultScreen(display)));
-
+        XSetLineAttributes(display, gc, 1, LineSolid, CapButt, JoinMiter);
         for (int y = 0; y < GRID_SIZE; ++y) {
             for (int x = 0; x < GRID_SIZE; ++x) {
                 uint32_t flags = getFlags(&map, x, y);
@@ -334,6 +358,37 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                 }
                 XSetLineAttributes(display, gc, 1, LineSolid, CapButt, JoinMiter);
             }
+        }
+        XSetLineAttributes(display, gc, 2, LineSolid, CapButt, JoinMiter);
+        if (drawingMode == kSquare) {
+            XDrawLine(display, window, gc,
+                      pivotX,
+                      pivotY,
+                      pivotX,
+                      cursorY
+            );
+
+            XDrawLine(display, window, gc,
+                      pivotX,
+                      pivotY,
+                      cursorX,
+                      pivotY)
+                      ;
+
+            XDrawLine(display, window, gc,
+                      cursorX,
+                      cursorY,
+                      cursorX,
+                      pivotY)
+                    ;
+
+            XDrawLine(display, window, gc,
+                      cursorX,
+                      cursorY,
+                      pivotX ,
+                      cursorY)
+                    ;
+
         }
         XFreeGC(display, gc);
     }
