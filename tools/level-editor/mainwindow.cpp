@@ -61,23 +61,23 @@ int main(int argc, char **argv) {
     Window window;
     map = initMap(32, 32);
     topLevel = XtVaAppInitialize(&app_context, "XawExample", NULL, 0, &argc, argv, NULL, NULL);
-    
+
     form = XtVaCreateManagedWidget("form", formWidgetClass, topLevel, NULL);
-    
+
     button = XtVaCreateManagedWidget("button", commandWidgetClass, form,
                                      XtNlabel, "About",
                                      XtNfromVert, NULL,
                                      XtNwidth, 100,
                                      XtNheight, 30,
                                      NULL);
-    
+
     save_button = XtVaCreateManagedWidget("save_button", commandWidgetClass, form,
                                           XtNlabel, "Save As",
                                           XtNfromVert, button,
                                           XtNwidth, 100,
                                           XtNheight, 30,
                                           NULL);
-    
+
     load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, form,
                                           XtNlabel, "Load",
                                           XtNfromVert, save_button,
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
                                        XtNwidth, 200,
                                        XtNheight, 200,
                                        NULL);
-    
+
     draw_area = XtVaCreateManagedWidget("", labelWidgetClass, viewport,
                                         XtNwidth, 200,
                                         XtNheight, 200,
@@ -117,17 +117,17 @@ int main(int argc, char **argv) {
     XtAddCallback(draw_square_button, XtNcallback, DrawSquare, (XtPointer) topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
     XtAddEventHandler(draw_area, ButtonPressMask, False, ClickCallback, NULL);
-    
+
     XtRealizeWidget(topLevel);
-    
+
     display = XtDisplay(topLevel);
     window = XtWindow(draw_area);
     screen = DefaultScreen(display);
-    
+
     XMapWindow(display, window);
-    
+
     XtAppMainLoop(app_context);
-    
+
     return 0;
 }
 
@@ -144,7 +144,7 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     dialog = XtVaCreateManagedWidget("dialog", dialogWidgetClass, popup,
                                      XtNlabel, "Level editor by Daniel \"MontyOnTheRun\" Monteiro",
                                      NULL);
-    
+
     popup_button = XtVaCreateManagedWidget("popup_button", commandWidgetClass, dialog,
                                            XtNlabel, "OK",
                                            NULL);
@@ -192,12 +192,12 @@ void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
                                  XtNheight, 150,
                                  XtNlabel, "Load",
                                  NULL);
-    
+
     dialog = XtVaCreateManagedWidget("load_dialog", dialogWidgetClass, popup,
                                      XtNlabel, "Enter filename:",
                                      XtNvalue, "mapfile.txt",
                                      NULL);
-    
+
     load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, dialog,
                                           XtNlabel, "Load",
                                           NULL);
@@ -230,7 +230,7 @@ void DrawSquare(Widget widget, XtPointer client_data, XtPointer call_data) {
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
     Widget dialog = (Widget) client_data;
     char *filename = XawDialogGetValueString(dialog);
-    
+
     if (filename != NULL && *filename != '\0') {
         saveMap(filename, &map);
     }
@@ -290,13 +290,13 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
         for (int x = 1; x <= GRID_SIZE; ++x) {
             XDrawLine(display, window, gc, x * (attr.width / GRID_SIZE), 0, x * (attr.width / GRID_SIZE), attr.height);
         }
-        
-        
+
+
         for (int y = 0; y < GRID_SIZE; ++y) {
             for (int x = 0; x < GRID_SIZE; ++x) {
                 uint32_t flags = getFlags(&map, x, y);
                 XSetLineAttributes(display, gc, 4, LineSolid, CapButt, JoinMiter);
-                
+
                 if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
                     XDrawLine(display, window, gc,
                               x * (attr.width / GRID_SIZE),
@@ -305,7 +305,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               y * (attr.height / GRID_SIZE)
                     );
                 }
-                
+
                 if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
                     XDrawLine(display, window, gc,
                               x * (attr.width / GRID_SIZE),
@@ -314,7 +314,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               (y + 1) * (attr.height / GRID_SIZE)
                     );
                 }
-                
+
                 if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
                     XDrawLine(display, window, gc,
                               (x + 1) * (attr.width / GRID_SIZE),
@@ -323,7 +323,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               (y + 1) * (attr.height / GRID_SIZE)
                     );
                 }
-                
+
                 if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
                     XDrawLine(display, window, gc,
                               x * (attr.width / GRID_SIZE),

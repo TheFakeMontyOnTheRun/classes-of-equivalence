@@ -20,14 +20,14 @@ struct Map {
     uint32_t *geometry;
 };
 
-void setFlags(struct Map* map, int x, int y, uint32_t flags );
+void setFlags(struct Map *map, int x, int y, uint32_t flags);
 
-uint32_t getFlags(struct Map* map, int x, int y);
+uint32_t getFlags(struct Map *map, int x, int y);
 
 struct Map initMap(int sizeX, int sizeY);
 
-void saveMap(const char* filename, struct Map* map);
+void saveMap(const char *filename, struct Map *map);
 
-struct Map loadMap(const char* filename);
+struct Map loadMap(const char *filename);
 
 #endif
