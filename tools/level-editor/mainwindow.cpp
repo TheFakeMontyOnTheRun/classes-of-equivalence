@@ -18,27 +18,44 @@
 
 #define GRID_SIZE 32
 
+enum EDrawingMode {
+    kPicker,
+    kLine,
+    kSquare
+};
+
+int pivotX, pivotY;
 
 struct Map map;
 
 Widget draw_area;
+enum EDrawingMode drawingMode = kPicker;
 
 void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data);
 
 void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void QuitButton(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data);
+
+void DrawSquare(Widget widget, XtPointer client_data, XtPointer call_data);
 
 
 void ClosePopup(Widget widget, XtPointer client_data, XtPointer call_data);
+
 void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch);
+
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch);
 
 int main(int argc, char **argv) {
     XtAppContext app_context;
     Widget topLevel, form, button, save_button, load_button, viewport, quit_button;
+    Widget pick_square_button, draw_square_button;
     Display *display;
     int screen;
     Window window;
@@ -74,7 +91,14 @@ int main(int argc, char **argv) {
                                           XtNwidth, 100,
                                           XtNheight, 30,
                                           NULL);
-    
+
+    draw_square_button = XtVaCreateManagedWidget("draw_square_button", commandWidgetClass, form,
+                                                 XtNlabel, "Draw Square",
+                                                 XtNfromHoriz, button,
+                                                 XtNwidth, 100,
+                                                 XtNheight, 30,
+                                                 NULL);
+
     viewport = XtVaCreateManagedWidget("viewport", viewportWidgetClass, form,
                                        XtNfromVert, quit_button,
                                        XtNwidth, 200,
@@ -85,11 +109,12 @@ int main(int argc, char **argv) {
                                         XtNwidth, 200,
                                         XtNheight, 200,
                                         NULL);
-    
-    XtAddCallback(button, XtNcallback, PopupDialog, (XtPointer)topLevel);
-    XtAddCallback(save_button, XtNcallback, SaveAsDialog, (XtPointer)topLevel);
-    XtAddCallback(load_button, XtNcallback, LoadDialog, (XtPointer)topLevel);
-    XtAddCallback(quit_button, XtNcallback, QuitButton, (XtPointer)topLevel);
+
+    XtAddCallback(button, XtNcallback, PopupDialog, (XtPointer) topLevel);
+    XtAddCallback(save_button, XtNcallback, SaveAsDialog, (XtPointer) topLevel);
+    XtAddCallback(load_button, XtNcallback, LoadDialog, (XtPointer) topLevel);
+    XtAddCallback(quit_button, XtNcallback, QuitButton, (XtPointer) topLevel);
+    XtAddCallback(draw_square_button, XtNcallback, DrawSquare, (XtPointer) topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
     XtAddEventHandler(draw_area, ButtonPressMask, False, ClickCallback, NULL);
     
@@ -110,7 +135,7 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     Widget popup, dialog, popup_button;
     XtAppContext app_context = XtWidgetToApplicationContext(widget);
 
-    popup = XtVaCreatePopupShell("popup", transientShellWidgetClass, (Widget)client_data,
+    popup = XtVaCreatePopupShell("popup", transientShellWidgetClass, (Widget) client_data,
                                  XtNwidth, 200,
                                  XtNheight, 100,
                                  XtNlabel, "Popup",
@@ -124,7 +149,7 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
                                            XtNlabel, "OK",
                                            NULL);
 
-    XtAddCallback(popup_button, XtNcallback, ClosePopup, (XtPointer)popup);
+    XtAddCallback(popup_button, XtNcallback, ClosePopup, (XtPointer) popup);
 
     XtPopup(popup, XtGrabNone);
 }
@@ -133,7 +158,7 @@ void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     Widget popup, dialog, save_button;
     XtAppContext app_context = XtWidgetToApplicationContext(widget);
 
-    popup = XtVaCreatePopupShell("save_popup", transientShellWidgetClass, (Widget)client_data,
+    popup = XtVaCreatePopupShell("save_popup", transientShellWidgetClass, (Widget) client_data,
                                  XtNwidth, 300,
                                  XtNheight, 150,
                                  XtNlabel, "Save As",
@@ -143,26 +168,26 @@ void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
                                      XtNlabel, "Enter filename:",
                                      XtNvalue, "mapfile.txt",
                                      NULL);
-    
+
     save_button = XtVaCreateManagedWidget("save_button", commandWidgetClass, dialog,
                                           XtNlabel, "Save",
                                           NULL);
 
-    XtAddCallback(save_button, XtNcallback, SaveFile, (XtPointer)dialog);
-    XtAddCallback(save_button, XtNcallback, ClosePopup, (XtPointer)popup);
+    XtAddCallback(save_button, XtNcallback, SaveFile, (XtPointer) dialog);
+    XtAddCallback(save_button, XtNcallback, ClosePopup, (XtPointer) popup);
 
     XtPopup(popup, XtGrabNone);
 }
 
 void QuitButton(Widget widget, XtPointer client_data, XtPointer call_data) {
-  exit(0);
+    exit(0);
 }
 
 void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     Widget popup, dialog, load_button;
     XtAppContext app_context = XtWidgetToApplicationContext(widget);
-    
-    popup = XtVaCreatePopupShell("load_popup", transientShellWidgetClass, (Widget)client_data,
+
+    popup = XtVaCreatePopupShell("load_popup", transientShellWidgetClass, (Widget) client_data,
                                  XtNwidth, 300,
                                  XtNheight, 150,
                                  XtNlabel, "Load",
@@ -176,15 +201,15 @@ void LoadDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, dialog,
                                           XtNlabel, "Load",
                                           NULL);
-    
-    XtAddCallback(load_button, XtNcallback, LoadFile, (XtPointer)dialog);
-    XtAddCallback(load_button, XtNcallback, ClosePopup, (XtPointer)popup);
-    
+
+    XtAddCallback(load_button, XtNcallback, LoadFile, (XtPointer) dialog);
+    XtAddCallback(load_button, XtNcallback, ClosePopup, (XtPointer) popup);
+
     XtPopup(popup, XtGrabNone);
 }
 
 void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data) {
-    Widget dialog = (Widget)client_data;
+    Widget dialog = (Widget) client_data;
     char *filename = XawDialogGetValueString(dialog);
 
     if (filename != NULL && *filename != '\0') {
@@ -197,8 +222,13 @@ void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data) {
     }
 }
 
+void DrawSquare(Widget widget, XtPointer client_data, XtPointer call_data) {
+    drawingMode = kSquare;
+    pivotX = pivotY = -1;
+}
+
 void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
-    Widget dialog = (Widget)client_data;
+    Widget dialog = (Widget) client_data;
     char *filename = XawDialogGetValueString(dialog);
     
     if (filename != NULL && *filename != '\0') {
@@ -207,7 +237,7 @@ void SaveFile(Widget widget, XtPointer client_data, XtPointer call_data) {
 }
 
 void ClosePopup(Widget widget, XtPointer client_data, XtPointer call_data) {
-    Widget popup = (Widget)client_data;
+    Widget popup = (Widget) client_data;
     XtDestroyWidget(popup);
 }
 
@@ -224,6 +254,35 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
         gc = XCreateGC(display, window, 0, &values);
         XSetForeground(display, gc, BlackPixel(display, DefaultScreen(display)));
 
+        for (int y = 0; y < GRID_SIZE; ++y) {
+            for (int x = 0; x < GRID_SIZE; ++x) {
+                uint32_t flags = getFlags(&map, x, y);
+
+                if ((flags & CELL_VOID) == CELL_VOID) {
+                    XSetForeground(display, gc, 0x555555);
+
+                    XFillRectangle(display, window, gc,
+                                   x * (attr.width / GRID_SIZE),
+                                   y * (attr.height / GRID_SIZE),
+                                   (attr.width / GRID_SIZE),
+                                   (attr.height / GRID_SIZE)
+                    );
+                } else if ((flags & CELL_FLOOR) == CELL_FLOOR) {
+                    XSetForeground(display, gc, 0xFFFFFFFF);
+
+                    XFillRectangle(display, window, gc,
+                                   x * (attr.width / GRID_SIZE),
+                                   y * (attr.height / GRID_SIZE),
+                                   (attr.width / GRID_SIZE),
+                                   (attr.height / GRID_SIZE)
+                    );
+
+                }
+            }
+        }
+
+        XSetForeground(display, gc, 0);
+
         for (int y = 1; y <= GRID_SIZE; ++y) {
             XDrawLine(display, window, gc, 0, y * (attr.height / GRID_SIZE), attr.width, y * (attr.height / GRID_SIZE));
         }
@@ -234,7 +293,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
         
         
         for (int y = 0; y < GRID_SIZE; ++y) {
-            for (int x = 0; x < GRID_SIZE; ++x ) {
+            for (int x = 0; x < GRID_SIZE; ++x) {
                 uint32_t flags = getFlags(&map, x, y);
                 XSetLineAttributes(display, gc, 4, LineSolid, CapButt, JoinMiter);
                 
@@ -244,7 +303,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               y * (attr.height / GRID_SIZE),
                               (x + 1) * (attr.width / GRID_SIZE),
                               y * (attr.height / GRID_SIZE)
-                              );
+                    );
                 }
                 
                 if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
@@ -253,7 +312,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               y * (attr.height / GRID_SIZE),
                               x * (attr.width / GRID_SIZE),
                               (y + 1) * (attr.height / GRID_SIZE)
-                              );
+                    );
                 }
                 
                 if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
@@ -262,7 +321,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               y * (attr.height / GRID_SIZE),
                               (x) * (attr.width / GRID_SIZE),
                               (y + 1) * (attr.height / GRID_SIZE)
-                              );                    
+                    );
                 }
                 
                 if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
@@ -271,7 +330,7 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                               y * (attr.height / GRID_SIZE),
                               (x + 1) * (attr.width / GRID_SIZE),
                               (y + 1) * (attr.height / GRID_SIZE)
-                              );
+                    );
                 }
                 XSetLineAttributes(display, gc, 1, LineSolid, CapButt, JoinMiter);
             }
@@ -281,57 +340,80 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
 }
 
 void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean *dispatch) {
+    Display *display = XtDisplay(draw_area);
+    XButtonEvent *button_event = (XButtonEvent *) event;
+    Window window = XtWindow(draw_area);
+    XWindowAttributes attr;
+    XGetWindowAttributes(display, window, &attr);
+
+    int grid_width = attr.width / GRID_SIZE;
+    int grid_height = attr.height / GRID_SIZE;
+
+    int x = button_event->x / grid_width;
+    int y = button_event->y / grid_height;
+
+    int x_offset = button_event->x % grid_width;
+    int y_offset = button_event->y % grid_height;
+
     if (event->type == ButtonPress) {
-        Display *display = XtDisplay(draw_area);
-        XButtonEvent *button_event = (XButtonEvent *)event;
-        Window window = XtWindow(draw_area);
-        XWindowAttributes attr;
-        XGetWindowAttributes(display, window, &attr);
+        switch (drawingMode) {
+            case kSquare : {
+                if (pivotX == -1) {
+                    pivotX = x;
+                    pivotY = y;
+                    printf("Pivot at: %d, %d\n", pivotX, pivotY);
+                } else {
+                    for (int _y = pivotY; _y < y; ++_y) {
+                        for (int _x = pivotX; _x < x; ++_x) {
+                            printf("filling %d, %d\n", _x, _y);
+                            setFlags(&map, _x, _y, CELL_FLOOR);
+                        }
+                    }
 
-        int grid_width = attr.width / GRID_SIZE;
-        int grid_height = attr.height / GRID_SIZE;
+                    pivotX = pivotY = -1;
+                    drawingMode = kPicker;
+                }
+            }
+                break;
+            case kPicker: {
+                uint32_t flags = getFlags(&map, x, y);
 
-        int x = button_event->x / grid_width;
-        int y = button_event->y / grid_height;
-
-        int x_offset = button_event->x % grid_width;
-        int y_offset = button_event->y % grid_height;
-        
-        uint32_t flags = getFlags(&map, x, y);
-
-	if (y_offset <= grid_height / 2) {
-	  if (x_offset <= grid_width / 2) {
-            if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
-	      flags &= ~VERTICAL_LINE;
-            } else {
-	      flags |= VERTICAL_LINE;
+                if (y_offset <= grid_height / 2) {
+                    if (x_offset <= grid_width / 2) {
+                        if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
+                            flags &= ~VERTICAL_LINE;
+                        } else {
+                            flags |= VERTICAL_LINE;
+                        }
+                    } else {
+                        if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
+                            flags &= ~HORIZONTAL_LINE;
+                        } else {
+                            flags |= HORIZONTAL_LINE;
+                        }
+                    }
+                } else {
+                    if (x_offset <= grid_width / 2) {
+                        if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
+                            flags &= ~LEFT_NEAR_LINE;
+                        } else {
+                            flags |= LEFT_NEAR_LINE;
+                        }
+                    } else {
+                        if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
+                            flags &= ~LEFT_FAR_LINE;
+                        } else {
+                            flags |= LEFT_FAR_LINE;
+                        }
+                    }
+                }
+                setFlags(&map, x, y, flags);
             }
-	  } else {
-            if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
-                flags &= ~HORIZONTAL_LINE;
-            } else {
-                flags |= HORIZONTAL_LINE;
-            }
-	  }
-        } else {
-	  if (x_offset <= grid_width / 2) {
-            if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
-                flags &= ~LEFT_NEAR_LINE;
-            } else {
-                flags |= LEFT_NEAR_LINE;
-            }
-	  } else {
-            if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
-                flags &= ~LEFT_FAR_LINE;
-            } else {
-                flags |= LEFT_FAR_LINE;
-            }
-	  }
-	}
-	
-    expose:
-        
-        setFlags(&map, x, y, flags);
-        XClearArea(display, window, 0, 0, 0, 0, True);
+                break;
+        }
     }
+
+
+    expose:
+    XClearArea(display, window, 0, 0, 0, 0, True);
 }

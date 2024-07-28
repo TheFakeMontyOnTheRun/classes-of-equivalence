@@ -18,14 +18,18 @@ struct Map loadMap(const char* filename) {
             uint8_t byte;
             for (int x = 0; x < map.sizeX; ++x) {
                 fread(&byte, 1, 1, file);
-                uint32_t flags = 0;
+                uint32_t flags = CELL_VOID;
                 switch(byte) {
                     case '<':
                         flags = ( HORIZONTAL_LINE + VERTICAL_LINE );
                         break;
 
+                    case ',':
+                        flags = CELL_VOID;
+                        break;
+
                     case '.':
-                        flags = 0;
+                        flags = CELL_FLOOR;
                         break;
 
                     case '|':

@@ -1,6 +1,8 @@
 #ifndef LEVELEDITOR_H
 #define LEVELEDITOR_H
 
+#define CELL_VOID 32
+
 #define HORIZONTAL_LINE 1
 
 #define VERTICAL_LINE 2
@@ -8,6 +10,8 @@
 #define LEFT_NEAR_LINE 4
 
 #define LEFT_FAR_LINE 8
+
+#define CELL_FLOOR 16
 
 
 struct Map {

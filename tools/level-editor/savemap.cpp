@@ -21,8 +21,10 @@ void saveMap(const char* filename, struct Map* map) {
                     byte = '-';
                 } else if( (flags & (HORIZONTAL_LINE + VERTICAL_LINE ) ) == ( VERTICAL_LINE ) ) {
                     byte = '|';
-                } else {
+                } else if( (flags & (CELL_FLOOR ) ) == ( CELL_FLOOR ) ) {
                     byte = '.';
+                } else {
+                    byte = ',';
                 }
 
 

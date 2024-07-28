@@ -9,7 +9,14 @@ struct Map initMap(int sizeX, int sizeY) {
     toReturn.geometry = (uint32_t*)calloc(4, sizeX * sizeY );
     toReturn.sizeX = sizeX;
     toReturn.sizeY = sizeY;
-    
+
+    for (int _y = 0; _y < sizeY; ++_y) {
+        for (int _x = 0; _x < sizeX; ++_x) {
+            setFlags(&toReturn, _x, _y, CELL_VOID);
+        }
+    }
+
+
     return toReturn;
 }
 
