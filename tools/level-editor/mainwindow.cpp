@@ -46,6 +46,7 @@ void LoadFile(Widget widget, XtPointer client_data, XtPointer call_data);
 
 void DrawSquare(Widget widget, XtPointer client_data, XtPointer call_data);
 
+void DrawLine(Widget widget, XtPointer client_data, XtPointer call_data);
 
 void ClosePopup(Widget widget, XtPointer client_data, XtPointer call_data);
 
@@ -58,7 +59,7 @@ void handle_motion(Widget w, XtPointer client_data, XEvent *event, Boolean *cont
 int main(int argc, char **argv) {
     XtAppContext app_context;
     Widget form, button, save_button, load_button, viewport, quit_button;
-    Widget pick_square_button, draw_square_button;
+    Widget draw_line_button, draw_square_button;
     Display *display;
     int screen;
     Window window;
@@ -70,37 +71,39 @@ int main(int argc, char **argv) {
     button = XtVaCreateManagedWidget("button", commandWidgetClass, form,
                                      XtNlabel, "About",
                                      XtNfromVert, NULL,
-                                     XtNwidth, 100,
-                                     XtNheight, 30,
+                                     XtNfromHoriz, NULL,
                                      NULL);
 
     save_button = XtVaCreateManagedWidget("save_button", commandWidgetClass, form,
                                           XtNlabel, "Save As",
                                           XtNfromVert, button,
-                                          XtNwidth, 100,
-                                          XtNheight, 30,
+                                          XtNfromHoriz, NULL,
                                           NULL);
 
     load_button = XtVaCreateManagedWidget("load_button", commandWidgetClass, form,
                                           XtNlabel, "Load",
                                           XtNfromVert, save_button,
-                                          XtNwidth, 100,
-                                          XtNheight, 30,
+                                          XtNfromHoriz, NULL,
                                           NULL);
 
     quit_button = XtVaCreateManagedWidget("quit_button", commandWidgetClass, form,
                                           XtNlabel, "Quit",
                                           XtNfromVert, load_button,
-                                          XtNwidth, 100,
-                                          XtNheight, 30,
+                                          XtNfromHoriz, NULL,
                                           NULL);
 
     draw_square_button = XtVaCreateManagedWidget("draw_square_button", commandWidgetClass, form,
                                                  XtNlabel, "Draw Square",
+                                                 XtNfromVert, NULL,
                                                  XtNfromHoriz, button,
-                                                 XtNwidth, 100,
-                                                 XtNheight, 30,
                                                  NULL);
+
+    draw_line_button = XtVaCreateManagedWidget("draw_line_button", commandWidgetClass, form,
+                                               XtNlabel, "Draw Line",
+                                               XtNfromVert, draw_square_button,
+                                               XtNfromHoriz, save_button,
+                                               NULL);
+
 
     viewport = XtVaCreateManagedWidget("viewport", viewportWidgetClass, form,
                                        XtNfromVert, quit_button,
@@ -117,6 +120,7 @@ int main(int argc, char **argv) {
     XtAddCallback(save_button, XtNcallback, SaveAsDialog, (XtPointer) topLevel);
     XtAddCallback(load_button, XtNcallback, LoadDialog, (XtPointer) topLevel);
     XtAddCallback(quit_button, XtNcallback, QuitButton, (XtPointer) topLevel);
+    XtAddCallback(draw_line_button, XtNcallback, DrawLine, (XtPointer) topLevel);
     XtAddCallback(draw_square_button, XtNcallback, DrawSquare, (XtPointer) topLevel);
     XtAddEventHandler(draw_area, ExposureMask, False, ExposeCallback, NULL);
     XtAddEventHandler(draw_area, PointerMotionMask, False, handle_motion, NULL);
@@ -139,18 +143,23 @@ void handle_motion(Widget w, XtPointer client_data, XEvent *event, Boolean *cont
     if (event->type == MotionNotify && drawingMode == kSquare && pivotX != -1) {
         Display *display = XtDisplay(draw_area);
         Window window = XtWindow(draw_area);
-        XMotionEvent *motion_event = (XMotionEvent *)event;
+        XMotionEvent *motion_event = (XMotionEvent *) event;
         XWindowAttributes attr;
         XGetWindowAttributes(display, window, &attr);
 
-        cursorX = motion_event->x * (GRID_SIZE / attr.width );
-        cursorY = motion_event->y * (GRID_SIZE / attr.height );
+        cursorX = motion_event->x * (attr.width / GRID_SIZE);
+        cursorY = motion_event->y * (attr.height / GRID_SIZE);
+
+        int y0 = (pivotY < cursorY) ? pivotY : cursorY;
+        int y1 = (pivotY < cursorY) ? cursorY : pivotY;
+        int x0 = (pivotX < cursorX) ? pivotX : cursorX;
+        int x1 = (pivotX < cursorX) ? cursorX : pivotX;
 
         XClearArea(display, window,
-                   pivotX * (attr.width / GRID_SIZE ),
-                   pivotY * (attr.height / GRID_SIZE ),
-                   motion_event->x,
-                   motion_event->y,
+                   x0 * (GRID_SIZE / attr.width),
+                   y0 * (GRID_SIZE / attr.height),
+                   (x1 - x0) * (GRID_SIZE / attr.width),
+                   (y1 - y0) * (GRID_SIZE / attr.height),
                    True);
     }
 }
@@ -176,6 +185,11 @@ void PopupDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
     XtAddCallback(popup_button, XtNcallback, ClosePopup, (XtPointer) popup);
 
     XtPopup(popup, XtGrabNone);
+}
+
+void DrawLine(Widget widget, XtPointer client_data, XtPointer call_data) {
+    drawingMode = kLine;
+    pivotX = pivotY = -1;
 }
 
 void SaveAsDialog(Widget widget, XtPointer client_data, XtPointer call_data) {
@@ -359,37 +373,6 @@ void ExposeCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean
                 XSetLineAttributes(display, gc, 1, LineSolid, CapButt, JoinMiter);
             }
         }
-        XSetLineAttributes(display, gc, 2, LineSolid, CapButt, JoinMiter);
-        if (drawingMode == kSquare) {
-            XDrawLine(display, window, gc,
-                      pivotX,
-                      pivotY,
-                      pivotX,
-                      cursorY
-            );
-
-            XDrawLine(display, window, gc,
-                      pivotX,
-                      pivotY,
-                      cursorX,
-                      pivotY)
-                      ;
-
-            XDrawLine(display, window, gc,
-                      cursorX,
-                      cursorY,
-                      cursorX,
-                      pivotY)
-                    ;
-
-            XDrawLine(display, window, gc,
-                      cursorX,
-                      cursorY,
-                      pivotX ,
-                      cursorY)
-                    ;
-
-        }
         XFreeGC(display, gc);
     }
 }
@@ -412,14 +395,49 @@ void ClickCallback(Widget widget, XtPointer client_data, XEvent *event, Boolean 
 
     if (event->type == ButtonPress) {
         switch (drawingMode) {
+            case kLine: {
+                if (pivotX == -1) {
+                    pivotX = x;
+                    pivotY = y;
+                    printf("Pivot at: %d, %d\n", pivotX, pivotY);
+                } else {
+
+                    if (x == pivotX) {
+                        int y0 = (pivotY < y) ? pivotY : y;
+                        int y1 = (pivotY < y) ? y : pivotY;
+                        for (int _y = y0; _y < y1; ++_y) {
+                            printf("filling %d, %d\n", pivotX, _y);
+                            setFlags(&map, pivotX, _y, VERTICAL_LINE);
+                        }
+                    } else if (y == pivotY) {
+                        int x0 = (pivotX < x) ? pivotX : x;
+                        int x1 = (pivotX < x) ? x : pivotX;
+
+                        for (int _x = x0; _x < x1; ++_x) {
+                            printf("filling %d, %d\n", _x, pivotY);
+                            setFlags(&map, _x, pivotY, HORIZONTAL_LINE);
+                        }
+                    }
+
+
+                    pivotX = pivotY = -1;
+                    drawingMode = kPicker;
+                }
+            }
+                break;
             case kSquare : {
                 if (pivotX == -1) {
                     pivotX = x;
                     pivotY = y;
                     printf("Pivot at: %d, %d\n", pivotX, pivotY);
                 } else {
-                    for (int _y = pivotY; _y < y; ++_y) {
-                        for (int _x = pivotX; _x < x; ++_x) {
+                    int y0 = (pivotY < y) ? pivotY : y;
+                    int y1 = (pivotY < y) ? y : pivotY;
+                    int x0 = (pivotX < x) ? pivotX : x;
+                    int x1 = (pivotX < x) ? x : pivotX;
+
+                    for (int _y = y0; _y < y1; ++_y) {
+                        for (int _x = x0; _x < x1; ++_x) {
                             printf("filling %d, %d\n", _x, _y);
                             setFlags(&map, _x, _y, CELL_FLOOR);
                         }
