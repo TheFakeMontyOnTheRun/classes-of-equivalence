@@ -75,8 +75,6 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
         addToRoom("computer-core", card);
         dropObjectByName("low-rank-keycard");
         removeObjectFromRoom(getItemNamed("low-rank-keycard"));
-        defaultLogger("Lena liberated. Intrusion implant upgrade found.");
-        party[2].inParty = 1;
     } else {
         defaultLogger("No effect");
     }
@@ -85,7 +83,8 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
 void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
     struct Item *coupling = getItemNamed("magnetic-coupling");
     struct Item *boots = getItemNamed("metal-pipe");
-    if (item1 == boots && item2 == coupling) {
+
+    if (item1 == boots && item2 == coupling && !party[1].inParty) {
         coupling->active = FALSE;
         defaultLogger("Omar recruited to the escape effort.");
         party[1].inParty = 1;
@@ -215,6 +214,12 @@ void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
 }
 
 void useKeycardWith(struct Item *item1, struct Item *item2) {
+
+    if (item2 == getItemNamed("comm-terminal-3") && !party[2].inParty) {
+        defaultLogger("Lena liberated. Intrusion implant upgrade found.");
+        party[2].inParty = 1;
+    }
+
     if (item2 == getItemNamed("comm-terminal-1") ||
         item2 == getItemNamed("comm-terminal-2") ||
         item2 == getItemNamed("comm-terminal-3")) {
@@ -240,8 +245,7 @@ void useComputerRack(struct Item *item) {
         return;
     }
 
-
-    if (accessGrantedToSafe) {
+    if (accessGrantedToSafe && !party[3].inParty) {
         defaultLogger("Juka joined the party");
         addToRoom("situation-room", getItemNamed("root-keycard"));
         party[3].inParty = 1;
