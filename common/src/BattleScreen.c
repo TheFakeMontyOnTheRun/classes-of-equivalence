@@ -105,7 +105,13 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
         }
     }
     
-    aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
+    /* You have Nico in your party. YOU SUFFER! */
+    if (party[4].inParty && party[4].hp > 0 ) {
+        aliveMonsters = monstersPresent = TOTAL_MONSTER_COUNT;
+    } else {
+        aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
+    }
+
     splat[0] = loadBitmap("splat0.img");
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
@@ -318,11 +324,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             }
                         }
                     } else if (battleActions[currentCharacter] == kRun) {
-                        int roll = rand() % 10;
-                        int agility = party[currentCharacter].agility;
-                        if (roll < agility) {
-                            initRoom(getPlayerRoom());
-                            return kEscapedBattle;
+                        /* Nico will decrease your speed so much that you won't be able to run */
+                        if (!party[4].inParty || party[4].hp == 0 ) {
+                            int roll = rand() % 10;
+                            int agility = party[currentCharacter].agility;
+                            if (roll < agility) {
+                                initRoom(getPlayerRoom());
+                                return kEscapedBattle;
+                            }
                         }
                     }
                 }
@@ -379,13 +388,30 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
         animationTimer--;
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
-            splatMonster = -1;
-            monsterAttacking = -1;
             batteCharacterOrder++;
-                        
-            do {
-                currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
-            } while( battleOrder[currentCharacter] != 0 );
+
+            if (party[4].inParty && party[4].hp > 0 ) {
+                /* Force giving priority to monsters, so they can kill Nico */
+                for ( int m = 0; m < monstersPresent; ++m) {
+                    if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] > 0 && monsterHP[m] > 0) {
+                        currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
+                        goto done_selecting_monster;
+                    }
+                }
+
+                do {
+                    currentCharacter = (rand() % (TOTAL_MONSTER_COUNT));
+                } while( battleOrder[currentCharacter] != 0 );
+
+            done_selecting_monster:
+                splatMonster = -1;
+                monsterAttacking = -1;
+
+            } else {
+                do {
+                    currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+                } while( battleOrder[currentCharacter] != 0 );
+            }
 
             battleOrder[currentCharacter] = 1;
 
@@ -450,10 +476,13 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
                         if (monsterHP[c] > 0) {
                             int hero;
-
-                            do {
-                                hero = rand() % TOTAL_CHARACTERS_IN_PARTY;
-                            } while (party[hero].hp == 0 || !party[hero].inParty);
+                            if (party[4].inParty && party[4].hp > 0) {
+                                hero = 4;
+                            } else {
+                                do {
+                                    hero = rand() % TOTAL_CHARACTERS_IN_PARTY;
+                                } while (party[hero].hp == 0 || !party[hero].inParty);
+                            }
 
                             battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = hero;
                             battleActions[c + TOTAL_CHARACTERS_IN_PARTY] = kAttack;
