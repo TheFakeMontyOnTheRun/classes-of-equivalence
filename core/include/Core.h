@@ -24,7 +24,7 @@ Created by Daniel Monteiro on 2019-07-26.
  * Defines the maximum characters allowed in a party.
  * Please note that the game might only allow a smaller number of active members in the party
  * */
-#define TOTAL_CHARACTERS_IN_PARTY 4
+#define TOTAL_CHARACTERS_IN_PARTY 5
 
 /* just a forward declaration, don't bother */
 struct Item;

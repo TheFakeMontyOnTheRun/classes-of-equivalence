@@ -179,6 +179,7 @@ void Crawler_repaintCallback(void) {
             renderRoomTransition();
         } else if (currentPresentationState == kWaitingForInput) {
             int c;
+            int xWindow = 0;
             char buffer[64];
             renderTick(30);
 
@@ -192,12 +193,10 @@ void Crawler_repaintCallback(void) {
             for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
                 if (party[c].inParty) {
                     sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
-                    drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
-                    
+                    drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+                    xWindow += 7;
                 }
             }
-
-
         }
     }
 }
@@ -276,7 +275,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         nativeTextures[1] = makeTextureFrom("floor.img");
         texturesUsed = 2;
 
-        if (random < playerNewRoom->chanceOfRandomBattle) {
+        if ((party[4].inParty && party[4].hp > 0) || random < playerNewRoom->chanceOfRandomBattle) {
             return kBattleScreen;
         } else {
             initRoom(getPlayerRoom());
