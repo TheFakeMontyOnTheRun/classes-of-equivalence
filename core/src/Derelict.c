@@ -204,6 +204,10 @@ void useCloggedFlush(struct Item *item) {
 void useRegularFlush(struct Item *item) {
     (void)item;
     defaultLogger("Nothing to be found");
+    if (!party[4].inParty) {
+        defaultLogger("Please allow me to join! I have implants!");
+        party[4].inParty = 1;
+    }
 }
 
 void inspectItemWithHelmetCallback(struct Item *helmet, struct Item *item) {
