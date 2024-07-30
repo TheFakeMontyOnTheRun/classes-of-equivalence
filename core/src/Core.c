@@ -849,6 +849,19 @@ void initCore(void) {
     party[3].specialStype = kOffense;
     party[3].kills = 0;
 
+    party[4].name = "Nico";
+    party[4].inParty = 0;
+    party[4].hp = 20;
+    party[4].energy = 0;
+    party[4].defense = 1;
+    party[4].attack = 1;
+    party[4].agility = 1;
+    party[4].wisdom = 1;
+    party[4].level = 1;
+    party[4].specialStype = kNone;
+    party[4].kills = 0;
+
+
     memFill(&rooms, 0, TOTAL_ROOMS * sizeof(struct Room));
     memFill(&item, 0, TOTAL_ITEMS * sizeof(struct Item));
 }
