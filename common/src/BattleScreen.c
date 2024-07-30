@@ -139,6 +139,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 void BattleScreen_repaintCallback(void) {
     char buffer[32];
     int c;
+    int xWindow = 0;
     clearScreen();
 
     if (currentBattleState == kAttackPhase) {
@@ -259,7 +260,8 @@ void BattleScreen_repaintCallback(void) {
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
         if (party[c].inParty) {
             sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
-            drawTextWindow(c * 7, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+            drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+            xWindow += 7;
 
             if (currentBattleState == kAttackPhase &&
                 battleDamages[currentCharacter] > 0 &&
@@ -271,7 +273,6 @@ void BattleScreen_repaintCallback(void) {
                 drawTextAt( 1 + (c * 7), (YRES_FRAMEBUFFER / 8) - 5, &buffer[0],
                        getPaletteEntry(0xFF0000FF));
             }
-
         }
     }
 }
@@ -491,9 +492,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
                     for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
                         if (battleActions[c] == kAttack) {
-                            battleTargets[c] = TOTAL_CHARACTERS_IN_PARTY + (rand() % (aliveMonsters));
+                            int monster;
+
+                            do {
+                                monster =  TOTAL_CHARACTERS_IN_PARTY + (rand() % (TOTAL_MONSTER_COUNT));
+                            } while ( monsterHP[monster - TOTAL_CHARACTERS_IN_PARTY] == 0);
+
+                            battleTargets[c] = monster;
                         }
                     }
+
 
                     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
                         if (battleActions[c] == kAttack) {
