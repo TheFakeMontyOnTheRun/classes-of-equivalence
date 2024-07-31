@@ -1,4 +1,4 @@
-package pt.b13h.spacetrashmanblues
+package pt.b13h.equivalencegles2
 
 import android.app.Application
 import android.content.Context

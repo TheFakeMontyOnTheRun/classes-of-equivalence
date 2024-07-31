@@ -13,7 +13,7 @@
         android:background="@drawable/border_top_repeat"
         android:orientation="horizontal"></LinearLayout>
 
-    <pt.b13h.derelictgles2.GL2JNIView
+    <pt.b13h.equivalencegles2.GL2JNIView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

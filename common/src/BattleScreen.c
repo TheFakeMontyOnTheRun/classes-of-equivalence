@@ -261,7 +261,6 @@ void BattleScreen_repaintCallback(void) {
         if (party[c].inParty) {
             sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
             drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
-            xWindow += 7;
 
             if (currentBattleState == kAttackPhase &&
                 battleDamages[currentCharacter] > 0 &&
@@ -270,9 +269,10 @@ void BattleScreen_repaintCallback(void) {
                 monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0) {
 
                 sprintf(&buffer[0], "%d HP", battleDamages[currentCharacter] );
-                drawTextAt( 1 + (c * 7), (YRES_FRAMEBUFFER / 8) - 5, &buffer[0],
+                drawTextAt( 1 + xWindow, (YRES_FRAMEBUFFER / 8) - 5, &buffer[0],
                        getPaletteEntry(0xFF0000FF));
             }
+            xWindow += 7;
         }
     }
 }
@@ -393,15 +393,15 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
             if (party[4].inParty && party[4].hp > 0 ) {
                 /* Force giving priority to monsters, so they can kill Nico */
-                for ( int m = 0; m < monstersPresent; ++m) {
-                    if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] > 0 && monsterHP[m] > 0) {
+                for ( int m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
+                    if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] == 0 && monsterHP[m] > 0) {
                         currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
                         goto done_selecting_monster;
                     }
                 }
 
                 do {
-                    currentCharacter = (rand() % (TOTAL_MONSTER_COUNT));
+                    currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
                 } while( battleOrder[currentCharacter] != 0 );
 
             done_selecting_monster:
@@ -504,48 +504,57 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
 
                     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
-                        if (battleActions[c] == kAttack) {
-                            int monsterTargetted = battleTargets[c];
-                            int attack = (rand() % party[c].attack);
-                            int agil1 = party[c].agility;
-                            int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
-                            int diffAgility = 1 + abs( agil1 - agil2);
-                            int roll = rand();
-                            int hit = roll % diffAgility;
-                            int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
-                            int calc = attack - ((hit == 0) ? 0 : defense);
-                            battleDamages[c] = max(0, calc);
-                        } else if (battleActions[c] == kSpecial) {
-                            int wisdom = party[c].wisdom;
-                            int roll = rand();
-                            int hit = roll % wisdom;
-                            battleDamages[c] = hit;
-                            battleTargets[c] = 0;
-                        } else {
+                        if (party[4].inParty && party[4].hp > 0) {
                             battleDamages[c] = 0;
+                        } else {
+                            if (battleActions[c] == kAttack) {
+                                int monsterTargetted = battleTargets[c];
+                                int attack = (rand() % party[c].attack);
+                                int agil1 = party[c].agility;
+                                int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
+                                int diffAgility = 1 + abs( agil1 - agil2);
+                                int roll = rand();
+                                int hit = roll % diffAgility;
+                                int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
+                                int calc = attack - ((hit == 0) ? 0 : defense);
+                                battleDamages[c] = max(0, calc * party[c].level);
+                            } else if (battleActions[c] == kSpecial) {
+                                int wisdom = party[c].wisdom;
+                                int roll = rand();
+                                int hit = roll % wisdom;
+                                battleDamages[c] = hit * party[c].level;
+                                battleTargets[c] = 0;
+                            } else {
+                                battleDamages[c] = 0;
+                            }
                         }
                     }
 
                     for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
-                        if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
-                            int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
-                            int attack = (rand() % monsterArchetypes[monsterType[c]].attack);
-                            int agil1 = party[heroTargetted].agility;
-                            int agil2 = monsterArchetypes[monsterType[c]].agility;
-                            int diffAgility = 1 + abs( agil1 - agil2 );
-                            int roll = rand();
-                            int hit = roll % diffAgility;
-                            int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
-                            int calc = attack - ((hit == 0) ? 0 : defense);
-                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
-                        } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
-                            int wisdom = monsterArchetypes[monsterType[c]].wisdom;
-                            int roll = rand();
-                            int hit = roll % wisdom;
-                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
-                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+                        if (party[4].inParty && party[4].hp > 0) {
+                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = party[4].hp;
+                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 4;
                         } else {
-                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+                            if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
+                                int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
+                                int attack = (rand() % monsterArchetypes[monsterType[c]].attack);
+                                int agil1 = party[heroTargetted].agility;
+                                int agil2 = monsterArchetypes[monsterType[c]].agility;
+                                int diffAgility = 1 + abs( agil1 - agil2 );
+                                int roll = rand();
+                                int hit = roll % diffAgility;
+                                int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
+                                int calc = attack - ((hit == 0) ? 0 : defense);
+                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
+                            } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
+                                int wisdom = monsterArchetypes[monsterType[c]].wisdom;
+                                int roll = rand();
+                                int hit = roll % wisdom;
+                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
+                                battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+                            } else {
+                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+                            }
                         }
                     }
 

@@ -1,4 +1,4 @@
-package pt.b13h.derelictgles2
+package pt.b13h.equivalencegles2
 
 import android.app.Presentation
 import android.content.Context
@@ -16,7 +16,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import pt.b13h.spacetrashmanblues.DerelictApplication
 
 class GameActivity : AppCompatActivity() {
 

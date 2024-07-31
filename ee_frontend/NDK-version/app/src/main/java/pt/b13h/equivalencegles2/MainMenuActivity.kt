@@ -1,4 +1,4 @@
-package pt.b13h.derelictgles2
+package pt.b13h.equivalencegles2
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
