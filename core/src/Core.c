@@ -851,7 +851,7 @@ void initCore(void) {
 
     party[4].name = "Nico";
     party[4].inParty = 0;
-    party[4].hp = 20;
+    party[4].hp = 5;
     party[4].energy = 0;
     party[4].defense = 1;
     party[4].attack = 1;
