@@ -1,4 +1,4 @@
-package pt.b13h.derelictgles2
+package pt.b13h.equivalencegles2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

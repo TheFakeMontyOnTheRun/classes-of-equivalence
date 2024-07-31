@@ -1,11 +1,10 @@
-package pt.b13h.derelictgles2;
+package pt.b13h.equivalencegles2;
 
 import android.app.Presentation;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.widget.ImageView;
 
 public class GamePresentation extends Presentation {
 
