@@ -264,6 +264,18 @@ void reactorValveCallback(struct Item *item) {
     setGameStatus(kBadVictory);
 }
 
+void consumeOnPickup(struct Item *item) {
+    removeObjectFromList(item, getPlayerItems());
+    if (!strcmp("black-diary", item->name)) {
+        for (int c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
+            if (party[c].inParty && party[c].hp > 0) {
+                defaultLogger("Partial heal!");
+                party[c].hp += rand() % 5;
+            }
+        }
+    }
+}
+
 void initStation(void) {
 
     struct Item *newItem;
@@ -743,7 +755,7 @@ void initStation(void) {
 #endif
                       TRUE, 4, 6);
     addToRoom("pod-1", newItem);
-
+    newItem->pickCallback = consumeOnPickup;
 
     newItem = addItem("blue-diary",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -758,7 +770,7 @@ void initStation(void) {
 #endif
                       TRUE, 11, 8);
     addToRoom("pod-2", newItem);
-
+    newItem->pickCallback = consumeOnPickup;
 
     newItem = addItem("white-diary",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -775,6 +787,7 @@ void initStation(void) {
 #endif
                       TRUE, 3, 2);
     addToRoom("pod-3", newItem);
+    newItem->pickCallback = consumeOnPickup;
 
 
     newItem = addItem("yellow-book",
@@ -790,7 +803,7 @@ void initStation(void) {
 #endif
                       TRUE, 5, 10);
     addToRoom("pod-4", newItem);
-
+    newItem->pickCallback = consumeOnPickup;
 
     newItem = addItem("log-book",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
@@ -802,6 +815,7 @@ void initStation(void) {
 #endif
                       TRUE, 26, 8);
     addToRoom("crew-bunks", newItem);
+    newItem->pickCallback = consumeOnPickup;
 
     /* Misc */
     newItem = addItem("card-writer",
