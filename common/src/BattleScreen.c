@@ -41,7 +41,7 @@ enum EBattleStates {
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
-struct Bitmap *foe[TOTAL_MONSTER_TYPES][TOTAL_FRAMES_PER_MONSTER];
+struct Bitmap *foe[TOTAL_MONSTER_COUNT][TOTAL_FRAMES_PER_MONSTER];
 struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 
 uint8_t currentCharacter;
