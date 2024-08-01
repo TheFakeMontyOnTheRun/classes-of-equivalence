@@ -145,7 +145,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 
     for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
-        monsterType[c] = rand() % TOTAL_MONSTER_TYPES;
+        monsterType[c] = rand() % 3; /* We can only have 3 types of monsters at the same time */
     }
 
 
