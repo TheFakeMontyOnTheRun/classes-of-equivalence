@@ -37,7 +37,7 @@ enum EBattleStates {
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 3
 #define kBattleAnimationInterval 9
-#define TOTAL_MONSTER_TYPES 20
+#define TOTAL_MONSTER_TYPES 26
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
@@ -75,6 +75,12 @@ const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"lady", 1, 3, 2, 1},
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
   {"lady", 1, 3, 2, 1}
 };
 
@@ -116,6 +122,8 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
 
+    monsterTypeOffset = getPlayerRoom() - 1;
+    
     aliveHeroes = 0;
     for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
         if (party[d].inParty && party[d].hp > 0) {
@@ -145,7 +153,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 
     for (c = 0; c < aliveMonsters; ++c) {
         monsterHP[c] = 20 + (rand() % 3);
-        monsterType[c] = rand() % 3; /* We can only have 3 types of monsters at the same time */
+        monsterType[c] = monsterTypeOffset + (rand() % 3); /* We can only have 3 types of monsters at the same time */
     }
 
 
@@ -209,7 +217,7 @@ void BattleScreen_repaintCallback(void) {
     }
 
     for (c = 0; c < monstersPresent; c++) {
-        int monsterTypeIndex = monsterTypeOffset + monsterType[monstersPresent - c - 1];
+        int monsterTypeIndex = -monsterTypeOffset + monsterType[monstersPresent - c - 1];
         int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
         /*
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
