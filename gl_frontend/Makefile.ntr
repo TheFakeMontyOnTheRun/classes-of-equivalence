@@ -73,13 +73,15 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 CFILES   := ../../common/src/MainMenu.c \
                               		../menu/src/Main.c \
                               		../base3d/src/nitro/NitroGLRenderer.c \
-                              		../GL1Common/LoadBitmap.c \
+					../../common/src/BattleScreen.c \
+                  			../../common/src/BattleResultScreen.c \
+					../GL1Common/LoadBitmap.c \
                               		../GL1Common/Renderer.c \
                               		../GL1Common/RendererRasterization.c \
                               		../GL1Common/RendererTesselation.c \
                               		../../common/src/Engine.c \
                               		../../common/src/UI.c \
-					                ../../common/src/Mesh.c \
+					../../common/src/Mesh.c \
                               		../../common/src/HackingScreen.c \
                               		../../common/src/Crawler.c \
                               		../../common/src/HelpScreen.c \

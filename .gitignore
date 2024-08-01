@@ -77,3 +77,6 @@ mx_frontend/equivalence.gba
 tools/level-editor/.idea
 tools/level-editor/level-editor
 tools/level-editor/mapfile.txt
+gl_frontend/derelict.elf
+gl_frontend/equivalence.nds
+gl_frontend/build/derelict.map
