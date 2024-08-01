@@ -37,7 +37,7 @@ enum EBattleStates {
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 3
 #define kBattleAnimationInterval 9
-#define TOTAL_MONSTER_TYPES 3
+#define TOTAL_MONSTER_TYPES 20
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
@@ -58,6 +58,23 @@ uint8_t plzdontfail[224];
 const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
   {"lady", 1, 3, 2, 1}
 };
 
@@ -74,6 +91,7 @@ uint8_t battleTargets[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
 uint8_t battleOrder[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 uint8_t batteCharacterOrder = 0;
+uint8_t monsterTypeOffset = 0;
 
 enum EBattleStates currentBattleState;
 int8_t animationTimer;
@@ -189,7 +207,7 @@ void BattleScreen_repaintCallback(void) {
     }
 
     for (c = 0; c < monstersPresent; c++) {
-        int monsterTypeIndex = monsterType[monstersPresent - c - 1];
+        int monsterTypeIndex = monsterTypeOffset + monsterType[monstersPresent - c - 1];
         int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
         /*
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
@@ -199,7 +217,7 @@ void BattleScreen_repaintCallback(void) {
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
 
-	  drawTextWindow(
+            drawTextWindow(
 		     11 + ( c * (32 + 16) ) / 8,
 		     1,
 		     6,
@@ -229,7 +247,7 @@ void BattleScreen_repaintCallback(void) {
                            2,
                            &buffer3[0],
                            getPaletteEntry(0xFF0000FF));
-        }
+            }
         }
     }
 
