@@ -80,3 +80,4 @@ tools/level-editor/mapfile.txt
 gl_frontend/derelict.elf
 gl_frontend/equivalence.nds
 gl_frontend/build/derelict.map
+derelict_ee.elf

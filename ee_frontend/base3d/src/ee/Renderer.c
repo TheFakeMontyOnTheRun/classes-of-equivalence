@@ -19,9 +19,9 @@
 #include <draw3d.h>
 #include <gs_gp.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "FixP.h"
-#include "Enums.h"
 #include "Common.h"
 #include "Vec.h"
 #include "CActor.h"
