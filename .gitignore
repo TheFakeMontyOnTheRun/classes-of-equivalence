@@ -65,3 +65,15 @@ gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/project.xcworkspace/xcuserdata/mo
 gl_frontend/Xcode2_gl1/Equivalence64.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
 core/.idea
 core/cmake-build-debug
+ee_frontend/Xcode4_gl2/equivalence128.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+gl_frontend/cmake_install.cmake
+gl_frontend/CMakeCache.txt
+gl_frontend/derelict64
+gl_frontend/derelict64.z64
+gl_frontend/Makefile
+gl_frontend/CMakeFiles
+gl_frontend/filesystem/font.font64
+mx_frontend/equivalence.gba
+tools/level-editor/.idea
+tools/level-editor/level-editor
+tools/level-editor/mapfile.txt
