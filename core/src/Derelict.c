@@ -3,17 +3,14 @@ Created by Daniel Monteiro on 2019-07-26.
 */
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #ifndef SMD
-
 #include <string.h>
-
 #ifdef WIN32
 #include "Win32Int.h"
 #else
-
 #include <stdint.h>
-
 #endif
 #else
 #include <genesis.h>
