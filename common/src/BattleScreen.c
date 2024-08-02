@@ -79,9 +79,9 @@ static const struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
   {"lady", 1, 3, 2, 1},
-  {"lady", 1, 3, 2, 1},
-  {"lady", 1, 3, 2, 1},
-  {"lady", 1, 3, 2, 1}
+  {"crot", 1, 3, 2, 1},
+  {"baba", 1, 3, 2, 1},
+  {"cret", 1, 3, 2, 1}
 };
 
 /* Life points of the monsters */
@@ -132,7 +132,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     }
     
     /* You have Nico in your party. YOU SUFFER! */
-    if (party[4].inParty && party[4].hp > 0 ) {
+    if ((party[4].inParty && party[4].hp > 0) || getPlayerRoom() == 22 ) {
         aliveMonsters = monstersPresent = TOTAL_MONSTER_COUNT;
     } else {
         aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
@@ -150,12 +150,22 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     foe[1][1] = loadBitmap("cuco1.img");
     foe[2][1] = loadBitmap("lady1.img");
 
+    if (getPlayerRoom() == 22) {
+        monsterTypeOffset = 23;
+        monsterHP[0] = 40 + (rand() % 3);
+        monsterType[0] = 23;
 
-    for (c = 0; c < aliveMonsters; ++c) {
-        monsterHP[c] = 20 + (rand() % 3);
-        monsterType[c] = monsterTypeOffset + (rand() % 3); /* We can only have 3 types of monsters at the same time */
+        monsterHP[1] = 40 + (rand() % 3);
+        monsterType[1] = 24;
+
+        monsterHP[2] = 40 + (rand() % 3);
+        monsterType[2] = 25;
+    } else {
+        for (c = 0; c < aliveMonsters; ++c) {
+            monsterHP[c] = 20 + (rand() % 3);
+            monsterType[c] = monsterTypeOffset + (rand() % 3); /* We can only have 3 types of monsters at the same time */
+        }
     }
-
 
     splatMonster = -1;
     monsterAttacking = -1;
@@ -232,7 +242,7 @@ void BattleScreen_repaintCallback(void) {
 		     1,
 		     6,
 		     3,
-		     monsterArchetypes[monsterTypeIndex].name,
+		     monsterArchetypes[monsterType[monstersPresent - c - 1]].name,
 		     &buffer[0]);
 	  
             drawBitmap(4 + 11 * 8 + ( c * (32 + 16)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
@@ -453,7 +463,11 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
 
                 if (aliveMonsters == 0) {
-                    return kBattleResultScreen;
+                    if (getPlayerRoom() == 22) {
+                        return kGoodVictoryEpilogue;
+                    } else {
+                        return kBattleResultScreen;
+                    }
                 }
             }
         }

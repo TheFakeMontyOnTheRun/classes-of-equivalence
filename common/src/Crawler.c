@@ -275,7 +275,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         nativeTextures[1] = makeTextureFrom("floor.img");
         texturesUsed = 2;
 
-        if ((party[4].inParty && party[4].hp > 0) || random < playerNewRoom->chanceOfRandomBattle) {
+        if (getPlayerRoom() == 22 || (party[4].inParty && party[4].hp > 0) || random < playerNewRoom->chanceOfRandomBattle) {
             return kBattleScreen;
         } else {
             initRoom(getPlayerRoom());
