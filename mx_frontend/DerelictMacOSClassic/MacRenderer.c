@@ -36,7 +36,7 @@
 
 #define rUserAlert 129
 
-#define APP_NAME_STRING "\pSub Mare Imperium - Derelict"
+#define APP_NAME_STRING "\pSub Mare Imperium - Tragedy of the Uncanny"
 struct RGBColor mPalette[256];
 PaletteHandle myPalette;
 SndChannelPtr sndChannelPtr;

@@ -430,8 +430,9 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
             batteCharacterOrder++;
 
             if (party[4].inParty && party[4].hp > 0 ) {
+            	int m;
                 /* Force giving priority to monsters, so they can kill Nico */
-                for ( int m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
+                for (m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
                     if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] == 0 && monsterHP[m] > 0) {
                         currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
                         goto done_selecting_monster;

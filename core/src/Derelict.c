@@ -262,9 +262,10 @@ void reactorValveCallback(struct Item *item) {
 }
 
 void consumeOnPickup(struct Item *item) {
+	int c;
     removeObjectFromList(item, getPlayerItems());
     if (!strcmp("black-diary", item->name)) {
-        for (int c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
+        for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
                 party[c].hp += rand() % 5;
