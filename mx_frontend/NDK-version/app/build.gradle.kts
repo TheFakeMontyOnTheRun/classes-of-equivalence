@@ -41,6 +41,17 @@ android {
     }
 }
 
+tasks.register<Copy>( "copyAssets") {
+    from(file("../../base.pfs"))
+    into(file("src/main/assets"))
+}
+
+tasks {
+    preBuild {
+        dependsOn("copyAssets")
+    }
+}
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
