@@ -87,3 +87,6 @@ ee_frontend/derelict_wii.dol
 ee_frontend/derelict_wii.elf
 derelict_gx.elf.map
 derelict_wii.elf.map
+gl_frontend/.idea
+gl_frontend/cmake-build-debug
+derelict.nds
