@@ -179,22 +179,20 @@ void Crawler_repaintCallback(void) {
             renderRoomTransition();
         } else if (currentPresentationState == kWaitingForInput) {
             int c;
-            int xWindow = 0;
+            int yWindow = 0;
             char buffer[64];
             renderTick(30);
 
             recenterView();
             redrawHUD();
-
-            sprintf(&buffer[0], "turn: %zu\ntime: %ld", gameSnapshot.turn, timeUntilNextState);
-
-            drawTextAt(0, (YRES_FRAMEBUFFER / 8) - 8, &buffer[0], getPaletteEntry(0xFFFFFFFF));
             
+            fillRect(XRES, 0, 64, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), 0);
+
             for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
                 if (party[c].inParty) {
                     sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
-                    drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
-                    xWindow += 7;
+                    drawTextWindow((XRES / 8), yWindow, 7, 4, party[c].name, &buffer[0]);
+                    yWindow += 5;
                 }
             }
         }
