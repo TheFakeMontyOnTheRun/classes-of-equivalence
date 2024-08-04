@@ -43,7 +43,12 @@ CGSize viewSize;
     NSPoint event_location = [theEvent locationInWindow];
     NSPoint local_point = [self convertPoint:event_location fromView:nil];
     
-    onClick(1, local_point.x, self.bounds.size.height - local_point.y, self.bounds.size.width, self.bounds.size.height);
+    onClick(1,
+            local_point.x,
+            self.bounds.size.height - local_point.y,
+            self.bounds.size.width,
+            self.bounds.size.height
+            );
 }
 
 void setLineWidth(uint8_t width) {
@@ -68,7 +73,7 @@ void drawLine(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
 void fillRect(uint32_t x0, uint32_t y0, uint32_t width, uint32_t height) {
     CGRect bounds;
     bounds.origin.x = x0;
-    bounds.origin.y = viewSize.height - y0;
+    bounds.origin.y = viewSize.height - y0 - height;
     bounds.size.width = width;
     bounds.size.height = height;
     CGContextFillRect(currentContext, bounds);

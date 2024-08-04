@@ -174,8 +174,8 @@ void onClick(int buttonIndex, int buttonX, int buttonY, int width, int height) {
                 
                 uint32_t flag = buttonIndex == 1 ? CELL_FLOOR : CELL_VOID;
                 
-                for (int _y = y0; _y < y1; ++_y) {
-                    for (int _x = x0; _x < x1; ++_x) {
+                for (int _y = y0; _y <= y1; ++_y) {
+                    for (int _x = x0; _x <= x1; ++_x) {
                         printf("filling %d, %d\n", _x, _y);
                         setFlags(&map, _x, _y, flag);
                     }
