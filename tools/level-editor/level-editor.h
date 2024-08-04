@@ -30,4 +30,22 @@ void saveMap(const char *filename, struct Map *map);
 
 struct Map loadMap(const char *filename);
 
+void onClick(int buttonIndex, int buttonX, int buttonY, int width, int height);
+
+void initMapEditor();
+
+void onDrawLineClicked();
+
+void onDrawSquareClicked();
+
+void setLineWidth(uint8_t width);
+
+void setColour(uint32_t colour);
+
+void drawLine(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1);
+
+void fillRect(uint32_t x0, uint32_t y0, uint32_t width, uint32_t height);
+
+void redrawGrid(int width, int height);
+
 #endif

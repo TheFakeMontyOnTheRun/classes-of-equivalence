@@ -15,6 +15,30 @@
     // Insert code here to initialize your application
 }
 
+- (IBAction)drawLine:(id)sender {
+    onDrawLineClicked();
+}
+
+- (IBAction)fillRect:(id)sender {
+    onDrawSquareClicked();
+}
+
+- (IBAction)saveMap:(id)sender {
+
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    /*
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+    [panel setAllowsMultipleSelection:NO];
+    */
+    NSInteger clicked = [panel runModal];
+    
+    if (clicked == NSFileHandlingPanelOKButton) {
+        [gridView loadMap: [panel URL].path];
+    }
+
+}
+
 - (IBAction)loadMap:(id)sender {
 
     NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -26,9 +50,7 @@
     
     if (clicked == NSFileHandlingPanelOKButton) {
         for (NSURL *url in [panel URLs]) {
-            NSLog(@"Load map! %@", url.path);
-            struct Map map = loadMap( url.path.UTF8String );
-            [gridView updateMap: &map];
+            [gridView loadMap: url.path];
             
         }
     }

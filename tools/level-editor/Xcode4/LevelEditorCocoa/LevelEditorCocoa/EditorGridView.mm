@@ -8,7 +8,9 @@
 
 #import "EditorGridView.h"
 
-uint32_t mapSurface[32][32];
+CGContextRef currentContext;
+extern struct Map map;
+CGSize viewSize;
 
 @implementation EditorGridView
 
@@ -30,6 +32,7 @@ uint32_t mapSurface[32][32];
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
+        initMapEditor();
         [self initTimer];
     }
     
@@ -37,14 +40,40 @@ uint32_t mapSurface[32][32];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-    NSPoint touchPoint = [NSEvent mouseLocation];
     NSPoint event_location = [theEvent locationInWindow];
     NSPoint local_point = [self convertPoint:event_location fromView:nil];
     
-    int y = local_point.y / (self.bounds.size.height / 33);
-    int x = local_point.x / (self.bounds.size.width / 33);
-    mapSurface[32 - y][x] = 1;
+    onClick(1, local_point.x, self.bounds.size.height - local_point.y, self.bounds.size.width, self.bounds.size.height);
 }
+
+void setLineWidth(uint8_t width) {
+    CGContextSetLineWidth(currentContext, width);
+}
+
+void setColour(uint32_t colour) {
+    float r = ((colour & 0xFF0000) >> 16) / 256.0f;
+    float g = ((colour & 0x00FF00) >>  8) / 256.0f;
+    float b = ((colour & 0x0000FF) >>  0) / 256.0f;
+    
+    CGContextSetRGBFillColor(currentContext, r, g, b, 1.0f);
+}
+
+void drawLine(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
+    CGContextMoveToPoint(currentContext, x0, viewSize.height - y0);
+    CGContextAddLineToPoint(currentContext, x1, viewSize.height - y1);
+    CGContextStrokePath(currentContext);
+
+}
+
+void fillRect(uint32_t x0, uint32_t y0, uint32_t width, uint32_t height) {
+    CGRect bounds;
+    bounds.origin.x = x0;
+    bounds.origin.y = viewSize.height - y0;
+    bounds.size.width = width;
+    bounds.size.height = height;
+    CGContextFillRect(currentContext, bounds);
+}
+
 
 - (void)drawRect:(NSRect)rect
 {
@@ -53,7 +82,7 @@ uint32_t mapSurface[32][32];
     bounds.origin.y = rect.origin.y;
     bounds.size.width = rect.size.width;
     bounds.size.height = rect.size.height;
-
+    viewSize = self.bounds.size;
     /*  MAC_OS_X_VERSION_10_10*/
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 101000
     CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
@@ -67,85 +96,20 @@ uint32_t mapSurface[32][32];
 
     CGContextFillRect(context, bounds);
     
+    currentContext = context;
     
-    for( int y = 0; y < 33; ++y) {
-        CGContextSetLineWidth(context, 1);
-        CGContextMoveToPoint(context, 0, y * (self.bounds.size.height / 33));
-        CGContextAddLineToPoint(context, self.bounds.size.width, y * (self.bounds.size.height / 33));
-        CGContextStrokePath(context);
-    }
-    
-    for ( int x = 0; x < 33; ++x) {
-        CGContextSetLineWidth(context, 1);
-        CGContextMoveToPoint(context, x * (self.bounds.size.width / 33), 0);
-        CGContextAddLineToPoint(context, x * (self.bounds.size.width / 33), self.bounds.size.height);
-        CGContextStrokePath(context);
-
-    }
-    
-    bounds.size.width = self.bounds.size.width / 33;
-    bounds.size.height = self.bounds.size.height / 33;
-    
-    for (int y = 0; y < 32; ++y) {
-        for (int x = 0; x < 32; ++x ) {
-            bounds.origin.x = x * (self.bounds.size.width / 33);
-            bounds.origin.y = y * (self.bounds.size.height / 33);
-
-            uint32_t flags = mapSurface[32 - y][x];
-            if ((flags & CELL_VOID) == CELL_VOID) {
-                CGContextSetRGBFillColor(context, 0.5f, 0.5f, 0.5f, 1.0f);
-            } else {
-                CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
-            }
-
-            CGContextFillRect(context, bounds);
-            
-            if ((flags & VERTICAL_LINE) == VERTICAL_LINE) {
-                CGContextSetLineWidth(context, 2);
-                CGContextMoveToPoint(context, x * (self.bounds.size.width / 33), y * (self.bounds.size.height / 33));
-                CGContextAddLineToPoint(context, x * (self.bounds.size.width / 33), (y + 1) * (self.bounds.size.height / 33));
-                CGContextStrokePath(context);
-            }
-            
-            if ((flags & HORIZONTAL_LINE) == HORIZONTAL_LINE) {
-                CGContextSetLineWidth(context, 2);
-                CGContextMoveToPoint(context, x * (self.bounds.size.width / 33), (y + 1) * (self.bounds.size.height / 33));
-                CGContextAddLineToPoint(context, (x + 1) * (self.bounds.size.width / 33), (y + 1) * (self.bounds.size.height / 33));
-                CGContextStrokePath(context);
-            }
-            
-            if ((flags & LEFT_FAR_LINE) == LEFT_FAR_LINE) {
-                CGContextSetLineWidth(context, 2);
-                CGContextMoveToPoint(context, x * (self.bounds.size.width / 33), (y + 1) * (self.bounds.size.height / 33));
-                CGContextAddLineToPoint(context, (x + 1) * (self.bounds.size.width / 33), (y + 0) * (self.bounds.size.height / 33));
-                CGContextStrokePath(context);
-            }
-            
-            if ((flags & LEFT_NEAR_LINE) == LEFT_NEAR_LINE) {
-                CGContextSetLineWidth(context, 2);
-                CGContextMoveToPoint(context, (x + 1) * (self.bounds.size.width / 33), (y + 1) * (self.bounds.size.height / 33));
-                CGContextAddLineToPoint(context, x * (self.bounds.size.width / 33), (y + 0) * (self.bounds.size.height / 33));
-                CGContextStrokePath(context);
-            }
-            
-        }
-    }
-    
-
+    redrawGrid(self.bounds.size.width, self.bounds.size.height);
     
     CGContextRestoreGState(context);
 }
 
-- (void)updateMap: (Map*) map {
-    for (int y = 0; y < 32; ++y) {
-        for (int x = 0; x < 32; ++x) {
-            mapSurface[y][x] = getFlags(map, x, y);
-        }
-    }
+- (void)loadMap: (NSString*) path {
+    map = loadMap( path.UTF8String );
 }
 
-- (void)saveMap: (Map*)map {
-    
+- (void)saveMap: (NSString*)path {
+    saveMap(path.UTF8String, &map);
 }
+
 
 @end

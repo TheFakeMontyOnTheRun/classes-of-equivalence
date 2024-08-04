@@ -12,6 +12,6 @@
 @interface EditorGridView : NSView
 - (void)drawRect:(NSRect)rect;
 - (void)mouseDown:(NSEvent *)theEvent;
-- (void)updateMap: (Map*) map;
-- (void)saveMap: (Map*)map;
+- (void)loadMap: (NSString*) path;
+- (void)saveMap: (NSString*)path;
 @end

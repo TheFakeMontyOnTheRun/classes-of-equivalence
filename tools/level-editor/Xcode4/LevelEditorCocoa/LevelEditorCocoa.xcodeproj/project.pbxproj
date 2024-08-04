@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F198DCF82C5FFD7D001B4503 /* window-delegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F198DCF72C5FFD7D001B4503 /* window-delegate.cpp */; };
 		F1D0E3C32C5FE756001CFFF8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D0E3C22C5FE756001CFFF8 /* Cocoa.framework */; };
 		F1D0E3CD2C5FE756001CFFF8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1D0E3CB2C5FE756001CFFF8 /* InfoPlist.strings */; };
 		F1D0E3CF2C5FE756001CFFF8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D0E3CE2C5FE756001CFFF8 /* main.m */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F198DCF72C5FFD7D001B4503 /* window-delegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "window-delegate.cpp"; path = "../../../window-delegate.cpp"; sourceTree = "<group>"; };
 		F1D0E3BF2C5FE756001CFFF8 /* LevelEditorCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelEditorCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1D0E3C22C5FE756001CFFF8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F1D0E3C52C5FE756001CFFF8 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -97,6 +99,7 @@
 				F1D0E3E42C5FE9C9001CFFF8 /* loadmap.cpp */,
 				F1D0E3E52C5FE9C9001CFFF8 /* savemap.cpp */,
 				F1D0E3D42C5FE756001CFFF8 /* AppDelegate.h */,
+				F198DCF72C5FFD7D001B4503 /* window-delegate.cpp */,
 				F1D0E3D52C5FE756001CFFF8 /* AppDelegate.mm */,
 				F1D0E3D72C5FE756001CFFF8 /* MainMenu.xib */,
 				F1D0E3C92C5FE756001CFFF8 /* Supporting Files */,
@@ -188,6 +191,7 @@
 				F1D0E3E62C5FE9C9001CFFF8 /* editor.cpp in Sources */,
 				F1D0E3E72C5FE9C9001CFFF8 /* loadmap.cpp in Sources */,
 				F1D0E3E82C5FE9C9001CFFF8 /* savemap.cpp in Sources */,
+				F198DCF82C5FFD7D001B4503 /* window-delegate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +327,7 @@
 				F1D0E3DE2C5FE756001CFFF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

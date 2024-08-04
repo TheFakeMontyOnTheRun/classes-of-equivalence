@@ -14,6 +14,9 @@
 }
 
 - (IBAction)loadMap:(id)sender;
+- (IBAction)saveMap:(id)sender;
+- (IBAction)drawLine:(id)sender;
+- (IBAction)fillRect:(id)sender;
 @property (assign) IBOutlet NSWindow *window;
 
 @end
