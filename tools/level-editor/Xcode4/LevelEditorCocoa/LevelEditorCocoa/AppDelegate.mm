@@ -34,7 +34,7 @@
     NSInteger clicked = [panel runModal];
     
     if (clicked == NSFileHandlingPanelOKButton) {
-        [gridView loadMap: [panel URL].path];
+        [gridView saveMap: [panel URL].path];
     }
 
 }
