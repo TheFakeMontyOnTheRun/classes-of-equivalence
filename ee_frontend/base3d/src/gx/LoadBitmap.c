@@ -4,8 +4,8 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "Core.h"
 #include "Enums.h"
+#include "Core.h"
 #include "FixP.h"
 #include "Common.h"
 #include "LoadBitmap.h"

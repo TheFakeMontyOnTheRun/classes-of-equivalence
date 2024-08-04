@@ -37,11 +37,11 @@ enum EBattleStates {
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 3
 #define kBattleAnimationInterval 9
-#define TOTAL_MONSTER_TYPES 3
+#define TOTAL_MONSTER_TYPES 26
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
-struct Bitmap *foe[TOTAL_MONSTER_TYPES][TOTAL_FRAMES_PER_MONSTER];
+struct Bitmap *foe[TOTAL_MONSTER_COUNT][TOTAL_FRAMES_PER_MONSTER];
 struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 
 uint8_t currentCharacter;
@@ -55,10 +55,33 @@ struct MonsterArchetype {
 };
 
 uint8_t plzdontfail[224];
-const static struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
+static const struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"bull", 2, 3, 4, 5},
   {"cuco", 3, 3, 2, 6},
-  {"lady", 1, 3, 2, 1}
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"bull", 2, 3, 4, 5},
+  {"cuco", 3, 3, 2, 6},
+  {"lady", 1, 3, 2, 1},
+  {"crot", 1, 3, 2, 1},
+  {"baba", 1, 3, 2, 1},
+  {"cret", 1, 3, 2, 1}
 };
 
 /* Life points of the monsters */
@@ -74,6 +97,7 @@ uint8_t battleTargets[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
 uint8_t battleOrder[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 uint8_t batteCharacterOrder = 0;
+uint8_t monsterTypeOffset = 0;
 
 enum EBattleStates currentBattleState;
 int8_t animationTimer;
@@ -98,6 +122,8 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     needsToRedrawVisibleMeshes = 0;
     currentCharacter = 0;
 
+    monsterTypeOffset = getPlayerRoom() - 1;
+    
     aliveHeroes = 0;
     for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
         if (party[d].inParty && party[d].hp > 0) {
@@ -106,7 +132,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     }
     
     /* You have Nico in your party. YOU SUFFER! */
-    if (party[4].inParty && party[4].hp > 0 ) {
+    if ((party[4].inParty && party[4].hp > 0) || getPlayerRoom() == 22 ) {
         aliveMonsters = monstersPresent = TOTAL_MONSTER_COUNT;
     } else {
         aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
@@ -124,12 +150,22 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     foe[1][1] = loadBitmap("cuco1.img");
     foe[2][1] = loadBitmap("lady1.img");
 
+    if (getPlayerRoom() == 22) {
+        monsterTypeOffset = 23;
+        monsterHP[0] = 40 + (rand() % 3);
+        monsterType[0] = 23;
 
-    for (c = 0; c < aliveMonsters; ++c) {
-        monsterHP[c] = 20 + (rand() % 3);
-        monsterType[c] = rand() % TOTAL_MONSTER_TYPES;
+        monsterHP[1] = 40 + (rand() % 3);
+        monsterType[1] = 24;
+
+        monsterHP[2] = 40 + (rand() % 3);
+        monsterType[2] = 25;
+    } else {
+        for (c = 0; c < aliveMonsters; ++c) {
+            monsterHP[c] = 20 + (rand() % 3);
+            monsterType[c] = monsterTypeOffset + (rand() % 3); /* We can only have 3 types of monsters at the same time */
+        }
     }
-
 
     splatMonster = -1;
     monsterAttacking = -1;
@@ -185,11 +221,13 @@ void BattleScreen_repaintCallback(void) {
     needsToRedrawVisibleMeshes = 0;
 
     for (c = 1; c < (YRES_FRAMEBUFFER / 2); c = c * 2) {
-        drawLine(0, c + YRES_FRAMEBUFFER / 2, XRES_FRAMEBUFFER, c + YRES_FRAMEBUFFER / 2, getPaletteEntry(0xFFFF0000));
+        fillRect(0, c + YRES_FRAMEBUFFER / 2,
+                 XRES_FRAMEBUFFER, 1,
+                 getPaletteEntry(0xFFFF0000), 0);
     }
 
     for (c = 0; c < monstersPresent; c++) {
-        int monsterTypeIndex = monsterType[monstersPresent - c - 1];
+        int monsterTypeIndex = -monsterTypeOffset + monsterType[monstersPresent - c - 1];
         int spriteFrame = (monsterAttacking == (monstersPresent - c - 1));
         /*
          to make it even weider, we have (monstersPresent - c - 1). This is required, since otherwise, we would print
@@ -199,12 +237,12 @@ void BattleScreen_repaintCallback(void) {
 
         if (monsterHP[(monstersPresent - c - 1)] > 0 ) {
 
-	  drawTextWindow(
+            drawTextWindow(
 		     11 + ( c * (32 + 16) ) / 8,
 		     1,
 		     6,
 		     3,
-		     monsterArchetypes[monsterTypeIndex].name,
+		     monsterArchetypes[monsterType[monstersPresent - c - 1]].name,
 		     &buffer[0]);
 	  
             drawBitmap(4 + 11 * 8 + ( c * (32 + 16)), -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2, foe[monsterTypeIndex][spriteFrame], 1);
@@ -229,7 +267,7 @@ void BattleScreen_repaintCallback(void) {
                            2,
                            &buffer3[0],
                            getPaletteEntry(0xFF0000FF));
-        }
+            }
         }
     }
 
@@ -392,8 +430,9 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
             batteCharacterOrder++;
 
             if (party[4].inParty && party[4].hp > 0 ) {
+            	int m;
                 /* Force giving priority to monsters, so they can kill Nico */
-                for ( int m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
+                for (m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
                     if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] == 0 && monsterHP[m] > 0) {
                         currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
                         goto done_selecting_monster;
@@ -425,7 +464,11 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
 
                 if (aliveMonsters == 0) {
-                    return kBattleResultScreen;
+                    if (getPlayerRoom() == 22) {
+                        return kGoodVictoryEpilogue;
+                    } else {
+                        return kBattleResultScreen;
+                    }
                 }
             }
         }

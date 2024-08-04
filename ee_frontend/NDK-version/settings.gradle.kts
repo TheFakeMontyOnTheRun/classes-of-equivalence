@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sub Mare Imperium - Derelict (GL ES2)"
+rootProject.name = "Sub Mare Imperium - Equivalence (GL ES2)"
 include(":app")
 include(":app")

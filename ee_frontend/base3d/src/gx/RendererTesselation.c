@@ -4,10 +4,10 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Common.h"
 #include "FixP.h"
-#include "Enums.h"
 #include "Vec.h"
 #include "CActor.h"
 #include "Dungeon.h"

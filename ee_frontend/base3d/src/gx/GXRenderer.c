@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "Common.h"
 #include "Enums.h"
+#include "Common.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Globals.h"

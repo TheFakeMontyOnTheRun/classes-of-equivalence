@@ -66,6 +66,8 @@ CFILES		:=			../../common/src/MainMenu.c \
                 		../../common/src/HelpScreen.c \
                 		../../common/src/CreditsScreen.c \
                 		../../common/src/GameMenu.c \
+				../../common/src/BattleScreen.c \
+				../../common/src/BattleResultScreen.c \
                 		../menu/src/Main.c \
                 		../../common/src/Engine.c \
                 		../base3d/src/gx/GXRenderer.c \

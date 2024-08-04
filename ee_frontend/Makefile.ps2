@@ -30,6 +30,8 @@ EE_OBJS= menu/src/Main.o \
 	../common/src/UI.o \
 	../common/src/Mesh.o \
 	../common/src/HackingScreen.o \
+	../common/src/BattleScreen.o \
+	../common/src/BattleResultScreen.o \
 	../common/src/HelpScreen.o \
 	../common/src/CreditsScreen.o \
 	../common/src/Crawler.o \
