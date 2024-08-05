@@ -35,7 +35,7 @@
 unittests
 core/coverage
 mx_frontend/cmake-build-debug
-level-editor
+level-editor-x11
 mx_frontend/.idea
 mx_frontend/derelict.elf
 mx_frontend/derelict.gba
