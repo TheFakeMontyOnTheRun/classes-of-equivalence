@@ -48,6 +48,13 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
 const int AbandonMission_count = 2;
 
+uint8_t drawActionsWindow = 0;
+const char *CrawlerActions_options[] = {
+    "Use/Toggle",
+    "Use with",
+    "Use/pick",
+    "Drop"};
+
 void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
@@ -152,6 +159,19 @@ void redrawHUD(void) {
         }
         head = head->next;
     }
+    
+    if (drawActionsWindow) {
+        
+        drawWindowWithOptions(0,
+                              (YRES_FRAMEBUFFER / 8) - 10,
+                              10 + 2,
+                              6,
+                              "Action",
+                              CrawlerActions_options,
+                              4,
+                              cursorPosition);
+    }
+    
 }
 
 void Crawler_repaintCallback(void) {
@@ -251,6 +271,15 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
 
     if (currentPresentationState == kWaitingForInput) {
+        
+        if (cmd ==  kCommandFire1 ) {
+            drawActionsWindow = 1;
+            cmd = kCommandNone;
+        } else if (cmd == kCommandFire2) {
+            drawActionsWindow = 0;
+            cmd = kCommandNone;
+        }
+
         if (timeUntilNextState < 0) {
             if (cmd == kCommandNone) {
                 timeUntilNextState = 1000;
