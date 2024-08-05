@@ -35,6 +35,7 @@
 unittests
 core/coverage
 mx_frontend/cmake-build-debug
+level-editor-x11
 mx_frontend/.idea
 mx_frontend/derelict.elf
 mx_frontend/derelict.gba
@@ -90,3 +91,7 @@ derelict_wii.elf.map
 gl_frontend/.idea
 gl_frontend/cmake-build-debug
 derelict.nds
+tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
+tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist

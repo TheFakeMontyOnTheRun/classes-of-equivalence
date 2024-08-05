@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'LevelEditorCocoa' target in the 'LevelEditorCocoa' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
