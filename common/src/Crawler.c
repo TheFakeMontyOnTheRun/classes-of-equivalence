@@ -22,6 +22,7 @@
 #include "Dungeon.h"
 #include "Core.h"
 #include "Derelict.h"
+#include "EDirection_Utils.h"
 #include "MapWithCharKey.h"
 #include "SoundSystem.h"
 #include "UI.h"
@@ -49,12 +50,17 @@ const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, k
 const int AbandonMission_count = 2;
 
 uint8_t drawActionsWindow = 0;
-const char *CrawlerActions_options[] = {
-    "Use/Toggle",
-    "Use with",
-    "Use/pick",
-    "Drop"};
+const char *CrawlerActions_optionsPickUse[] = {
+    "Use with...",
+    "Pick/Use"
+};
 
+const char *CrawlerActions_optionsDrop[] = {
+    "Use",
+    "Drop"
+};
+
+extern struct CActor playerCrawler;
 void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
@@ -161,15 +167,41 @@ void redrawHUD(void) {
     }
     
     if (drawActionsWindow) {
-        
-        drawWindowWithOptions(0,
-                              (YRES_FRAMEBUFFER / 8) - 10,
-                              10 + 2,
-                              6,
-                              "Action",
-                              CrawlerActions_options,
-                              4,
-                              cursorPosition);
+      struct Item *item;
+      struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+      head = getRoom(getPlayerRoom())->itemsPresent->next;
+      offseted.x += playerCrawler.position.x;
+      offseted.y += playerCrawler.position.y;
+
+      needsToRedrawHUD = TRUE;
+
+      while (head != NULL && item == NULL) {
+	if (offseted.x == (getItem(head->item)->position.x) &&
+	    offseted.y == (getItem(head->item)->position.y)) {
+	  item = getItem(head->item);
+	}
+	head = head->next;
+      }
+
+      if (item != NULL) {
+	drawWindowWithOptions(0,
+			    (YRES_FRAMEBUFFER / 8) - 10,
+			    10 + 2,
+			    6,
+			    "Action",
+			    CrawlerActions_optionsPickUse,
+			    2,
+			    cursorPosition);
+      } else {
+	      drawWindowWithOptions(0,
+			    (YRES_FRAMEBUFFER / 8) - 10,
+			    10 + 2,
+			    6,
+			    "Action",
+			    CrawlerActions_optionsDrop,
+			    2,
+			    cursorPosition);
+      }
     }
     
 }
@@ -260,6 +292,42 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         return kResumeCurrentState;
     }
 
+    if (drawActionsWindow) {
+        switch (cmd) {
+            case kCommandBack:
+                return kMainMenu;
+            case kCommandUp:
+                timeUntilNextState = 1000;
+                playSound(MENU_SELECTION_CHANGE_SOUND);
+                --cursorPosition;
+                break;
+            case kCommandDown:
+                timeUntilNextState = 1000;
+                playSound(MENU_SELECTION_CHANGE_SOUND);
+                ++cursorPosition;
+                break;
+	    case kCommandFire2:
+	        drawActionsWindow = 0;
+  	        break;
+            case kCommandFire1:
+  	        drawActionsWindow = 0;
+	        needsToRedrawVisibleMeshes = TRUE;
+		timeUntilNextState = 1000;
+	        loopTick(kCommandFire1 + cursorPosition);
+		return kResumeCurrentState;
+        }
+
+        if (cursorPosition >= 2) {
+	    cursorPosition = 1;
+        }
+
+        if (cursorPosition < 0) {
+            cursorPosition = 0;
+        }
+
+        return kResumeCurrentState;
+    }
+
     if (cmd == kCommandBack) {
         showPromptToAbandonMission = TRUE;
         timeUntilNextState = 0;
@@ -274,18 +342,18 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         
         if (cmd ==  kCommandFire1 ) {
             drawActionsWindow = 1;
-            cmd = kCommandNone;
-        } else if (cmd == kCommandFire2) {
-            drawActionsWindow = 0;
-            cmd = kCommandNone;
         }
 
         if (timeUntilNextState < 0) {
             if (cmd == kCommandNone) {
                 timeUntilNextState = 1000;
-                cmd = kCommandFire4;
             }
         }
+
+	if (cmd == kCommandFire1 || cmd == kCommandFire2) {
+  	    cmd = kCommandNone;
+	}
+
         loopTick(cmd);
 
         return kResumeCurrentState;
