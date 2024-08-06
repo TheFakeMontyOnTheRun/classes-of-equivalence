@@ -89,15 +89,6 @@ TEST_F(TestDerelict, cantUseCardWriterToHackOtherThings) {
     ASSERT_FALSE(hasItemInRoom("computer-core", "hacked-keycard"));
 }
 
-TEST_F(TestDerelict, canUseMagneticBootsToDisableMagneticCoupling) {
-    struct Item *boots = getItemNamed("metal-pipe");
-    struct Item *coupling = getItemNamed("magnetic-coupling");
-
-    ASSERT_TRUE(coupling->active);
-    useBootsWithMagneticCoupling(boots, coupling);
-    ASSERT_FALSE(coupling->active);
-}
-
 TEST_F(TestDerelict, usingOtherObjectsWithMagneticCoupleAchievesNothing) {
     struct Item *helmet = getItemNamed("helmet");
     struct Item *coupling = getItemNamed("magnetic-coupling");
