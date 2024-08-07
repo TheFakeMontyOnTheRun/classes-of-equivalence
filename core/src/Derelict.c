@@ -264,7 +264,7 @@ void reactorValveCallback(struct Item *item) {
 void consumeOnPickup(struct Item *item) {
 	int c;
     removeObjectFromList(item, getPlayerItems());
-    if (!strcmp("black-diary", item->name)) {
+    if (!strcmp("black-health", item->name)) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
@@ -273,7 +273,7 @@ void consumeOnPickup(struct Item *item) {
         }
     }
     
-    if (!strcmp("blue-diary", item->name)) {
+    if (!strcmp("blue-health", item->name)) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
@@ -282,7 +282,7 @@ void consumeOnPickup(struct Item *item) {
         }
     }
 
-    if (!strcmp("white-diary", item->name)) {
+    if (!strcmp("white-health", item->name)) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
@@ -756,7 +756,7 @@ void initStation(void) {
     addToRoom("hall-3", newItem);
 
     /* Diaries */
-    newItem = addItem("black-diary",
+    newItem = addItem("black-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
             "...We meet every night in the rest\n"
             "room, to make out. I asked her for\n"
@@ -771,7 +771,7 @@ void initStation(void) {
     addToRoom("pod-1", newItem);
     newItem->pickCallback = consumeOnPickup;
 
-    newItem = addItem("blue-diary",
+    newItem = addItem("blue-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
             "The growing discontent is very \n"
             "noticeable. I don't know for how\n"
@@ -786,7 +786,7 @@ void initStation(void) {
     addToRoom("pod-2", newItem);
     newItem->pickCallback = consumeOnPickup;
 
-    newItem = addItem("white-diary",
+    newItem = addItem("white-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
             "Crew is growing demotivated with\n"
             "all the combat exercises and no \n"
