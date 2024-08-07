@@ -225,7 +225,7 @@ void useKeycardWith(struct Item *item1, struct Item *item2) {
         item2 == getItemNamed("comm-terminal-2") ||
         item2 == getItemNamed("comm-terminal-3")) {
 
-        defaultLogger("Computer node rebooted");
+        defaultLogger("Level alarm disabled");
         item2->active = TRUE;
         return;
     }
