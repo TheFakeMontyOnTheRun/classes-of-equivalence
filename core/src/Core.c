@@ -326,16 +326,10 @@ void moveBy(uint8_t direction) {
 
     struct Room *room = &rooms[party[0].location];
     if (direction <= 5 && room->connections[direction] != 0) {
-        struct Item *coupling = getItemNamed("magnetic-coupling");
         room = &rooms[party[0].location];
 
         if (rooms[room->connections[direction]].rankRequired > party[0].rank) {
-            defaultLogger("Insufficient rank to enter room");
-            return;
-        }
-
-        if (room == getRoomByName("hangar") && coupling->active && direction == 0) {
-            defaultLogger("The magnetic coupling is\nengaged. The door won't open.");
+            defaultLogger("Access denied");
             return;
         }
 
