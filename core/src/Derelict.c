@@ -607,7 +607,6 @@ void initStation(void) {
             5,
 #endif
                       TRUE, 9, 6);
-    addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
 
 
@@ -623,7 +622,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 10, 6);
-    addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombControllerActivatedCallback;
 
     newItem = addItem("ship-ignition",
@@ -635,7 +633,6 @@ void initStation(void) {
             0,
 #endif
                       TRUE, 11, 6);
-    addToRoom("lss-daedalus", newItem);
     newItem->useCallback = bombActivatedCallback;
 
     newItem = addItem("metal-pipe",
