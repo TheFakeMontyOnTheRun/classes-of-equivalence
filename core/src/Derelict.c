@@ -650,7 +650,7 @@ void initStation(void) {
 
     newItem->active = TRUE;
     pickObject(newItem);
-    newItem->pickable = FALSE;
+    newItem->pickable = TRUE;
     newItem->useWithCallback = useBootsWithMagneticCoupling;
 
     newItem = addItem("helmet",
