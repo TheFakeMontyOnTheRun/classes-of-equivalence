@@ -848,13 +848,6 @@ void render(const long ms) {
 
 
         if (turnTarget == turnStep) {
-            if (focusItemName != NULL) {
-                size_t len = strlen(focusItemName);
-                int lines = 1 + (len / 27);
-                fillRect(0, YRES - (8 * lines), XRES, lines * 8, 0, 1);
-                drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, focusItemName, 255, ' ');
-            }
-
 
             if (currentPresentationState == kRoomTransitioning) {
                 messageLogBufferCoolDown = 0;
@@ -876,9 +869,9 @@ void render(const long ms) {
                     }
                 }
 
-                fillRect(0, 0, XRES, (lines * 8), 0, 1);
+                fillRect(0, 0, XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
 
-                drawTextAt(0, 0, messageLogBuffer, 255);
+                drawTextAt(0, 0, messageLogBuffer, getPaletteEntry(0xFFFFFFFF));
             }
         }
 

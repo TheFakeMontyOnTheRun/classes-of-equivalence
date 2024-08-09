@@ -148,18 +148,22 @@ void redrawHUD(void) {
     int c;
     struct Item *itemPtr;
     
-    /* draw current item on the corner of the screen */
     head = getPlayerItems();
     
     while (head != NULL) {
         itemPtr = getItem(head->item);
         if (itemPtr != NULL) {
             if (line == currentSelectedItem) {
+                size_t len;
+                int lines;
                 char textBuffer[255];
-                sprintf(&textBuffer[0], "%s", itemPtr->name);
-                
-                drawTextAtWithMarginWithFiltering(0, (YRES_FRAMEBUFFER / 8) - 2, XRES_FRAMEBUFFER, itemPtr->name,
-                                                  itemPtr->active ? getPaletteEntry(0xFFAAAAAA) : getPaletteEntry(0xFFFFFFFF), ' ');
+                sprintf(&textBuffer[0], "Holding: %s%s%s", itemPtr->name, (focusItemName? "\nFront: " : ""), focusItemName ? focusItemName : "");
+
+                len = strlen(&textBuffer[0]);
+                lines = 2 + (len / (XRES / 8));
+                fillRect(0, YRES_FRAMEBUFFER - (lines * 8), XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
+                drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, &textBuffer[0], getPaletteEntry(0xFFFFFFFF), ' ');
+
             }
             ++line;
         }
@@ -176,15 +180,15 @@ void redrawHUD(void) {
       needsToRedrawHUD = TRUE;
 
       while (head != NULL && item == NULL) {
-	if (offseted.x == (getItem(head->item)->position.x) &&
-	    offseted.y == (getItem(head->item)->position.y)) {
-	  item = getItem(head->item);
-	}
-	head = head->next;
+          if (offseted.x == (getItem(head->item)->position.x) &&
+              offseted.y == (getItem(head->item)->position.y)) {
+              item = getItem(head->item);
+          }
+          head = head->next;
       }
 
       if (item != NULL) {
-	drawWindowWithOptions(0,
+          drawWindowWithOptions(0,
 			    (YRES_FRAMEBUFFER / 8) - 10,
 			    10 + 2,
 			    6,
@@ -370,7 +374,10 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         nativeTextures[1] = makeTextureFrom("floor.img");
         texturesUsed = 2;
 
-        if (getPlayerRoom() == 22 || (party[4].inParty && party[4].hp > 0) || random < playerNewRoom->chanceOfRandomBattle) {
+        if (getPlayerRoom() == 22 ||
+            (party[4].inParty && party[4].hp > 0) ||
+            random < playerNewRoom->chanceOfRandomBattle) {
+
             return kBattleScreen;
         } else {
             initRoom(getPlayerRoom());
