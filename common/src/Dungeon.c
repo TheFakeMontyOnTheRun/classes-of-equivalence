@@ -207,7 +207,9 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                         item->position.y = offseted.y;
                         setItem(item->position.x, item->position.y, item->index);
                         currentSelectedItem = 0;
-                    }
+                    } else {
+		        defaultLogger("Can't drop it");
+		    }
                 }
                 gameSnapshot.turn++;
             }
