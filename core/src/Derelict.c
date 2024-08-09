@@ -134,7 +134,7 @@ void elevatorGoDownCallback(struct Item *item) {
 
 
     if (!getItemNamed("comm-terminal-2")->active) {
-        defaultLogger("Central computer is offline");
+        defaultLogger("Floor is on alarm status. Elevator halted.");
         return;
     }
 
@@ -164,7 +164,7 @@ void elevatorGoUpCallback(struct Item *item) {
     uint8_t newRoom;
 
     if (!getItemNamed("comm-terminal-2")->active) {
-        defaultLogger("Central computer is offline");
+        defaultLogger("Floor is on alarm status. Elevator halted.");
         return;
     }
 
@@ -242,7 +242,7 @@ void useComputerRack(struct Item *item) {
     if (!getItemNamed("comm-terminal-1")->active ||
         !getItemNamed("comm-terminal-2")->active ||
         !getItemNamed("comm-terminal-3")->active) {
-        defaultLogger("Central computer is offline");
+        defaultLogger("Floor is on alarm status. Elevator halted.");
         return;
     }
 
