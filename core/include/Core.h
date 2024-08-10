@@ -106,6 +106,7 @@ struct Room {
     uint8_t sizeX;
     uint8_t sizeY;
     uint8_t rankRequired;
+    uint8_t storyPoint;
 };
 /**
  *

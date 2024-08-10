@@ -314,7 +314,7 @@ void initStation(void) {
             "the predicted path, I will sink into\n"
             "the abyss myself.",
 #endif
-            32, 32, 5, connections);
+            32, 32, 5, connections)->storyPoint = 1;
 
     /* 2 */
     connections[2] = 1;
@@ -334,7 +334,7 @@ void initStation(void) {
             "corner, there's a escape pod entrance.\n"
             "Apparently, only one pod was launched.",
 #endif
-            32, 32, 5, connections);
+            32, 32, 5, connections)->storyPoint = 2;
 
     /* 3 */
     connections[2] = 0;

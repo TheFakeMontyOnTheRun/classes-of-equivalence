@@ -48,6 +48,13 @@ const char *AbandonMission_Title = "Abandon game?";
 const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
 const int AbandonMission_count = 2;
+uint8_t showDialogEntry = 0;
+
+const static char *storyPoint[] = {
+    "",
+    "It's been so long you don't even remember why anymore. Every day they try to extract information from you, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
+    "I wonder how many of my former comrades are being held here - perhaps our collective strength could be useful."
+};
 
 uint8_t drawActionsWindow = 0;
 const char *CrawlerActions_optionsPickUse[] = {
@@ -66,6 +73,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
 
     if (tag == kPlayGame) {
         initStation();
+        showDialogEntry = 1;
         timeUntilNextState = 1000;
         gameTicks = 0;
         enteredThru = 0;
@@ -207,7 +215,6 @@ void redrawHUD(void) {
 			    cursorPosition);
       }
     }
-    
 }
 
 void Crawler_repaintCallback(void) {
@@ -252,6 +259,10 @@ void Crawler_repaintCallback(void) {
                 }
             }
         }
+    }
+
+    if (showDialogEntry) {
+        drawTextWindow(1, 1, (XRES / 8) - 2, (YRES / 8) - 2, "", storyPoint[showDialogEntry]);
     }
 }
 
@@ -313,12 +324,12 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 	    case kCommandFire2:
 	        drawActionsWindow = 0;
   	        break;
-            case kCommandFire1:
+        case kCommandFire1:
   	        drawActionsWindow = 0;
 	        needsToRedrawVisibleMeshes = TRUE;
-		timeUntilNextState = 1000;
+            timeUntilNextState = 1000;
 	        loopTick(kCommandFire1 + cursorPosition);
-		return kResumeCurrentState;
+            return kResumeCurrentState;
         }
 
         if (cursorPosition >= 2) {
@@ -329,6 +340,13 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
             cursorPosition = 0;
         }
 
+        return kResumeCurrentState;
+    }
+    
+    if (showDialogEntry) {
+        if (cmd == kCommandFire1) {
+            showDialogEntry = 0;
+        }
         return kResumeCurrentState;
     }
 
@@ -373,6 +391,9 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         nativeTextures[0] = makeTextureFrom("arch.img");
         nativeTextures[1] = makeTextureFrom("floor.img");
         texturesUsed = 2;
+
+        showDialogEntry = getRoom(getPlayerRoom())->storyPoint;
+        getRoom(getPlayerRoom())->storyPoint = 0;
 
         if (getPlayerRoom() == 22 ||
             (party[4].inParty && party[4].hp > 0) ||
