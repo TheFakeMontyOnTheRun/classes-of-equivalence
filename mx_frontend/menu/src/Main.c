@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
 #endif
     initHW(argc, argv);
     initStation();
-    enterState(kMainMenu);
+    enterState(kPlayGame);
 
     end_clock = uclock();
     prev = 0;
