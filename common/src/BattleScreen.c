@@ -263,7 +263,7 @@ void BattleScreen_repaintCallback(void) {
 
                 sprintf(&buffer3[0], "%d HP", battleDamages[currentCharacter] );
                 drawTextAt(
-			   12 + ( c * (32 + 16) ) / 8,
+                           12 + ( c * (32 + 16) ) / 8,
                            2,
                            &buffer3[0],
                            getPaletteEntry(0xFF0000FF));
@@ -298,7 +298,7 @@ void BattleScreen_repaintCallback(void) {
     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
         if (party[c].inParty) {
             sprintf(&buffer[0], "H %d\nE %d", party[c].hp, party[c].energy);
-            drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 6, 4, party[c].name, &buffer[0]);
+            drawTextWindow(xWindow, (YRES_FRAMEBUFFER / 8) - 6, 7, 4, party[c].name, &buffer[0]);
 
             if (currentBattleState == kAttackPhase &&
                 battleDamages[currentCharacter] > 0 &&

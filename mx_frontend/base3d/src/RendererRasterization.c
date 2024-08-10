@@ -1699,7 +1699,7 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
         col = ascii & 31;
         letter = fontPixelData + (col * 8) + (fontWidth * (line * 8));
 
-        if (currentChar == '\n' || dstX >= (margin)) {
+        if (currentChar == '\n' || dstX > (margin)) {
             dstX = x * 8;
             dstY += 8;
             continue;

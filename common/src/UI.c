@@ -82,7 +82,7 @@ void
 drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned int dy, const char *title,
                const char *content) {
     drawWindow(x, y, dx, dy, title);
-    drawTextAt(x + 1, y + 2, content, getPaletteEntry(0xFFFFFFFF));
+    drawTextAtWithMargin( x + 1, y + 2, ( 1 + x + dx) * 8, content, getPaletteEntry(0xFFFFFFFF));
 }
 
 enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
