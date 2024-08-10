@@ -49,6 +49,7 @@ extern struct GfxBase *GfxBase;
 int nextChannel = 0;
 
 void playSound(const uint8_t action) {
+  return;
     nextChannel = (nextChannel + 1) % 4;
     /* Flush the previous sound to avoid overlapping */
     AbortIO((struct IORequest *) audioSink[nextChannel]);
@@ -69,7 +70,8 @@ void playSound(const uint8_t action) {
 }
 
 void setupOPL2(int unused) {
-
+  return;
+  
     if (GfxBase->DisplayFlags & PAL)
         clock = 3546895;        /* PAL clock */
     else
@@ -132,6 +134,7 @@ void setupOPL2(int unused) {
 }
 
 void shutdownSounds(void) {
+  return;
     for (int c = 0; c < 8; ++c) {
         if (waveptr[c] != 0) {
             FreeMem(waveptr[c], samples[c]);

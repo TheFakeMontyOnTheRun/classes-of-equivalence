@@ -102,3 +102,5 @@ mx_frontend/index.js
 mx_frontend/index.wasm
 mx_frontend/tragedy.gba
 IDEFindNavigatorScopes.plist
+mx_frontend/gameaga
+mx_frontend/gamecd32
