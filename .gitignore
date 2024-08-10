@@ -95,3 +95,10 @@ tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/project.xc
 tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/project.xcworkspace/xcuserdata/monty.xcuserdatad/UserInterfaceState.xcuserstate
 tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/xcuserdata/monty.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 tools/level-editor/Xcode4/LevelEditorCocoa/LevelEditorCocoa.xcodeproj/xcuserdata/monty.xcuserdatad/xcschemes/xcschememanagement.plist
+mx_frontend/Archive.zip
+mx_frontend/index.data
+mx_frontend/index.html
+mx_frontend/index.js
+mx_frontend/index.wasm
+mx_frontend/tragedy.gba
+IDEFindNavigatorScopes.plist
