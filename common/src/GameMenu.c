@@ -93,9 +93,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kBadGameOverEpilogue:
-            mainText = "You're dead! And so are millions of\n"
-                       "other people on the path of\n"
-                       "destruction faulty reactor\n\n\n\n\n\n";
+            mainText = "You're dead!";
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;

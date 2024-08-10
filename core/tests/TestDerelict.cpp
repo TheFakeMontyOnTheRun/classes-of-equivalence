@@ -81,7 +81,7 @@ TEST_F(TestDerelict, canUseCardWriterToHackKeycards) {
 }
 
 TEST_F(TestDerelict, cantUseCardWriterToHackOtherThings) {
-    struct Item *boots = getItemNamed("metal-pipe");
+    struct Item *boots = getItemNamed("metal-wire");
     struct Item *cardWritter = getItemNamed("card-writer");
 
     ASSERT_FALSE(hasItemInRoom("computer-core", "hacked-keycard"));
@@ -90,8 +90,8 @@ TEST_F(TestDerelict, cantUseCardWriterToHackOtherThings) {
 }
 
 TEST_F(TestDerelict, usingOtherObjectsWithMagneticCoupleAchievesNothing) {
-    struct Item *helmet = getItemNamed("helmet");
-    struct Item *coupling = getItemNamed("magnetic-coupling");
+    struct Item *helmet = getItemNamed("implants");
+    struct Item *coupling = getItemNamed("cell-lock");
 
     ASSERT_TRUE(coupling->active);
     useBootsWithMagneticCoupling(helmet, coupling);
@@ -294,9 +294,9 @@ TEST_F(TestDerelict, usingTheReactorCoreWillCauseMeltdown) {
 }
 
 TEST_F(TestDerelict, cantToggleMagneticBoots) {
-    ASSERT_TRUE(getItemNamed("metal-pipe")->active);
-    parseCommand("use", "metal-pipe");
-    ASSERT_TRUE(getItemNamed("metal-pipe")->active);
+    ASSERT_TRUE(getItemNamed("metal-wire")->active);
+    parseCommand("use", "metal-wire");
+    ASSERT_TRUE(getItemNamed("metal-wire")->active);
 }
 
 TEST_F(TestDerelict, cantToggleCommTerminal1ByUsingWithHigherRankKeycards) {

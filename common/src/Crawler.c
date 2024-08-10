@@ -165,7 +165,7 @@ void redrawHUD(void) {
                 size_t len;
                 int lines;
                 char textBuffer[255];
-                sprintf(&textBuffer[0], "Holding: %s%s%s", itemPtr->name, (focusItemName? "\nFront: " : ""), focusItemName ? focusItemName : "");
+                sprintf(&textBuffer[0], "Current: %s%s%s", itemPtr->name, (focusItemName? "\nFront: " : ""), focusItemName ? focusItemName : "");
 
                 len = strlen(&textBuffer[0]);
                 lines = 2 + (len / (XRES / 8));

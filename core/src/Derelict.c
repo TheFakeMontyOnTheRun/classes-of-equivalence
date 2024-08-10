@@ -78,8 +78,8 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
 }
 
 void useBootsWithMagneticCoupling(struct Item *item1, struct Item *item2) {
-    struct Item *coupling = getItemNamed("magnetic-coupling");
-    struct Item *boots = getItemNamed("metal-pipe");
+    struct Item *coupling = getItemNamed("cell-lock");
+    struct Item *boots = getItemNamed("metal-wire");
 
     if (item1 == boots && item2 == coupling && !party[1].inParty) {
         coupling->active = FALSE;
@@ -277,7 +277,7 @@ void consumeOnPickup(struct Item *item) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
-                party[c].hp += rand() % 5;
+                party[c].hp += rand() % 10;
             }
         }
     }
@@ -286,7 +286,7 @@ void consumeOnPickup(struct Item *item) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
-                party[c].hp += rand() % 5;
+                party[c].hp += rand() % 20;
             }
         }
     }
@@ -635,28 +635,22 @@ void initStation(void) {
                       TRUE, 11, 6);
     newItem->useCallback = bombActivatedCallback;
 
-    newItem = addItem("metal-pipe",
+    newItem = addItem("metal-wire",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Boots with strong electro-magnets.\n"
-            "Ideal for walking underwater...\n"
-            "...as long as the surface in question\n"
-            "is metallic (like most of the \n"
-            "surfaces here).",
+            "A piece of wire sticking out of the wall panel. Someone made a sloppy repair job here.",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             2,
 #endif
-                      TRUE, 15, 15);
+                      TRUE, 28, 12);
 
-    newItem->active = TRUE;
-    pickObject(newItem);
+    addToRoom("lss-daedalus", newItem);
     newItem->pickable = TRUE;
     newItem->useWithCallback = useBootsWithMagneticCoupling;
 
-    newItem = addItem("helmet",
+    newItem = addItem("implants",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Atmosphere-contained helmet for\n"
-            "safety.",
+            "Augmentation implants, specialized for infiltration and scouting",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             2,
@@ -670,9 +664,7 @@ void initStation(void) {
 
     newItem = addItem("low-rank-keycard",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Clearance for low rank. Oddly, \n"
-            "this one is of the rewrittable kind;\n"
-            "probably due to a field promotion.",
+            "Clearance for low rank. This might allow access to some (but not all) areas in this cell block",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
@@ -698,9 +690,9 @@ void initStation(void) {
 
     /* Hangar */
 
-    newItem = addItem("magnetic-coupling",
+    newItem = addItem("cell-lock",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Automatic seal activated by \nspecial safety protocols",
+            "Mechanism for for the cell lock. Could possibly open if short-circuited.",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             17,
@@ -736,7 +728,7 @@ void initStation(void) {
 
     newItem = addItem("comm-terminal-2",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Terminal for communicating with\nthe central computer.",
+            "Terminal for communicating with the central computer.",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             200,
@@ -758,11 +750,7 @@ void initStation(void) {
     /* Diaries */
     newItem = addItem("black-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "...We meet every night in the rest\n"
-            "room, to make out. I asked her for\n"
-            "an access key for the armory - let's\n"
-            " see if she keeps her promisse. If\n"
-            "they catch me, I'm scr...",
+            "Will provide some minmal heal effect to the party",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
@@ -773,11 +761,7 @@ void initStation(void) {
 
     newItem = addItem("blue-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "The growing discontent is very \n"
-            "noticeable. I don't know for how\n"
-            "long can we keep the situation\n"
-            "stable. For safety, I gave the root\n"
-            "keycard to first officer Costa.",
+            "Will heal minor to more severe injuries on the party",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
@@ -788,13 +772,7 @@ void initStation(void) {
 
     newItem = addItem("white-health",
 #ifdef INCLUDE_ITEM_DESCRIPTIONS
-            "Crew is growing demotivated with\n"
-            "all the combat exercises and no \n"
-            "downtime. Don't know long can I\n"
-            "keep the fact that we already lost\n"
-            "the war. If anything goes wrong,\n"
-            "the situation room will be our\n"
-            "last stand.",
+            "A life saver heal effect on the party!",
 #endif
 #ifdef ITEMS_HAVE_WEIGHT
             0,
