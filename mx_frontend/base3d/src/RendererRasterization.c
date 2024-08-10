@@ -143,7 +143,7 @@ void maskWall(
     ix = x;
 
     if (ix < 0) {
-        FixP_t diff = intToFix(-ix);
+        FixP_t diff = -intToFix(ix);
         y0 += Mul(diff, upperDyDx);
         y1 += Mul(diff, lowerDyDx);
         ix = 0;
@@ -524,7 +524,7 @@ void drawFrontWall(FixP_t x0,
 
 
     if (iy < 0) {
-        FixP_t diff = intToFix(-iy);
+        FixP_t diff = -intToFix(iy);
         v += Mul(diff, dv);
         iy = 0;
     }
@@ -562,7 +562,7 @@ void drawFrontWall(FixP_t x0,
         ix = iX0;
 
         if (ix < 0) {
-            FixP_t diff = intToFix(-ix);
+            FixP_t diff = -intToFix(ix);
             destinationLine += -ix;
             u += Mul(diff, du);
             ix = 0;
@@ -695,7 +695,7 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
     }
 
     if (iy < 0) {
-        FixP_t diff = intToFix(-iy);
+        FixP_t diff = -intToFix(iy);
         x0 += Mul(diff, leftDxDy);
         x1 += Mul(diff, rightDxDy);
         iy = 0;
@@ -768,7 +768,7 @@ void drawFloor(FixP_t y0,
                int z,
                const TexturePixelFormat *texture) {
 
-    int32_t y;
+    int32_t y = 0;
     int32_t limit;
     FixP_t upperX0;
     FixP_t upperX1;

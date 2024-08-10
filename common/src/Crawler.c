@@ -179,7 +179,7 @@ void redrawHUD(void) {
     }
     
     if (drawActionsWindow) {
-      struct Item *item;
+      struct Item *item = NULL;
       struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
       head = getRoom(getPlayerRoom())->itemsPresent->next;
       offseted.x += playerCrawler.position.x;

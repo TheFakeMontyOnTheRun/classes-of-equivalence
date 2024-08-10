@@ -212,7 +212,7 @@ void renderRoomTransition(void) {
         drawColumnAt(center, intToFix(3), nativeTextures[1], MASK_RIGHT, 0, 1);
 
         center.mY = intToFix(5) - zCameraOffset;
-        center.mX = intToFix(-1);
+        center.mX = -intToFix(1);
         drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
         center.mX = intToFix(1);
         drawColumnAt(center, intToFix(3), nativeTextures[0], MASK_FRONT, 0, 1);
@@ -283,7 +283,7 @@ void drawMap(const struct CActor *current) {
 
         case kSouth:
             mCamera.mX = intToFix((2 * cameraPosition.x));
-            mCamera.mZ = intToFix(-2 * cameraPosition.y - 1);
+            mCamera.mZ = -intToFix(2 * cameraPosition.y - 1);
             break;
 
         case kWest:
@@ -292,7 +292,7 @@ void drawMap(const struct CActor *current) {
             break;
 
         case kEast:
-            mCamera.mX = intToFix(-(2 * cameraPosition.y));
+            mCamera.mX = -intToFix((2 * cameraPosition.y));
             mCamera.mZ = intToFix(((MAP_SIZE * 2) - 1) - (2 * cameraPosition.x));
             break;
     }
@@ -403,7 +403,7 @@ void render(const long ms) {
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
-                                mCamera.mX + intToFix(-2 * ((MAP_SIZE - 1) - x));
+                                mCamera.mX + -intToFix(2 * ((MAP_SIZE - 1) - x));
                         position.mY = mCamera.mY;
                         position.mZ =
                                 mCamera.mZ + intToFix(2 * (MAP_SIZE) - (2 * z));
@@ -441,7 +441,7 @@ void render(const long ms) {
                         element = LEVEL_MAP(x, z);
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
-                        position.mX = mCamera.mX + intToFix(-2 * x);
+                        position.mX = mCamera.mX - intToFix(2 * x);
                         position.mY = mCamera.mY;
                         position.mZ = mCamera.mZ + intToFix(2 + 2 * z);
 
@@ -473,7 +473,7 @@ void render(const long ms) {
                         element = LEVEL_MAP(z, x);
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
-                        position.mX = mCamera.mX + intToFix(-2 * x);
+                        position.mX = mCamera.mX - intToFix(2 * x);
                         position.mY = mCamera.mY;
                         position.mZ = mCamera.mZ + intToFix(2 - 2 * z);
 
