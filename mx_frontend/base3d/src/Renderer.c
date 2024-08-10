@@ -871,7 +871,7 @@ void render(const long ms) {
 
                 fillRect(0, 0, XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
 
-                drawTextAt(0, 0, messageLogBuffer, getPaletteEntry(0xFFFFFFFF));
+                drawTextAtWithMargin(0, 0, XRES, messageLogBuffer, getPaletteEntry(0xFFFFFFFF));
             }
         }
 
