@@ -36,7 +36,7 @@ enum EBattleStates {
 
 #define kDummyBattleOptionsCount  4
 #define TOTAL_MONSTER_COUNT 3
-#define kBattleAnimationInterval 9
+#define kBattleAnimationInterval 900
 #define TOTAL_MONSTER_TYPES 26
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
@@ -100,7 +100,7 @@ uint8_t batteCharacterOrder = 0;
 uint8_t monsterTypeOffset = 0;
 
 enum EBattleStates currentBattleState;
-int8_t animationTimer;
+int32_t animationTimer;
 uint8_t monstersPresent = 0;
 uint8_t aliveMonsters = 0;
 uint8_t aliveHeroes = 0;
@@ -254,7 +254,7 @@ void BattleScreen_repaintCallback(void) {
                 party[currentCharacter].hp > 0) {
 
                 char buffer3[16];
-                int frame = (animationTimer / 3) - 1;
+                int frame = (animationTimer / 300) - 1;
 
                 /* Terrible kludge, but I'm in a hurry */
                 if (frame >= 0 ) {
@@ -321,7 +321,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
     if (currentBattleState == kAttackPhase) {
 
-        if (animationTimer == 5) {
+        if (animationTimer == (kBattleAnimationInterval / 2)) {
 
             int target = battleTargets[currentCharacter];
             int attackerIsAlive;
@@ -423,8 +423,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
             }
         }
+#ifdef __EMSCRIPTEN__
+        animationTimer-=25;
+#else
+        animationTimer-=50;
+#endif
 
-        animationTimer--;
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
             batteCharacterOrder++;
