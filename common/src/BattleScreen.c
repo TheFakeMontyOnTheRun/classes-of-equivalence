@@ -171,6 +171,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     splatMonster = -1;
     monsterAttacking = -1;
     currentBattleState = kPlayerSelectingMoves;
+    cursorPosition = 0;
 }
 
 void BattleScreen_repaintCallback(void) {
@@ -506,6 +507,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 battleActions[currentCharacter] = cursorPosition;
 
                 currentCharacter++;
+                cursorPosition = 0;
 
                 /* skipping dead or absent characters */
                 while (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
