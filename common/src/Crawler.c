@@ -52,7 +52,7 @@ uint8_t showDialogEntry = 0;
 
 const static char *storyPoint[] = {
     "",
-    "It's been so long you don't even remember why anymore. Every day they try to extract information from you, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
+    "It's been so long you don't even remember why. Every day they try to extract information, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
     "I wonder how many of my former comrades are being held here - perhaps our collective strength could be useful."
 };
 
