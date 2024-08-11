@@ -262,7 +262,7 @@ void Crawler_repaintCallback(void) {
     }
 
     if (showDialogEntry) {
-        drawTextWindow(1, 1, (XRES / 8) - 2, (YRES / 8) - 2, "", storyPoint[showDialogEntry]);
+        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 2, "", storyPoint[showDialogEntry]);
     }
 }
 
