@@ -57,6 +57,8 @@ const static char *storyPoint[] = {
 };
 
 uint8_t drawActionsWindow = 0;
+uint8_t selectedAction = 0xFF;
+
 const char *CrawlerActions_optionsPickUse[] = {
     "Use with...",
     "Pick/Use"
@@ -66,6 +68,57 @@ const char *CrawlerActions_optionsDrop[] = {
     "Use",
     "Drop"
 };
+
+
+void drawInventoryWindow(void) {
+    struct ObjectNode *head;
+    int c;
+    struct Item *itemPtr;
+    const char *item = NULL;
+    char bufferItem[256];
+    char bufferWindow[256];
+    int biggest = 0;
+    int candidateBiggest = 0;
+    int totalItems = 0;
+    const char **itemList;
+    const char **listItemPtr;
+
+    head = getPlayerItems();
+
+    while (head != NULL) {
+        itemPtr = getItem(head->item);
+        item = itemPtr->name;
+
+        candidateBiggest = strlen(item);
+        if (candidateBiggest > biggest) {
+            biggest = candidateBiggest;
+        }
+
+        head = head->next;
+        ++totalItems;
+    }
+
+    listItemPtr = itemList = allocMem( sizeof(char*) * totalItems, GENERAL_MEMORY, 1);
+    itemPtr = NULL;
+    item = NULL;
+    head = getPlayerItems();
+
+    while (head != NULL) {
+        itemPtr = getItem(head->item);
+        *listItemPtr = itemPtr->name;
+        head = head->next;
+        ++listItemPtr;
+    }
+
+    drawWindowWithOptions(12,
+                          /*(YRES_FRAMEBUFFER / 8) - itemsCount - 2*/ 0,
+                          biggest + 2,
+                          totalItems + 2,
+                          "Inventory",
+                          itemList,
+                          totalItems,
+                          cursorPosition);
+}
 
 extern struct CActor playerCrawler;
 void Crawler_initStateCallback(enum EGameMenuState tag) {
@@ -197,23 +250,27 @@ void redrawHUD(void) {
 
       if (item != NULL) {
           drawWindowWithOptions(0,
-			    (YRES_FRAMEBUFFER / 8) - 10,
+			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
 			    10 + 2,
 			    6,
 			    "Action",
 			    CrawlerActions_optionsPickUse,
 			    2,
-			    cursorPosition);
+                (selectedAction == 0xFF) ? cursorPosition : selectedAction);
       } else {
 	      drawWindowWithOptions(0,
-			    (YRES_FRAMEBUFFER / 8) - 10,
+			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
 			    10 + 2,
 			    6,
 			    "Action",
 			    CrawlerActions_optionsDrop,
 			    2,
-			    cursorPosition);
+			    (selectedAction == 0xFF) ? cursorPosition : selectedAction);
       }
+        if (selectedAction != 0xFF) {
+            drawInventoryWindow();
+        }
+
     }
 }
 
@@ -322,18 +379,30 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                 ++cursorPosition;
                 break;
 	    case kCommandFire2:
-	        drawActionsWindow = 0;
+        case kCommandLeft:
+                if (selectedAction != 0xFF) {
+                    selectedAction = 0xFF;
+                } else {
+                    drawActionsWindow = 0;
+                }
   	        break;
         case kCommandFire1:
-  	        drawActionsWindow = 0;
-	        needsToRedrawVisibleMeshes = TRUE;
-            timeUntilNextState = 1000;
-	        loopTick(kCommandFire1 + cursorPosition);
+        case kCommandRight:
+                if (selectedAction == 0xFF) {
+                    selectedAction = cursorPosition;
+                    cursorPosition = 0;
+                } else {
+                    drawActionsWindow = 0;
+                    needsToRedrawVisibleMeshes = TRUE;
+                    timeUntilNextState = 1000;
+                    loopTick(kCommandFire1 + selectedAction);
+                    selectedAction = 0xFF;
+                }
             return kResumeCurrentState;
         }
 
         if (cursorPosition >= 2) {
-	    cursorPosition = 1;
+            cursorPosition = 1;
         }
 
         if (cursorPosition < 0) {
@@ -364,6 +433,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         
         if (cmd ==  kCommandFire1 ) {
             drawActionsWindow = 1;
+            selectedAction = 0xFF;
         }
 
         if (timeUntilNextState < 0) {
@@ -372,9 +442,9 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
             }
         }
 
-	if (cmd == kCommandFire1 || cmd == kCommandFire2) {
-  	    cmd = kCommandNone;
-	}
+        if (cmd == kCommandFire1 || cmd == kCommandFire2) {
+            cmd = kCommandNone;
+        }
 
         loopTick(cmd);
 
