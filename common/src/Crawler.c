@@ -50,6 +50,7 @@ const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, k
 const int AbandonMission_count = 2;
 uint8_t showDialogEntry = 0;
 extern int currentSelectedItem;
+extern struct CActor playerCrawler;
 
 const static char *storyPoint[] = {
     "",
@@ -69,6 +70,30 @@ const char *CrawlerActions_optionsDrop[] = {
     "Use",
     "Drop"
 };
+
+struct Item* itemInFrontOfPlayer() {
+    struct ObjectNode *head;
+    struct Item *itemPtr;
+    
+    head = getPlayerItems();
+    struct Item *item = NULL;
+    struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+    head = getRoom(getPlayerRoom())->itemsPresent->next;
+    offseted.x += playerCrawler.position.x;
+    offseted.y += playerCrawler.position.y;
+
+    needsToRedrawHUD = TRUE;
+
+    while (head != NULL && item == NULL) {
+        if (offseted.x == (getItem(head->item)->position.x) &&
+            offseted.y == (getItem(head->item)->position.y)) {
+            item = getItem(head->item);
+        }
+        head = head->next;
+    }
+
+    return item;
+}
 
 
 void drawInventoryWindow(void) {
@@ -121,7 +146,6 @@ void drawInventoryWindow(void) {
                           cursorPosition);
 }
 
-extern struct CActor playerCrawler;
 void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
@@ -234,20 +258,8 @@ void redrawHUD(void) {
     
     if (drawActionsWindow) {
       struct Item *item = NULL;
-      struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
-      head = getRoom(getPlayerRoom())->itemsPresent->next;
-      offseted.x += playerCrawler.position.x;
-      offseted.y += playerCrawler.position.y;
-
-      needsToRedrawHUD = TRUE;
-
-      while (head != NULL && item == NULL) {
-          if (offseted.x == (getItem(head->item)->position.x) &&
-              offseted.y == (getItem(head->item)->position.y)) {
-              item = getItem(head->item);
-          }
-          head = head->next;
-      }
+        
+      item = itemInFrontOfPlayer();
 
       if (item != NULL) {
           drawWindowWithOptions(0,
