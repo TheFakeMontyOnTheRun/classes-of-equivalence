@@ -49,6 +49,7 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
 const int AbandonMission_count = 2;
 uint8_t showDialogEntry = 0;
+extern int currentSelectedItem;
 
 const static char *storyPoint[] = {
     "",
@@ -395,6 +396,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                     drawActionsWindow = 0;
                     needsToRedrawVisibleMeshes = TRUE;
                     timeUntilNextState = 1000;
+                    currentSelectedItem = cursorPosition;
                     loopTick(kCommandFire1 + selectedAction);
                     selectedAction = 0xFF;
                 }
