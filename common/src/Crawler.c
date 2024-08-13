@@ -62,8 +62,9 @@ uint8_t drawActionsWindow = 0;
 uint8_t selectedAction = 0xFF;
 
 const char *CrawlerActions_optionsPickUse[] = {
+    "Use",
+    "Pick",
     "Use with...",
-    "Pick/Use"
 };
 
 const char *CrawlerActions_optionsDrop[] = {
@@ -264,17 +265,17 @@ void redrawHUD(void) {
       if (item != NULL) {
           drawWindowWithOptions(0,
 			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    10 + 2,
-			    6,
+			    11 + 2,
+			    5,
 			    "Action",
 			    CrawlerActions_optionsPickUse,
-			    2,
+			    3,
                 (selectedAction == 0xFF) ? cursorPosition : selectedAction);
       } else {
 	      drawWindowWithOptions(0,
 			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    10 + 2,
-			    6,
+			    11 + 2,
+			    4,
 			    "Action",
 			    CrawlerActions_optionsDrop,
 			    2,
@@ -332,7 +333,7 @@ void Crawler_repaintCallback(void) {
     }
 
     if (showDialogEntry) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 2, "", storyPoint[showDialogEntry]);
+        drawTextWindow(0, 0, (XRES_FRAMEBUFFER / 8) - 1, (YRES_FRAMEBUFFER / 8) - 1, "Press any key to continue", storyPoint[showDialogEntry]);
     }
 }
 
@@ -414,8 +415,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                 }
             return kResumeCurrentState;
         }
-
-        if (cursorPosition >= 2) {
+        
+        if (cursorPosition >=  (itemInFrontOfPlayer() == NULL ? 2 : 3)) {
             cursorPosition = 1;
         }
 
@@ -427,7 +428,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
     
     if (showDialogEntry) {
-        if (cmd == kCommandFire1) {
+        if (cmd == kCommandFire1 || cmd == kCommandFire2) {
             showDialogEntry = 0;
         }
         return kResumeCurrentState;
