@@ -38,15 +38,25 @@ int roomCount = 1;
 /**
  *
  */
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 struct Room rooms[TOTAL_ROOMS];
 /**
  *
  */
 uint8_t itemsCount = 0;
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /**
  *
  */
 struct Item item[TOTAL_ITEMS];
+
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /*
  *
  */
@@ -55,6 +65,10 @@ struct ObjectNode objectNodes[TOTAL_ITEMS];
  *
  */
 struct ObjectNode collectedObjectHead;
+
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /**
  *
  */
