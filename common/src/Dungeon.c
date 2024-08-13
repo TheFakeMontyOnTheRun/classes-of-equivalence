@@ -251,6 +251,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             }
                 break;
             case kCommandFire4: {
+                updateMapObjects();
                 gameSnapshot.turn++;
             }
                 break;
