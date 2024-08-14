@@ -14,12 +14,12 @@ Created by Daniel Monteiro on 2019-07-26.
  * Defines the maximum total of rooms.
  * @see roomCount for the current number of created rooms
  */
-#define TOTAL_ROOMS 24
+#define TOTAL_ROOMS 128
 /**
  * Defines the maximum total of items
  * @see itemCount for the number of created items
  */
-#define TOTAL_ITEMS 39
+#define TOTAL_ITEMS 128
 /**
  * Defines the maximum characters allowed in a party.
  * Please note that the game might only allow a smaller number of active members in the party

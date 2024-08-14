@@ -26,6 +26,7 @@
 #include "MapWithCharKey.h"
 #include "SoundSystem.h"
 #include "UI.h"
+#include "Parser.h"
 
 #ifndef SHORT_VIEW_ANGLE
 #define ANGLE_TURN_THRESHOLD 40
@@ -49,6 +50,8 @@ const char *AbandonMission_options[6] = {"Continue", "End game"};
 const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, kMainMenu};
 const int AbandonMission_count = 2;
 uint8_t showDialogEntry = 0;
+extern int currentSelectedItem;
+extern struct CActor playerCrawler;
 
 const static char *storyPoint[] = {
     "",
@@ -59,15 +62,72 @@ const static char *storyPoint[] = {
 uint8_t drawActionsWindow = 0;
 uint8_t selectedAction = 0xFF;
 
-const char *CrawlerActions_optionsPickUse[] = {
+const static char *CrawlerActions_optionsPickUse[] = {
+    "Use",
+    "Pick",
     "Use with...",
-    "Pick/Use"
 };
 
-const char *CrawlerActions_optionsDrop[] = {
+const static char *CrawlerActions_optionsDrop[] = {
     "Use",
     "Drop"
 };
+
+const static char *commandTemplate_optionsPickUse[] = {
+    "use",
+    "pick",
+    "use-with"
+};
+
+const static char *commandTemplate_optionsDrop[] = {
+    "use",
+    "drop"
+};
+
+
+struct Item* getNthPlayerObject(int nth) {
+    struct ObjectNode *head;
+    struct Item *itemPtr = NULL;
+    struct Item *item = NULL;
+    
+    head = getPlayerItems();
+    needsToRedrawHUD = TRUE;
+
+    while (head != NULL && itemPtr == NULL) {
+        if (nth == 0) {
+            return getItem(head->item);
+        }
+        
+        nth--;
+        
+        head = head->next;
+    }
+
+    return NULL;
+}
+
+struct Item* itemInFrontOfPlayer() {
+    struct ObjectNode *head;
+    struct Item *itemPtr = NULL;
+    
+    struct Item *item = NULL;
+    struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+    head = getRoom(getPlayerRoom())->itemsPresent->next;
+    offseted.x += playerCrawler.position.x;
+    offseted.y += playerCrawler.position.y;
+
+    needsToRedrawHUD = TRUE;
+
+    while (head != NULL && itemPtr == NULL) {
+        if (offseted.x == (getItem(head->item)->position.x) &&
+            offseted.y == (getItem(head->item)->position.y)) {
+            return getItem(head->item);
+        }
+        head = head->next;
+    }
+
+    return NULL;
+}
 
 
 void drawInventoryWindow(void) {
@@ -120,7 +180,6 @@ void drawInventoryWindow(void) {
                           cursorPosition);
 }
 
-extern struct CActor playerCrawler;
 void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
@@ -212,61 +271,36 @@ void redrawHUD(void) {
     int line = 0;
     struct ObjectNode *head;
     int c;
-    struct Item *itemPtr;
+    struct Item *itemPtr = itemInFrontOfPlayer();
     
-    head = getPlayerItems();
-    
-    while (head != NULL) {
-        itemPtr = getItem(head->item);
-        if (itemPtr != NULL) {
-            if (line == currentSelectedItem) {
-                size_t len;
-                int lines;
-                char textBuffer[255];
-                sprintf(&textBuffer[0], "Current: %s%s%s", itemPtr->name, (focusItemName? "\nFront: " : ""), focusItemName ? focusItemName : "");
-
-                len = strlen(&textBuffer[0]);
-                lines = 2 + (len / (XRES / 8));
-                fillRect(0, YRES_FRAMEBUFFER - (lines * 8), XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
-                drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, &textBuffer[0], getPaletteEntry(0xFFFFFFFF), ' ');
-
-            }
-            ++line;
-        }
-        head = head->next;
+    if (itemPtr != NULL) {
+        size_t len;
+        int lines;
+        len = strlen(itemPtr->name);
+        lines = 2 + (len / (XRES / 8));
+        fillRect(0, YRES_FRAMEBUFFER - (lines * 8), XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
+        drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, itemPtr->name, getPaletteEntry(0xFFFFFFFF), ' ');
     }
     
     if (drawActionsWindow) {
       struct Item *item = NULL;
-      struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
-      head = getRoom(getPlayerRoom())->itemsPresent->next;
-      offseted.x += playerCrawler.position.x;
-      offseted.y += playerCrawler.position.y;
-
-      needsToRedrawHUD = TRUE;
-
-      while (head != NULL && item == NULL) {
-          if (offseted.x == (getItem(head->item)->position.x) &&
-              offseted.y == (getItem(head->item)->position.y)) {
-              item = getItem(head->item);
-          }
-          head = head->next;
-      }
+        
+      item = itemInFrontOfPlayer();
 
       if (item != NULL) {
           drawWindowWithOptions(0,
 			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    10 + 2,
-			    6,
+			    11 + 2,
+			    5,
 			    "Action",
 			    CrawlerActions_optionsPickUse,
-			    2,
+			    3,
                 (selectedAction == 0xFF) ? cursorPosition : selectedAction);
       } else {
 	      drawWindowWithOptions(0,
 			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    10 + 2,
-			    6,
+			    11 + 2,
+			    4,
 			    "Action",
 			    CrawlerActions_optionsDrop,
 			    2,
@@ -324,7 +358,7 @@ void Crawler_repaintCallback(void) {
     }
 
     if (showDialogEntry) {
-        drawTextWindow(1, 1, (XRES_FRAMEBUFFER / 8) - 2, (YRES_FRAMEBUFFER / 8) - 2, "", storyPoint[showDialogEntry]);
+        drawTextWindow(0, 0, (XRES_FRAMEBUFFER / 8) - 1, (YRES_FRAMEBUFFER / 8) - 1, "Press any key to continue", storyPoint[showDialogEntry]);
     }
 }
 
@@ -393,20 +427,64 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
   	        break;
         case kCommandFire1:
         case kCommandRight:
-                if (selectedAction == 0xFF) {
-                    selectedAction = cursorPosition;
-                    cursorPosition = 0;
+            {
+                char cmdBuffer[256];
+                struct Item *item;
+                needsToRedrawVisibleMeshes = TRUE;
+                timeUntilNextState = 1000;
+
+                item = itemInFrontOfPlayer();
+
+                if (item) {
+                    if (selectedAction == 0xFF) {
+                        if (cursorPosition == 2) {
+                            selectedAction = cursorPosition;
+                            cursorPosition = 0;
+                        } else {
+                            /* Please note the index! This the case of a action that doesn't open the cascading menu */
+                            parseCommand(commandTemplate_optionsPickUse[cursorPosition], item->name);
+                            drawActionsWindow = 0;
+                            currentSelectedItem = cursorPosition;
+                            selectedAction = 0xFF;
+                        }
+                    } else {
+                        if (selectedAction == 2) {
+                            char *operand1;
+                            char *operator1;
+                            /* Terrible terrible hack*/
+                            sprintf(&cmdBuffer[0], "use-with %s %s", getNthPlayerObject(cursorPosition)->name, item->name);
+                            operator1 = strtok(&cmdBuffer[0], "\n ");
+                            operand1 = strtok(NULL, "\n ");
+                            parseCommand(operator1, operand1);
+
+                            
+                            drawActionsWindow = 0;
+                            currentSelectedItem = cursorPosition;
+                            selectedAction = 0xFF;
+                        } else {
+                            puts("THIS SHOULDN'T BE HAPENNING!");
+                        }
+                    }
                 } else {
-                    drawActionsWindow = 0;
-                    needsToRedrawVisibleMeshes = TRUE;
-                    timeUntilNextState = 1000;
-                    loopTick(kCommandFire1 + selectedAction);
-                    selectedAction = 0xFF;
+                    if (selectedAction == 0xFF) {
+                        selectedAction = cursorPosition;
+                        cursorPosition = 0;
+                    } else {
+                        parseCommand(commandTemplate_optionsDrop[selectedAction], getNthPlayerObject(cursorPosition)->name);
+                        drawActionsWindow = 0;
+                        currentSelectedItem = cursorPosition;
+                        selectedAction = 0xFF;
+                    }
                 }
+                
+                
+                loopTick(kCommandFire4);
+
+            }
             return kResumeCurrentState;
         }
-
-        if (cursorPosition >= 2) {
+        
+        if (cursorPosition >=  (itemInFrontOfPlayer() == NULL ? 2 : 3)) {
             cursorPosition = 1;
         }
 
@@ -418,7 +496,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
     
     if (showDialogEntry) {
-        if (cmd == kCommandFire1) {
+        if (cmd == kCommandFire1 || cmd == kCommandFire2) {
             showDialogEntry = 0;
         }
         return kResumeCurrentState;

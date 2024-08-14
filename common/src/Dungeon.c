@@ -46,6 +46,24 @@ uint8_t isPositionAllowed(int8_t x, int8_t y) {
            && collisionMap[LEVEL_MAP(x, y)] != '1';
 }
 
+void updateMapObjects(void) {
+    struct ObjectNode *head;
+    int8_t x, y;
+    head = getRoom(getPlayerRoom())->itemsPresent->next;
+
+    for (y = 0; y < MAP_SIZE; ++y) {
+        for (x = 0; x < MAP_SIZE; ++x) {
+            setItem(x, y, 0xFF);
+        }
+    }
+
+    while (head != NULL) {
+        struct Item *item = getItem(head->item);
+        setItem(item->position.x, item->position.y, item->index);
+        head = head->next;
+    }
+}
+
 struct GameSnapshot dungeonTick(const enum ECommand command) {
     int currentPlayerRoom;
     int cell;
@@ -233,6 +251,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             }
                 break;
             case kCommandFire4: {
+                updateMapObjects();
                 gameSnapshot.turn++;
             }
                 break;
@@ -410,7 +429,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     int8_t x, y;
     const uint8_t *ptr = mapData;
     struct WorldPosition worldPos;
-    struct ObjectNode *head;
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.camera_rotation = 0;
@@ -421,7 +439,6 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
         for (x = 0; x < MAP_SIZE; ++x) {
             char current = *ptr;
             LEVEL_MAP(x, y) = current;
-            setItem(x, y, 0xFF);
 
             if ((current == 's' && enteredThru == 0) ||
                 (current == 'w' && enteredThru == 1) ||
@@ -444,13 +461,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     playerCrawler.position.x = x;
     playerCrawler.position.y = y;
 
-    head = getRoom(getPlayerRoom())->itemsPresent->next;
-
-    while (head != NULL) {
-        struct Item *item = getItem(head->item);
-        setItem(item->position.x, item->position.y, item->index);
-        head = head->next;
-    }
+    updateMapObjects();
 
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;

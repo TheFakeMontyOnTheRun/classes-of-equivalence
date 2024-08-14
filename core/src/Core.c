@@ -38,15 +38,25 @@ int roomCount = 1;
 /**
  *
  */
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 struct Room rooms[TOTAL_ROOMS];
 /**
  *
  */
 uint8_t itemsCount = 0;
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /**
  *
  */
 struct Item item[TOTAL_ITEMS];
+
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /*
  *
  */
@@ -55,6 +65,10 @@ struct ObjectNode objectNodes[TOTAL_ITEMS];
  *
  */
 struct ObjectNode collectedObjectHead;
+
+#ifdef AGS
+__attribute__((target("arm"), section(".ewram"), noinline))
+#endif
 /**
  *
  */
@@ -272,7 +286,38 @@ void addObjectToRoom(uint8_t roomId, struct Item *itemToAdd) {
     itemToAdd->roomId = roomId;
 }
 
+struct WorldPosition worldPosOffsetForDirection(const enum EDirection aDirection) {
+
+    struct WorldPosition toReturn;
+
+    switch (aDirection) {
+        case kEast:
+            toReturn.x = 1;
+            toReturn.y = 0;
+            break;
+        case kWest:
+            toReturn.x = -1;
+            toReturn.y = 0;
+            break;
+        case kSouth:
+            toReturn.x = 0;
+            toReturn.y = 1;
+            break;
+        case kNorth:
+            toReturn.x = 0;
+            toReturn.y = -1;
+            break;
+        default:
+            assert (FALSE);
+    }
+
+    return toReturn;
+}
+
 void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop) {
+    
+    struct WorldPosition offseted = worldPosOffsetForDirection(party[0].direction);
+
 #ifdef CLI_BUILD
     if (itemToDrop->roomId != 0) {
         defaultLogger("Object not present to drop");
@@ -287,6 +332,13 @@ void dropObjectToRoom(uint8_t roomId, struct Item *itemToDrop) {
     removeObjectFromList(itemToDrop, collectedObject);
     addObjectToRoom(roomId, itemToDrop);
 
+    offseted.x += party[0].position.x;
+    offseted.y += party[0].position.y;
+
+    itemToDrop->position.x = offseted.x;
+    itemToDrop->position.y = offseted.y;
+
+    
     if (itemToDrop->dropCallback != NULL) {
         itemToDrop->dropCallback(itemToDrop);
     }
