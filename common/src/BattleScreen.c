@@ -136,7 +136,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     if ((party[4].inParty && party[4].hp > 0) || getPlayerRoom() == 22 ) {
         aliveMonsters = monstersPresent = TOTAL_MONSTER_COUNT;
     } else {
-        aliveMonsters = monstersPresent = 1 + (rand() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
+        aliveMonsters = monstersPresent = 1 + (nextRandomInteger() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
     }
 
     splat[0] = loadBitmap("splat0.img");
@@ -153,18 +153,18 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
 
     if (getPlayerRoom() == 22) {
         monsterTypeOffset = 23;
-        monsterHP[0] = 40 + (rand() % 3);
+        monsterHP[0] = 40 + (nextRandomInteger() % 3);
         monsterType[0] = 23;
 
-        monsterHP[1] = 40 + (rand() % 3);
+        monsterHP[1] = 40 + (nextRandomInteger() % 3);
         monsterType[1] = 24;
 
-        monsterHP[2] = 40 + (rand() % 3);
+        monsterHP[2] = 40 + (nextRandomInteger() % 3);
         monsterType[2] = 25;
     } else {
         for (c = 0; c < aliveMonsters; ++c) {
-            monsterHP[c] = 20 + (rand() % 3);
-            monsterType[c] = monsterTypeOffset + (rand() % 3); /* We can only have 3 types of monsters at the same time */
+            monsterHP[c] = 20 + (nextRandomInteger() % 3);
+            monsterType[c] = monsterTypeOffset + (nextRandomInteger() % 3); /* We can only have 3 types of monsters at the same time */
         }
     }
 
@@ -367,7 +367,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     } else if (battleActions[currentCharacter] == kRun) {
                         /* Nico will decrease your speed so much that you won't be able to run */
                         if (!party[4].inParty || party[4].hp == 0 ) {
-                            int roll = rand() % 10;
+                            int roll = nextRandomInteger() % 10;
                             int agility = party[currentCharacter].agility;
                             if (roll < agility) {
                                 initRoom(getPlayerRoom());
@@ -446,7 +446,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
 
                 do {
-                    currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+                    currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
                 } while( battleOrder[currentCharacter] != 0 );
 
             done_selecting_monster:
@@ -455,7 +455,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
             } else {
                 do {
-                    currentCharacter = rand() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+                    currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
                 } while( battleOrder[currentCharacter] != 0 );
             }
 
@@ -517,6 +517,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
                 if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
                     int c;
+                    int totalDamage = 0;
                     currentCharacter = batteCharacterOrder = 0;
                     currentBattleState = kAttackPhase;
                     
@@ -531,7 +532,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                                 hero = 4;
                             } else {
                                 do {
-                                    hero = rand() % TOTAL_CHARACTERS_IN_PARTY;
+                                    hero = nextRandomInteger() % TOTAL_CHARACTERS_IN_PARTY;
                                 } while (party[hero].hp == 0 || !party[hero].inParty);
                             }
 
@@ -545,13 +546,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             int monster;
 
                             do {
-                                monster =  TOTAL_CHARACTERS_IN_PARTY + (rand() % (TOTAL_MONSTER_COUNT));
+                                monster =  TOTAL_CHARACTERS_IN_PARTY + (nextRandomInteger() % (TOTAL_MONSTER_COUNT));
                             } while ( monsterHP[monster - TOTAL_CHARACTERS_IN_PARTY] == 0);
 
                             battleTargets[c] = monster;
                         }
                     }
-
 
                     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
                         if (party[4].inParty && party[4].hp > 0) {
@@ -559,20 +559,22 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         } else {
                             if (battleActions[c] == kAttack) {
                                 int monsterTargetted = battleTargets[c];
-                                int attack = (rand() % party[c].attack);
+                                int attack = (nextRandomInteger() % party[c].attack);
                                 int agil1 = party[c].agility;
                                 int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
                                 int diffAgility = 1 + abs( agil1 - agil2);
-                                int roll = rand();
+                                int roll = nextRandomInteger();
                                 int hit = roll % diffAgility;
                                 int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
                                 int calc = attack - ((hit == 0) ? 0 : defense);
                                 battleDamages[c] = max(0, calc * party[c].level);
+                                totalDamage += battleDamages[c];
                             } else if (battleActions[c] == kSpecial) {
                                 int wisdom = party[c].wisdom;
-                                int roll = rand();
+                                int roll = nextRandomInteger();
                                 int hit = roll % wisdom;
                                 battleDamages[c] = hit * party[c].level;
+                                totalDamage += battleDamages[c];
                                 battleTargets[c] = 0;
                             } else {
                                 battleDamages[c] = 0;
@@ -587,25 +589,32 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         } else {
                             if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
                                 int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
-                                int attack = (rand() % monsterArchetypes[monsterType[c]].attack);
+                                int attack = (nextRandomInteger() % monsterArchetypes[monsterType[c]].attack);
                                 int agil1 = party[heroTargetted].agility;
                                 int agil2 = monsterArchetypes[monsterType[c]].agility;
                                 int diffAgility = 1 + abs( agil1 - agil2 );
-                                int roll = rand();
+                                int roll = nextRandomInteger();
                                 int hit = roll % diffAgility;
                                 int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
                                 int calc = attack - ((hit == 0) ? 0 : defense);
                                 battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
+                                totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
                             } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
                                 int wisdom = monsterArchetypes[monsterType[c]].wisdom;
-                                int roll = rand();
+                                int roll = nextRandomInteger();
                                 int hit = roll % wisdom;
                                 battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
+                                totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
                                 battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                             } else {
                                 battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                             }
                         }
+                    }
+
+                    if (totalDamage == 0 ) {
+                        initRoom(getPlayerRoom());
+                        return kEnemiesFledBattle;
                     }
 
                     animationTimer = kBattleAnimationInterval;

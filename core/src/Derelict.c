@@ -268,7 +268,7 @@ void consumeOnPickup(struct Item *item) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
-                party[c].hp += rand() % 5;
+                party[c].hp += nextRandomInteger() % 5;
             }
         }
     }
@@ -277,7 +277,7 @@ void consumeOnPickup(struct Item *item) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
-                party[c].hp += rand() % 10;
+                party[c].hp += nextRandomInteger() % 10;
             }
         }
     }
@@ -286,7 +286,7 @@ void consumeOnPickup(struct Item *item) {
         for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c ) {
             if (party[c].inParty && party[c].hp > 0) {
                 defaultLogger("Partial heal!");
-                party[c].hp += rand() % 20;
+                party[c].hp += nextRandomInteger() % 20;
             }
         }
     }

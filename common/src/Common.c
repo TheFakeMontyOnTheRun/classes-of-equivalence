@@ -113,6 +113,10 @@ uint32_t toNativeEndianess(const uint32_t val) {
 }
 #endif
 
+int nextRandomInteger(void) {
+    return rand();
+}
+
 
 int countLines(const char* text) {
     int lines = 1;

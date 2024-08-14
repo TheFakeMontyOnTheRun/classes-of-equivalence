@@ -140,6 +140,11 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
         printMessageTo3DView("You managed to escape!");
     }
 
+    if (tag == kEnemiesFledBattle) {
+        timeUntilNextState = 1000;
+        printMessageTo3DView("The opposing party has fled!");
+    }
+
     currentPresentationState = kWaitingForInput;
 
     showPromptToAbandonMission = FALSE;
@@ -454,7 +459,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (currentPresentationState == kCheckingForRandomBattle) {
         struct Room *playerNewRoom = getRoom(getPlayerRoom());
-        int random = rand() % 10;
+        int random = nextRandomInteger() % 10;
         currentPresentationState = kWaitingForInput;
         texturesUsed = 0;
         clearTextures();
@@ -482,6 +487,7 @@ void Crawler_unloadStateCallback(enum EGameMenuState newState) {
 
     if (newState != kBackToGame &&
         newState != kEscapedBattle &&
+        newState != kEnemiesFledBattle &&
         newState != kHackingGame &&
         newState != kBattleScreen &&
         newState != kBattleResultScreen) {

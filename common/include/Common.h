@@ -72,6 +72,8 @@ extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
 extern size_t biggestOption;
 
+int nextRandomInteger(void);
+
 #define TEXT_BUFFER_SIZE (40 * 25)
 
 
