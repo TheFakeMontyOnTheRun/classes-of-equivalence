@@ -197,6 +197,7 @@ void BattleScreen_repaintCallback(void) {
                     }
                     monsterAttacking = currentCharacter - TOTAL_CHARACTERS_IN_PARTY;
                 } else {
+                    monsterAttacking = -1;
                     if (!party[currentCharacter].inParty || /* attacking hero is dead */
                         monsterHP[battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY] == 0) { /* or its target is dead */
                         animationTimer = 0;
@@ -215,6 +216,8 @@ void BattleScreen_repaintCallback(void) {
                 }
             }
         }
+    } else {
+        monsterAttacking = -1;
     }
 
     done_flashing:
