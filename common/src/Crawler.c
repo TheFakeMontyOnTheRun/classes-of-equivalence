@@ -137,7 +137,7 @@ void drawInventoryWindow(void) {
     const char *item = NULL;
     char bufferItem[256];
     char bufferWindow[256];
-    int biggest = 0;
+    int biggest = 9; /* length of "Inventory" */
     int candidateBiggest = 0;
     int totalItems = 0;
     const char **itemList;
@@ -170,7 +170,7 @@ void drawInventoryWindow(void) {
         ++listItemPtr;
     }
 
-    drawWindowWithOptions(12,
+    drawWindowWithOptions(13,
                           /*(YRES_FRAMEBUFFER / 8) - itemsCount - 2*/ 0,
                           biggest + 2,
                           totalItems + 2,
