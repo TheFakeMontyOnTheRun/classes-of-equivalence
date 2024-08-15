@@ -189,6 +189,8 @@ void drawInventoryWindow(void) {
                           itemList,
                           totalItems,
                           cursorPosition);
+
+    disposeMem(itemList);
 }
 
 void Crawler_initStateCallback(enum EGameMenuState tag) {
