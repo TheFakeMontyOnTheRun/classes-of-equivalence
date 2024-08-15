@@ -129,6 +129,17 @@ struct Item* itemInFrontOfPlayer() {
     return NULL;
 }
 
+int getTotalItemsWithPlayer(void) {
+    int totalItems = 0;
+    struct ObjectNode *head = getPlayerItems();
+
+    while (head != NULL) {
+        head = head->next;
+        ++totalItems;
+    }
+
+    return totalItems;
+}
 
 void drawInventoryWindow(void) {
     struct ObjectNode *head;
@@ -482,16 +493,30 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                         selectedAction = 0xFF;
                     }
                 }
-                
-                
+
                 loopTick(kCommandFire4);
 
             }
             return kResumeCurrentState;
         }
         
-        if (cursorPosition >=  (itemInFrontOfPlayer() == NULL ? 2 : 3)) {
-            cursorPosition = 1;
+        if (drawActionsWindow) {
+            if (selectedAction != 0xFF) {
+                int total = getTotalItemsWithPlayer();
+                if (cursorPosition >= total ) {
+                    cursorPosition = total - 1;
+                }
+            } else {
+                if (itemInFrontOfPlayer()) {
+                    if (cursorPosition >= 3 ) {
+                        cursorPosition = 2;
+                    }
+                } else {
+                    if (cursorPosition >= 2 ) {
+                        cursorPosition = 1;
+                    }
+                }
+            }
         }
 
         if (cursorPosition < 0) {
