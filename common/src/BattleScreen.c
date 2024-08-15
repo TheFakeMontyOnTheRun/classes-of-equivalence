@@ -137,7 +137,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     } else {
         aliveMonsters = monstersPresent = 1 + (nextRandomInteger() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
     }
-    aliveMonsters = monstersPresent = 3;
+
     splat[0] = loadBitmap("splat0.img");
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
