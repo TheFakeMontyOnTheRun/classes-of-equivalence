@@ -343,8 +343,7 @@ void Crawler_repaintCallback(void) {
             renderTick(30);
 
             recenterView();
-            redrawHUD();
-            
+
             fillRect(XRES, 0, 64, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), 0);
 
             for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; c++) {
@@ -354,6 +353,8 @@ void Crawler_repaintCallback(void) {
                     yWindow += 5;
                 }
             }
+            
+            redrawHUD();
         }
     }
 
