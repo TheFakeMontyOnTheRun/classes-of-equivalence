@@ -364,6 +364,11 @@ void Crawler_repaintCallback(void) {
 
 enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
+    /* Temporary end of the game, for the demo release */
+    if (getPlayerRoom() == 13 || getPlayerRoom() == 19) {
+        return kGoodVictoryEpilogue;
+    }
+
     if (showPromptToAbandonMission) {
 
         switch (cmd) {
