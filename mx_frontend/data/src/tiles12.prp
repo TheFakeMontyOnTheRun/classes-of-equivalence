@@ -5,6 +5,9 @@ U 0 0 1 1 1 null null bricks cube null null 0 0 8 0
 | 0 0 1 1 1 hollow floor2 bricks wallwest null null 0 0 8 4
 ( 0 0 1 1 1 hollow floor2 bricks wallwest null null 0 0 4 0
 # 0 0 1 1 1 hollow floor2 bricks wallwest null null 0 0 8 0
+* 0 0 1 1 1 hollow floor2 bricks cube null null 0 0 8 0
+% 0 0 1 1 1 hollow floor2 electric rampeast bricks bricks2 6 1 2 1
+H 0 0 1 1 1 hollow floor2 null null bricks bricks2 6 1 2 1
 ? 0 0 1 1 1 hollow floor2 bricks wallnorth null null 0 0 8 0
 < 0 0 1 1 1 hollow floor2 bricks wallcorner null null 0 0 8 4
 P 0 0 1 1 0 bricks bricks electric cube bricks bricks 3 1 2 0.8
@@ -15,8 +18,8 @@ E 0 0 0 1 1 hollow floor2 null null bricks null 1 0 4 0
 S 0 0 1 1 1 null null null null null grating 0 2 6 6
 \ 0 0 1 1 1 hollow floor2 bricks leftfar null null 0 0 8 4
 / 0 0 1 1 1 hollow floor2 bricks leftnear null null 0 0 8 4
-{ 0 0 1 1 1 hollow floor1 bricks2 leftfar bricks null 0 0 8 0
-} 0 0 1 1 1 hollow floor1 bricks2 leftnear bricks null 0 0 8 0
+{ 0 0 1 1 1 hollow floor1 table leftfar bricks null 0 0 8 0
+} 0 0 1 1 1 hollow floor1 table leftnear bricks null 0 0 8 0
 2 0 0 0 0 1 hollow floor2 null null null null 0 0 8 4
 1 0 0 0 0 1 hollow floor2 null null null null 0 0 8 4
 0 0 0 0 0 1 bricks bricks null null null bricks 0 0 6 4

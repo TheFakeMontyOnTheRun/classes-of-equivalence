@@ -70,8 +70,6 @@ void useCardWithCardWriter(struct Item *item1, struct Item *item2) {
     if (item1 == getItemNamed("low-rank-keycard") && item2 == getItemNamed("card-writer")) {
         struct Item *card = getItemNamed("hacked-keycard");
         addToRoom("computer-core", card);
-        dropObjectByName("low-rank-keycard");
-        removeObjectFromRoom(getItemNamed("low-rank-keycard"));
     } else {
         defaultLogger("No effect");
     }
@@ -669,7 +667,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 4, 7);
+                      TRUE, 4, 14);
     addToRoom("hall-2", newItem);
     newItem->useWithCallback = useCardWithCardWriter;
     newItem->pickCallback = keycardPickCallback;
@@ -683,7 +681,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 21, 9);
+                      TRUE, 29, 15);
     newItem->useWithCallback = useKeycardWith;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
@@ -818,7 +816,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             3,
 #endif
-                      FALSE, 22, 10);
+                      FALSE, 29, 17);
     addToRoom("computer-core", newItem);
 
 
