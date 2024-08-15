@@ -262,7 +262,7 @@ void BattleScreen_repaintCallback(void) {
 
                 /* Terrible kludge, but I'm in a hurry */
                 if (frame >= 0 ) {
-                    drawBitmap(12 * 8 + ( c * (splat[frame]->width + 8)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
+                    drawBitmap(4 + 11 * 8 + ( c * (32 + 16)), -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame], 1);
                 }
 
                 sprintf(&buffer3[0], "%d HP", battleDamages[currentCharacter] );
