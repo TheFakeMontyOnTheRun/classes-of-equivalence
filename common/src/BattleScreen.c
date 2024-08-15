@@ -137,7 +137,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     } else {
         aliveMonsters = monstersPresent = 1 + (nextRandomInteger() % min( aliveHeroes, TOTAL_MONSTER_COUNT - 1));
     }
-
+    aliveMonsters = monstersPresent = 3;
     splat[0] = loadBitmap("splat0.img");
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
@@ -185,7 +185,7 @@ void BattleScreen_repaintCallback(void) {
         if (animationTimer == kBattleAnimationInterval) {
 
             int damage = battleDamages[currentCharacter];
-            
+
             if (battleActions[currentCharacter] == kSpecial) {
                 fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFFFF0000), 0);
             } else if (battleActions[currentCharacter] == kAttack) {
@@ -206,7 +206,7 @@ void BattleScreen_repaintCallback(void) {
                     damage = -damage;
                     splatMonster = battleTargets[currentCharacter] - TOTAL_CHARACTERS_IN_PARTY;
                 }
-                
+
                 if (damage > 0) {
                     fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF0000FF), 0);
                 } else if (damage < 0) {
@@ -324,9 +324,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
     (void) data;
 
     if (currentBattleState == kAttackPhase) {
-
         if (animationTimer == (kBattleAnimationInterval / 2)) {
-
             int target = battleTargets[currentCharacter];
             int attackerIsAlive;
 
@@ -338,10 +336,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
             /* The target must still be alive to perform his attack */
             if (attackerIsAlive) {
-
                 if (currentCharacter < TOTAL_CHARACTERS_IN_PARTY) {
-                    if (battleActions[currentCharacter] == kSpecial) {
 
+                    if (!party[currentCharacter].inParty) {
+                        return kResumeCurrentState;
+                    }
+
+                    /* Obviously starting with specials */
+                    if (battleActions[currentCharacter] == kSpecial) {
                         if (party[currentCharacter].specialStype == kHeal) {
                             int c = 0;
                             party[currentCharacter].energy -= 4;
@@ -456,9 +458,14 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 monsterAttacking = -1;
 
             } else {
+
                 do {
                     currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
-                } while( battleOrder[currentCharacter] != 0 );
+                } while( battleOrder[currentCharacter] != 0 &&
+                        (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY ?
+                        monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0 :
+                        (party[currentCharacter].inParty && party[currentCharacter].hp > 0))
+                        );
             }
 
             battleOrder[currentCharacter] = 1;
@@ -498,6 +505,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                 }
                 break;
             case kCommandFire1:
+                /* No energy for special or no special? Nothing happens */
                 if (cursorPosition == kSpecial &&
                     ( party[currentCharacter].specialStype == kNone ||
                       party[currentCharacter].energy < 4)) {
@@ -523,13 +531,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     currentCharacter = batteCharacterOrder = 0;
                     currentBattleState = kAttackPhase;
                     
+                    /* Reset battle order to be selected later */
                     for (c = 0; c < (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY); ++c) {
                         battleOrder[c] = 0;
                     }
 
+                    /* Selecting targets */
                     for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
                         if (monsterHP[c] > 0) {
                             int hero;
+                            /* If Nico is in the party and alive, he's the target */
                             if (party[4].inParty && party[4].hp > 0) {
                                 hero = 4;
                             } else {
@@ -546,7 +557,6 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
                         if (battleActions[c] == kAttack) {
                             int monster;
-
                             do {
                                 monster =  TOTAL_CHARACTERS_IN_PARTY + (nextRandomInteger() % (TOTAL_MONSTER_COUNT));
                             } while ( monsterHP[monster - TOTAL_CHARACTERS_IN_PARTY] == 0);
@@ -555,10 +565,13 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         }
                     }
 
+                    /* Compute damages */
+
                     for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
+                        /* If Nick is alive, you deal no damage */
                         if (party[4].inParty && party[4].hp > 0) {
                             battleDamages[c] = 0;
-                        } else {
+                        } else if (party[c].inParty && party[c].hp > 0) {
                             if (battleActions[c] == kAttack) {
                                 int monsterTargetted = battleTargets[c];
                                 int attack = (nextRandomInteger() % party[c].attack);
@@ -581,14 +594,17 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             } else {
                                 battleDamages[c] = 0;
                             }
+                        } else {
+                            battleDamages[c] = 0;
                         }
                     }
 
                     for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
+                        /* If Nico is alive, all damage goes to him */
                         if (party[4].inParty && party[4].hp > 0) {
                             battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = party[4].hp;
                             battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 4;
-                        } else {
+                        } else if (monsterHP[c] > 0){
                             if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
                                 int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
                                 int attack = (nextRandomInteger() % monsterArchetypes[monsterType[c]].attack);
@@ -611,6 +627,8 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             } else {
                                 battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                             }
+                        } else {
+                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
                         }
                     }
 
@@ -619,6 +637,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                         return kEnemiesFledBattle;
                     }
 
+                    battleOrder[currentCharacter] = 1;
                     animationTimer = kBattleAnimationInterval;
                 }
                 break;
