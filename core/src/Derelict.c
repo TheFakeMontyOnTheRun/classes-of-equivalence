@@ -695,7 +695,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             17,
 #endif
-                      FALSE, 2, 2);
+                      FALSE, 5, 0);
     addToRoom("rls-bohr-2", newItem);
     newItem->active = TRUE;
 

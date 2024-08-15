@@ -22,6 +22,8 @@ Z 0 0 1 1 1 hollow floor1 bricks2 leftfar null bricks2 0 0 4 0
 . 0 0 0 0 1 hollow floor1 null null null null 0 0 4 0
 _ 0 0 0 0 1 ceiling floor2 null null null null 0 0 4 0
 - 0 0 1 1 1 hollow floor1 bricks2 wallnorth null null 0 0 4 0
+^ 0 0 1 1 1 hollow floor1 bricks2 cube null null 0 0 4 0
+H 0 0 1 1 1 hollow floor1 electric2 cube bricks2 bricks2 2 1 2 1
 | 0 0 1 1 1 hollow floor1 bricks2 wallwest null null 0 0 4 0
 X 0 0 1 1 1 hollow floor1 bricks2 wallcorner null null 0 0 4 0
 , 0 1 1 1 1 null null null null null null 0 0 0 0
