@@ -35,6 +35,7 @@ enum EBattleStates {
 };
 
 #define kDummyBattleOptionsCount  4
+#define kMaxRoundsWithTies 3
 #define TOTAL_MONSTER_COUNT 3
 #define kBattleAnimationInterval 900
 #define TOTAL_MONSTER_TYPES 27
@@ -43,8 +44,6 @@ enum EBattleStates {
 
 struct Bitmap *foe[TOTAL_MONSTER_COUNT][TOTAL_FRAMES_PER_MONSTER];
 struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
-
-uint8_t currentCharacter;
 
 struct MonsterArchetype {
     const char* name;
@@ -84,6 +83,12 @@ static const struct MonsterArchetype monsterArchetypes[TOTAL_MONSTER_TYPES] = {
   {"loose seal", 3, 3, 2, 6},
 };
 
+const char *BattleScreen_options[kDummyBattleOptionsCount] = {
+    "Attack", "Defend", "Special", "Run"};
+
+const char *BattleScreen_optionsNoSpecial[kDummyBattleOptionsCount] = {
+    "Attack", "Defend", "-", "Run"};
+
 /* Life points of the monsters */
 uint8_t monsterHP[TOTAL_MONSTER_COUNT];
 /* Types of the monsters. For now, this has no meaning */
@@ -96,35 +101,39 @@ uint8_t battleDamages[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 uint8_t battleTargets[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
 uint8_t battleOrder[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
-uint8_t batteCharacterOrder = 0;
-uint8_t monsterTypeOffset = 0;
 
 enum EBattleStates currentBattleState;
-int32_t animationTimer;
+
+uint8_t batteCharacterOrder = 0;
+uint8_t monsterTypeOffset = 0;
+int32_t animationTimer = 0;
 uint8_t monstersPresent = 0;
 uint8_t aliveMonsters = 0;
 uint8_t aliveHeroes = 0;
-
-const char *BattleScreen_options[kDummyBattleOptionsCount] = {
-        "Attack", "Defend", "Special", "Run"};
-
-const char *BattleScreen_optionsNoSpecial[kDummyBattleOptionsCount] = {
-        "Attack", "Defend", "-", "Run"};
-
-
 int8_t splatMonster = -1;
 int8_t monsterAttacking = -1;
+uint8_t roundsWithTies = 0;
+uint8_t currentCharacter = 0;
 
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     int c, d;
     (void) tag;
-    cursorPosition = 1;
+    cursorPosition = 0;
     needsToRedrawVisibleMeshes = 0;
-    currentCharacter = 0;
-
-    monsterTypeOffset = getPlayerRoom() - 1;
-    
+    batteCharacterOrder = 0;
+    monsterTypeOffset = 0;
+    animationTimer = 0;
+    monstersPresent = 0;
+    aliveMonsters = 0;
     aliveHeroes = 0;
+    splatMonster = -1;
+    monsterAttacking = -1;
+    roundsWithTies = 0;
+    currentCharacter = 0;
+    monsterTypeOffset = getPlayerRoom() - 1;
+    currentBattleState = kPlayerSelectingMoves;
+    aliveHeroes = 0;
+
     for (d = 0; d < TOTAL_CHARACTERS_IN_PARTY; d++) {
         if (party[d].inParty && party[d].hp > 0) {
             ++aliveHeroes;
@@ -166,11 +175,6 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
             monsterType[c] = monsterTypeOffset + (nextRandomInteger() % 3); /* We can only have 3 types of monsters at the same time */
         }
     }
-
-    splatMonster = -1;
-    monsterAttacking = -1;
-    currentBattleState = kPlayerSelectingMoves;
-    cursorPosition = 0;
 }
 
 void BattleScreen_repaintCallback(void) {
@@ -633,6 +637,12 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     }
 
                     if (totalDamage == 0 ) {
+                        ++roundsWithTies;
+                    } else {
+                        roundsWithTies = 0;
+                    }
+
+                    if (roundsWithTies >= kMaxRoundsWithTies ) {
                         initRoom(getPlayerRoom());
                         return kEnemiesFledBattle;
                     }
