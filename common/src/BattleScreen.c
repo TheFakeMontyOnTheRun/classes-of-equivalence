@@ -534,10 +534,11 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                     int totalDamage = 0;
                     currentCharacter = batteCharacterOrder = 0;
                     currentBattleState = kAttackPhase;
-                    
+
                     /* Reset battle order to be selected later */
                     for (c = 0; c < (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY); ++c) {
                         battleOrder[c] = 0;
+                        battleDamages[c] = 0;
                     }
 
                     /* Selecting targets */
