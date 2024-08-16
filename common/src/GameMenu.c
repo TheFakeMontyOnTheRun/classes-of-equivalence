@@ -31,15 +31,15 @@ struct Bitmap *featuredBitmap = NULL;
 const char *inspectItem_options[1] = {"Back"};
 
 const enum EGameMenuState InspectItem_nextStateNavigation[1] = {
-        kBackToGame};
+    kResumeCurrentState};
 
-const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[1] = {kMainMenu};
+const enum EGameMenuState GameMenu_EndGame_nextStateNavigation[1] = {kResumeCurrentState};
 
 const char *GameMenu_EndGame_options[2] = {"No", "Yes"};
 
 const char *GameMenu_Story_options[1] = {"Continue"};
 
-const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kMainMenu};
+const enum EGameMenuState GameMenu_Story_nextStateNavigation[1] = {kResumeCurrentState};
 
 int16_t GameMenu_optionsCount = 2;
 int drawFilter = FALSE;
@@ -64,7 +64,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
 
 
         case kGoodVictoryEpilogue:
-            mainText = "Victory! You managed to destroy the\nship and get out alive\n\n\n\n\n\n";
+            mainText = "Thank you for playing. This is the end of this planned demo. Please, tell me what did you think of it!";
 
             GameMenu_StateTitle = "Victory";
 
@@ -74,7 +74,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kBadVictoryEpilogue:
-            mainText = "Victory! Too bad you didn't survive\nto tell the story\n\n\n\n\n\n";
+            mainText = "Thank you for playing. This is the end of this planned demo. Please, tell me what did you think of it!";
             GameMenu_StateTitle = "Victory";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
@@ -82,10 +82,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kGoodGameOverEpilogue:
-            mainText = "You failed! While you fled the ship\n"
-                       "alive, you failed to prevent the \n"
-                       "worst scenario and now EVERYBODY is\n"
-                       "dead (and that includes you!)\n\n\n\n\n";
+            mainText = "You're dead!";
             GameMenu_StateTitle = "Game Over";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
