@@ -109,10 +109,10 @@ void drawTitleBox(void) {
 
 	putStr(76, 10, "\xbc", COLOR_WHITE, COLOR_BLUE);
 
-	putStr(17, 4, "Sub Mare Imperium - Derelict - v0.9", COLOR_WHITE,
+	putStr(17, 4, "Sub Mare Imperium - Tragedy of the Uncanny - v0.1", COLOR_WHITE,
 		   COLOR_BLUE);
 
-	putStr(5, 6, "Program and Audio-visual (C) 2021 by Brotherhood of 13h",
+	putStr(5, 6, "Program and Audio-visual (C) 2024 by Brotherhood of 13h",
 		   COLOR_WHITE, COLOR_BLUE);
 
 	putStr(30, 7, "PRE-RELEASE version! Beware!", COLOR_WHITE, COLOR_BLUE);
