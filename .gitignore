@@ -104,3 +104,7 @@ mx_frontend/tragedy.gba
 IDEFindNavigatorScopes.plist
 mx_frontend/gameaga
 mx_frontend/gamecd32
+mx_frontend/game.data
+mx_frontend/game.html
+mx_frontend/game.html.mem
+mx_frontend/game.js
