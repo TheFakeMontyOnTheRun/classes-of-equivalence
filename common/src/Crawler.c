@@ -53,7 +53,7 @@ uint8_t showDialogEntry = 0;
 extern int currentSelectedItem;
 extern struct CActor playerCrawler;
 
-const static char *storyPoint[] = {
+static const char *storyPoint[] = {
     "",
     "It's been so long you don't even remember why. Every day they try to extract information, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
     "I wonder how many of my former comrades are being held here - perhaps our collective strength could be useful."
@@ -62,24 +62,24 @@ const static char *storyPoint[] = {
 uint8_t drawActionsWindow = 0;
 uint8_t selectedAction = 0xFF;
 
-const static char *CrawlerActions_optionsPickUse[] = {
+static const char *CrawlerActions_optionsPickUse[] = {
     "Use",
     "Pick",
     "Use with...",
 };
 
-const static char *CrawlerActions_optionsDrop[] = {
+static const char *CrawlerActions_optionsDrop[] = {
     "Use",
     "Drop"
 };
 
-const static char *commandTemplate_optionsPickUse[] = {
+static const char *commandTemplate_optionsPickUse[] = {
     "use",
     "pick",
     "use-with"
 };
 
-const static char *commandTemplate_optionsDrop[] = {
+static const char *commandTemplate_optionsDrop[] = {
     "use",
     "drop"
 };

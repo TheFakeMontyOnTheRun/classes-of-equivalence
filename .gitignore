@@ -109,3 +109,11 @@ mx_frontend/game.html
 mx_frontend/game.html.mem
 mx_frontend/game.js
 index.html.mem
+xcschememanagement.plist
+UserInterfaceState.xcuserstate
+IDEWorkspaceChecks.plist
+gl_frontend/build/derelict64.dfs
+gl_frontend/build/derelict64.elf
+gl_frontend/build/derelict64.elf.stripped
+gl_frontend/build/derelict64.elf.sym
+gl_frontend/build/derelict64.map
