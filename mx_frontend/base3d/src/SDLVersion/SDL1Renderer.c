@@ -54,7 +54,7 @@ void graphicsInit(void) {
 
     SDL_Init(SDL_INIT_EVERYTHING);
 #ifdef MAEMO22
-    video = SDL_SetVideoMode(640, 480, 16, SDL_FULLSCREEN);
+    video = SDL_SetVideoMode(800, 480, 16, SDL_FULLSCREEN);
 #else
     video = SDL_SetVideoMode(320, 240, 32, 0);
 #endif
@@ -303,6 +303,16 @@ void flipRenderer(void) {
     SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
     SDL_BlitSurface(stretchedBuffer, NULL, video, NULL);
 
+
+    SDL_Rect rect;
+    rect.x = 640;
+    rect.y = 0;
+    rect.w = 160;
+    rect.h = 240;
+    SDL_FillRect( video, &rect, SDL_MapRGB(video->format, 255, 0, 0));
+    rect.y = 240;
+    SDL_FillRect( video, &rect, SDL_MapRGB(video->format, 0, 0, 255));
+    
     SDL_Flip(video);
 #ifndef __EMSCRIPTEN__
     SDL_Delay(1000 / 60);
