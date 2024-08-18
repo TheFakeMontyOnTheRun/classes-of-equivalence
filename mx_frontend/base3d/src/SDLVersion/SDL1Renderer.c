@@ -249,11 +249,19 @@ void flipRenderer(void) {
 
     for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
         int chunky;
+#ifdef MAEMO22
+        if (scaller == 4) {
+            heightY = 4;
+        } else {
+            heightY = 2;
+        }
+#else
         if (scaller == 4) {
             heightY = 2;
         } else {
             heightY = 1;
         }
+#endif
 
         for (chunky = 0; chunky < heightY; ++chunky) {
 #ifdef MAEMO22
@@ -277,8 +285,11 @@ void flipRenderer(void) {
 #endif
             }
         }
-
+#ifdef MAEMO22
+        dstY+=2;
+#else
         dstY++;
+#endif
         scaller++;
 
 
