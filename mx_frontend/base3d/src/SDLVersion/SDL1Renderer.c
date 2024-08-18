@@ -54,7 +54,7 @@ void graphicsInit(void) {
 
     SDL_Init(SDL_INIT_EVERYTHING);
 #ifdef MAEMO22
-    video = SDL_SetVideoMode(320, 240, 16, 0);
+    video = SDL_SetVideoMode(640, 480, 16, SDL_FULLSCREEN);
 #else
     video = SDL_SetVideoMode(320, 240, 32, 0);
 #endif
@@ -76,7 +76,7 @@ void graphicsInit(void) {
     defaultFont = loadBitmap("font.img");
     enableSmoothMovement = TRUE;
 #ifdef MAEMO22
-    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 16, video->format->Rmask, video->format->Gmask,
+    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 16, video->format->Rmask, video->format->Gmask,
                                            video->format->Bmask, video->format->Amask);
 #else
     stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
@@ -249,28 +249,33 @@ void flipRenderer(void) {
 
     for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
         int chunky;
-
         if (scaller == 4) {
             heightY = 2;
         } else {
             heightY = 1;
         }
 
-
         for (chunky = 0; chunky < heightY; ++chunky) {
 #ifdef MAEMO22
+	    uint16_t fragment;
             dst = (uint16_t *) stretchedBuffer->pixels;
+            src = &newFrame[(XRES_FRAMEBUFFER * y)];
+            dst += (640 * (dstY + chunky));
 #else
             dst = (uint32_t *) stretchedBuffer->pixels;
-#endif
             src = &newFrame[(XRES_FRAMEBUFFER * y)];
             dst += (XRES_FRAMEBUFFER * (dstY + chunky));
+#endif
 
             for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+#ifdef MAEMO22
+		uint16_t fragment = palette[*src++];
+		*dst++ = fragment;
+	        *dst++ = fragment;
+#else
                 *dst++ = palette[*src++];
+#endif
             }
-            
-            
         }
 
         dstY++;
