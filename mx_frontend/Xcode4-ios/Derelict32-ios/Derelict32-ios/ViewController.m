@@ -184,7 +184,7 @@ void shutdownHW(void) {
     effectiveSize.height = playField.bounds.size.height - (2.0f * margins.height);
 
     pointerClickPositionX = ((point.x - margins.width) / ( effectiveSize.width / XRES_FRAMEBUFFER) ) / 8;
-    pointerClickPositionY = (YRES_FRAMEBUFFER - ((point.y - margins.height) / ( effectiveSize.height / YRES_FRAMEBUFFER ) )) / 8;
+    pointerClickPositionY = (((point.y - margins.height) / ( effectiveSize.height / YRES_FRAMEBUFFER ) )) / 8;
 }
 
 - ( void ) draw {
@@ -286,6 +286,7 @@ void shutdownHW(void) {
     
     menuTick(50);
     [self initTimer];
+    [playField setMultipleTouchEnabled: NO];
 }
 
 - (void)didReceiveMemoryWarning
