@@ -103,8 +103,8 @@ void handleSystemEvents(void) {
             pointerClickPositionX = (x / 2) / 8;
             pointerClickPositionY = (((y / 2) * 200) / 240 ) / 8;
 #else
-            pointerClickPositionX = (x / 2) / 8;
-            pointerClickPositionY = (((y * 200 ) / 240 ) / 2) / 8;
+            pointerClickPositionX = (x) / 8;
+            pointerClickPositionY = (((y * 200 ) / 240 )) / 8;
 #endif
         }
 
