@@ -309,7 +309,11 @@ void flipRenderer(void) {
 
         if (scaller == 5) {
             scaller = 0;
-            dstY++;
+#ifdef MAEMO22
+        dstY+=2;
+#else
+        dstY++;
+#endif
         }
     }
 
