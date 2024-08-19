@@ -13,4 +13,5 @@ public class DerelictJNI {
     public static native int getSoundToPlay();
     public static native int isOnMainMenu();
 
+    public static native void setTouchCoords(float multiplier, int sizeX, int sizeY, int touchX, int touchY);
 }

@@ -11,6 +11,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Display
 import android.view.KeyEvent
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_POINTER_UP
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewManager
 import android.widget.Button
@@ -21,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import pt.b13h.equivalencegles2.R
 import java.nio.ByteBuffer
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchListener {
 
     private var imageView: ImageView? = null
     private var soundPool : SoundPool? = null
@@ -30,6 +33,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var pixels = ByteArray(320 * 240 * 4)
     val bitmap: Bitmap = Bitmap.createBitmap(320, 240, Bitmap.Config.ARGB_8888)
     private var running = false
+    private var multiplier : Float = 0f
+
+    fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
+        multiplier = if (((320.0f / 240.0f) * sizeHeight) < sizeWidth) {
+            (sizeHeight.toFloat()) / 240.0f
+        } else {
+            (sizeWidth.toFloat()) / 320.0f
+        }
+    }
 
     private fun initAudio() {
         soundPool =
@@ -111,6 +123,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             llScreenControllers.visibility = View.VISIBLE
                         }
 
+                        imageView?.setOnTouchListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
                         btnUse.setOnClickListener(this)
@@ -178,6 +191,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun redraw() {
+        setMultiplier(imageView?.width!!, imageView?.height!!);
         DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
         imageView?.invalidate()
@@ -250,5 +264,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             GamePresentation(this, presentationDisplay, imageView)
 
         presentation?.show()
+    }
+
+    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+        val viewCoords = IntArray(2)
+        imageView!!.getLocationOnScreen(viewCoords)
+        val touchX = event!!.x.toInt()
+        val touchY = event.y.toInt()
+        val width = imageView?.width!!
+        val height = imageView?.height!!
+
+        if (event.actionIndex == 0 && ((event.action == ACTION_UP) || (event.action == ACTION_POINTER_UP)) ) {
+            DerelictJNI.setTouchCoords( multiplier, width, height, touchX, touchY );
+        }
+        return true;
     }
 }
