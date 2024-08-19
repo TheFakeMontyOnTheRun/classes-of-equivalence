@@ -94,6 +94,20 @@ void handleSystemEvents(void) {
             return;
         }
 #endif
+        
+
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            int x, y;
+            SDL_GetMouseState(&x , &y);
+#ifdef MAEMO22
+            pointerClickPositionX = (x / 2) / 8;
+            pointerClickPositionY = (((y / 2) * 200) / 240 ) / 8;
+#else
+            pointerClickPositionX = (x / 2) / 8;
+            pointerClickPositionY = (((y * 200 ) / 240 ) / 2) / 8;
+#endif
+        }
+
         if (event.type == SDL_KEYDOWN) {
 
             SDLKey key = event.key.keysym.sym;
