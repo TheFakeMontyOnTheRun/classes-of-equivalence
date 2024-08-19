@@ -49,12 +49,18 @@ void CreditsScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 7 - 4,
                           ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 5,
                           7 + 2,
-                          3, "Credits", CreditsScreen_options, 1, cursorPosition);
+                          3,
+                          "Credits", CreditsScreen_options, 1, cursorPosition);
 }
 
 enum EGameMenuState CreditsScreen_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
-    return handleCursor(CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
+    return handleCursor((XRES_FRAMEBUFFER / 8) - 7 - 4,
+                        ((YRES_FRAMEBUFFER / 8) + 1) - (1) - 5,
+                        7 + 2,
+                        3,
+                        &CreditsScreen_options[0],
+                        CreditsScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
 void CreditsScreen_unloadStateCallback(enum EGameMenuState newState) {

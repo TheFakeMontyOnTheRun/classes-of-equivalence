@@ -101,7 +101,26 @@ drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned i
     drawTextAtWithMargin( x + 1, y + 2, ( 1 + x + dx) * 8, content, getPaletteEntry(0xFFFFFFFF));
 }
 
-enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
+enum EGameMenuState handleCursor(const int x,
+                                 const int y,
+                                 const unsigned int dx,
+                                 const unsigned int dy,
+                                 const char **optionsStr,
+                                 const enum EGameMenuState* options,
+                                 uint8_t optionsCount, const enum ECommand cmd, enum
+                                 EGameMenuState backState) {
+
+    for (int c = 0; c < optionsCount; ++c) {
+        size_t len = strlen(&optionsStr[c][0]);
+
+        if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
+            if (c == cursorPosition) {
+                return options[c];
+            } else {
+                cursorPosition = c;
+            }
+        }
+    }
 
     switch (cmd) {
         case kCommandBack:
