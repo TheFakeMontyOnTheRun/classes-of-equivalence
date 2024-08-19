@@ -313,4 +313,7 @@ void checkGLError(const char *operation);
 
 void unloadTextures(void);
 
+extern int pointerClickPositionX;
+extern int pointerClickPositionY;
+
 #endif

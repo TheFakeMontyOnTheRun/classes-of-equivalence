@@ -288,6 +288,9 @@ extern int dirtyLineY1;
 extern enum ECommand mTurnBuffer;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
+extern int pointerClickPositionX;
+extern int pointerClickPositionY;
+
 #define DIV_LUT_COUNT XRES_FRAMEBUFFER
 extern FixP_t divLut[DIV_LUT_COUNT];
 #endif

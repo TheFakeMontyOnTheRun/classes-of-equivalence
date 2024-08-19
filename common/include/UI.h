@@ -45,4 +45,6 @@ void clearScreen(void);
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
 
+int pointerInsideRect (int x, int y, int dx, int dy);
+
 #endif /*UI_H*/

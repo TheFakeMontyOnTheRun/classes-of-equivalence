@@ -36,8 +36,12 @@
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
 extern const char *focusItemName;
-int hasSnapshot = FALSE;
 extern int leanX, leanY, turning;
+
+int pointerClickPositionX = -1;
+int pointerClickPositionY = -1;
+
+int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
 FixP_t playerHeightChangeRate = 0;

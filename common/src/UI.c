@@ -25,6 +25,22 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
+
+int pointerInsideRect (int x, int y, int dx, int dy) {
+    int offsettedX = pointerClickPositionX - (x / 8);
+    int offsettedY = pointerClickPositionY - (y / 8);
+
+    if (pointerClickPositionX == -1) {
+        return 0;
+    }
+
+    if (offsettedX >= 0 && offsettedY >= 0 && offsettedX < (dx / 8)  && offsettedY < (dy / 8)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 void
 drawWindowWithOptions(const int x,
                       const int y,

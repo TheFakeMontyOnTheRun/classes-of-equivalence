@@ -15,6 +15,8 @@
 #include "Engine.h"
 #include "SoundSystem.h"
 
+extern int pointerClickPositionX;
+
 InitStateCallback initStateCallback = NULL;
 RepaintCallback repaintCallback = NULL;
 TickCallback tickCallback = NULL;
@@ -153,6 +155,7 @@ uint8_t menuTick(long delta_time) {
 
     repaintCallback();
     firstFrameOnCurrentState = 0;
+    pointerClickPositionX = -1;
 
     return isRunning;
 }

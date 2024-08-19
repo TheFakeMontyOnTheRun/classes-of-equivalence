@@ -271,4 +271,8 @@ extern struct Bitmap *mapTopLevel;
 extern uint8_t *map;
 extern uint8_t *itemsInMap;
 extern FixP_t divLut[320];
+
+extern int pointerClickPositionX;
+extern int pointerClickPositionY;
+
 #endif

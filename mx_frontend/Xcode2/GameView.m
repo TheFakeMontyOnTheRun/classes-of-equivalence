@@ -164,6 +164,27 @@ void setMultiplier(CGSize size) {
 {
 }
 
+- (void)mouseUp:(NSEvent *)theEvent {
+    NSPoint point = [theEvent locationInWindow];
+    NSSize windowSize = self.bounds.size;
+
+    NSSize margins;
+    NSSize effectiveSize;
+
+    margins.width = (self.bounds.size.width - (XRES_FRAMEBUFFER * multiplier)) / 2.0f;
+    margins.height = (self.bounds.size.height - (YRES_FRAMEBUFFER * multiplier * 1.2f )) / 2.0f;
+
+    effectiveSize.width = self.bounds.size.width - (2.0f * margins.width);
+    effectiveSize.height = self.bounds.size.height - (2.0f * margins.height);
+
+    pointerClickPositionX = ((point.x - margins.width) / ( effectiveSize.width / XRES_FRAMEBUFFER) ) / 8;
+    pointerClickPositionY = (YRES_FRAMEBUFFER - ((point.y - margins.height) / ( effectiveSize.height / YRES_FRAMEBUFFER ) )) / 8;
+
+    [self setNeedsDisplay:YES];
+}
+
+
+
 -(void)keyUp:(NSEvent*)event
 {
     
@@ -226,9 +247,8 @@ void shutdownHW(void) {
     }
     
     setMultiplier(bounds.size);
-	
-	
-	renderPageFlip(&flippedBuffer[0], &framebuffer[0], &previousFrame[0], turnStep, turnTarget, 0);
+
+    renderPageFlip(&flippedBuffer[0], &framebuffer[0], &previousFrame[0], turnStep, turnTarget, 0);
     uint8_t *pixelPtr = &flippedBuffer[0];
     uint32_t *bufferPtr = &stretchedBuffer[0];
     for ( y = 0; y < YRES_FRAMEBUFFER; ++y ) {
