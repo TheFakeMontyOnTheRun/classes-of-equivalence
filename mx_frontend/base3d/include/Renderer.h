@@ -11,10 +11,10 @@
 #define HALF_YRES 80
 #else
 #define PAGE_FLIP_TARGET 200
-#define XRES (320 - 64)
-#define YRES 200
-#define HALF_XRES ((320 - 64) / 2)
-#define HALF_YRES 100
+#define XRES ((XRES_FRAMEBUFFER) - 64)
+#define YRES (YRES_FRAMEBUFFER)
+#define HALF_XRES ((XRES) / 2)
+#define HALF_YRES ((YRES) / 2)
 #endif
 /*
 #ifndef AGS

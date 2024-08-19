@@ -76,7 +76,7 @@ void graphicsInit(void) {
     defaultFont = loadBitmap("font.img");
     enableSmoothMovement = TRUE;
 #ifdef MAEMO22
-    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 16, video->format->Rmask, video->format->Gmask,
+    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 800, 480, 16, video->format->Rmask, video->format->Gmask,
                                            video->format->Bmask, video->format->Amask);
 #else
     stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
@@ -268,7 +268,7 @@ void flipRenderer(void) {
 	    uint16_t fragment;
             dst = (uint16_t *) stretchedBuffer->pixels;
             src = &newFrame[(XRES_FRAMEBUFFER * y)];
-            dst += (640 * (dstY + chunky));
+            dst += (800 * (dstY + chunky));
 #else
             dst = (uint32_t *) stretchedBuffer->pixels;
             src = &newFrame[(XRES_FRAMEBUFFER * y)];
@@ -302,16 +302,6 @@ void flipRenderer(void) {
     SDL_UnlockSurface(stretchedBuffer);
     SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
     SDL_BlitSurface(stretchedBuffer, NULL, video, NULL);
-
-
-    SDL_Rect rect;
-    rect.x = 640;
-    rect.y = 0;
-    rect.w = 160;
-    rect.h = 240;
-    SDL_FillRect( video, &rect, SDL_MapRGB(video->format, 255, 0, 0));
-    rect.y = 240;
-    SDL_FillRect( video, &rect, SDL_MapRGB(video->format, 0, 0, 255));
     
     SDL_Flip(video);
 #ifndef __EMSCRIPTEN__
