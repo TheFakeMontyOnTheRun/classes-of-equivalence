@@ -153,6 +153,7 @@ void handleSystemEvents(void) {
             switch (key) {
                 case SDLK_RETURN:
                 case SDLK_z:
+	        case SDLK_F4:
                     mBufferedCommand = kCommandFire1;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;

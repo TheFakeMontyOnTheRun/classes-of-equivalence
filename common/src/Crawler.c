@@ -424,8 +424,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (drawActionsWindow) {
         switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
             case kCommandUp:
                 timeUntilNextState = 1000;
                 playSound(MENU_SELECTION_CHANGE_SOUND);
@@ -437,16 +435,17 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                 ++cursorPosition;
                 break;
 	    case kCommandFire2:
-        case kCommandLeft:
+	    case kCommandBack:
+            case kCommandLeft:
                 if (selectedAction != 0xFF) {
                     selectedAction = 0xFF;
                 } else {
                     drawActionsWindow = 0;
                 }
   	        break;
-        case kCommandFire1:
-        case kCommandRight:
-            {
+            case kCommandFire1:
+            case kCommandRight: {
+
                 char cmdBuffer[256];
                 struct Item *item;
                 needsToRedrawVisibleMeshes = TRUE;
