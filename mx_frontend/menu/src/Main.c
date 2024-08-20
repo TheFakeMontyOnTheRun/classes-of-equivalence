@@ -90,8 +90,8 @@ void initHW(int argc, char** argv) {
     itemsInMap = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
     map = (uint8_t *) allocMem(MAP_SIZE * MAP_SIZE * sizeof(uint8_t *), GENERAL_MEMORY, 1);
 
-#ifndef CD32
-    initFileReader("base.pfs");
+#ifdef MAEMO22
+    initFileReader("/usr/share/tragedy/base.pfs");
 #else
     initFileReader("base.pfs");
 #endif
