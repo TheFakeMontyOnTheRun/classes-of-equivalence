@@ -109,8 +109,8 @@ enum EGameMenuState handleCursor(const int x,
                                  const enum EGameMenuState* options,
                                  uint8_t optionsCount, const enum ECommand cmd, enum
                                  EGameMenuState backState) {
-
-    for (int c = 0; c < optionsCount; ++c) {
+    int c;
+    for (c = 0; c < optionsCount; ++c) {
         size_t len = strlen(&optionsStr[c][0]);
 
         if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
