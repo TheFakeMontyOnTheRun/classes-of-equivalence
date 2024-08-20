@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "pt.b13h.equivalencegles2"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "pt.b13h.equivalencegles2"
         minSdk = 22
-        targetSdk = 34
+        targetSdk = 35  
         versionCode = 1
         versionName = "1.0"
 
