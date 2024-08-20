@@ -115,7 +115,11 @@ enum EGameMenuState handleCursor(const int x,
 
         if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
             if (c == cursorPosition) {
-                return options[c];
+                if (options == NULL) {
+                    return c;
+                } else {
+                    return options[c];
+                }
             } else {
                 cursorPosition = c;
             }
