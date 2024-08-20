@@ -229,6 +229,7 @@ void handleSystemEvents(void) {
 }
 
 void graphicsShutdown(void) {
+    SDL_FreeSurface(stretchedBuffer);
     SDL_Quit();
 
     releaseBitmap(defaultFont);
