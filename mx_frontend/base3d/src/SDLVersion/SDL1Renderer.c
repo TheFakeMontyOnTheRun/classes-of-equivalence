@@ -55,6 +55,7 @@ void graphicsInit(void) {
     SDL_Init(SDL_INIT_EVERYTHING);
 #ifdef MAEMO22
     video = SDL_SetVideoMode(800, 480, 16, SDL_FULLSCREEN);
+    SDL_ShowCursor(SDL_DISABLE);
 #else
     video = SDL_SetVideoMode(320, 240, 32, 0);
 #endif
