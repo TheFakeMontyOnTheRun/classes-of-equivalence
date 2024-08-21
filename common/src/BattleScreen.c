@@ -115,6 +115,196 @@ int8_t monsterAttacking = -1;
 uint8_t roundsWithTies = 0;
 uint8_t currentCharacter = 0;
 
+int canCastSpecial(int characterIndex) {
+  if (( party[characterIndex].specialStype == kNone ||
+	party[characterIndex].energy < 4)) {
+    return 0;
+  }
+
+  return 1;
+}
+
+void skipToNextValidCharacter(void) {
+  currentCharacter++;
+  /* skipping dead or absent characters */
+  while (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
+	 (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
+    currentCharacter++;
+  }
+}
+
+enum EGameMenuState prepareNextTurn(void) {
+  int c;
+  int totalDamage = 0;
+  currentCharacter = batteCharacterOrder = 0;
+  currentBattleState = kAttackPhase;
+  
+  /* Reset battle order to be selected later */
+  for (c = 0; c < (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY); ++c) {
+    battleOrder[c] = 0;
+    battleDamages[c] = 0;
+  }
+  
+  /* Selecting targets */
+  for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
+    if (monsterHP[c] > 0) {
+      int hero;
+      /* If Nico is in the party and alive, he's the target */
+      if (party[4].inParty && party[4].hp > 0) {
+	hero = 4;
+      } else {
+	do {
+	  hero = nextRandomInteger() % TOTAL_CHARACTERS_IN_PARTY;
+	} while (party[hero].hp == 0 || !party[hero].inParty);
+      }
+      
+      battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = hero;
+      battleActions[c + TOTAL_CHARACTERS_IN_PARTY] = kAttack;
+    }
+  }
+  
+  for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
+    if (battleActions[c] == kAttack) {
+      int monster;
+      do {
+	monster =  TOTAL_CHARACTERS_IN_PARTY + (nextRandomInteger() % (TOTAL_MONSTER_COUNT));
+      } while ( monsterHP[monster - TOTAL_CHARACTERS_IN_PARTY] == 0);
+      
+      battleTargets[c] = monster;
+    }
+  }
+  
+  /* Compute damages */
+  
+  for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
+    /* If Nick is alive, you deal no damage */
+    if (party[4].inParty && party[4].hp > 0) {
+      battleDamages[c] = 0;
+    } else if (party[c].inParty && party[c].hp > 0) {
+      if (battleActions[c] == kAttack) {
+	int monsterTargetted = battleTargets[c];
+	int attack = (nextRandomInteger() % party[c].attack);
+	int agil1 = party[c].agility;
+	int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
+	int diffAgility = 1 + abs( agil1 - agil2);
+	int roll = nextRandomInteger();
+	int hit = roll % diffAgility;
+	int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
+	int calc = attack - ((hit == 0) ? 0 : defense);
+	battleDamages[c] = max(0, calc * party[c].level);
+	totalDamage += battleDamages[c];
+      } else if (battleActions[c] == kSpecial) {
+	int wisdom = party[c].wisdom;
+	int roll = nextRandomInteger();
+	int hit = roll % wisdom;
+	battleDamages[c] = hit * party[c].level;
+	totalDamage += battleDamages[c];
+	battleTargets[c] = 0;
+      } else {
+	battleDamages[c] = 0;
+      }
+    } else {
+      battleDamages[c] = 0;
+    }
+  }
+  
+  for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
+    /* If Nico is alive, all damage goes to him */
+    if (party[4].inParty && party[4].hp > 0) {
+      battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = party[4].hp;
+      battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 4;
+    } else if (monsterHP[c] > 0){
+      if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
+	int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
+	int attack = (nextRandomInteger() % monsterArchetypes[monsterType[c]].attack);
+	int agil1 = party[heroTargetted].agility;
+	int agil2 = monsterArchetypes[monsterType[c]].agility;
+	int diffAgility = 1 + abs( agil1 - agil2 );
+	int roll = nextRandomInteger();
+	int hit = roll % diffAgility;
+	int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
+	int calc = attack - ((hit == 0) ? 0 : defense);
+	battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
+	totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
+      } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
+	int wisdom = monsterArchetypes[monsterType[c]].wisdom;
+	int roll = nextRandomInteger();
+	int hit = roll % wisdom;
+	battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
+	totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
+	battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+      } else {
+	battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+      }
+    } else {
+      battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
+    }
+  }
+  
+  if (totalDamage == 0 ) {
+    ++roundsWithTies;
+  } else {
+    roundsWithTies = 0;
+  }
+
+  if (roundsWithTies >= kMaxRoundsWithTies ) {
+    initRoom(getPlayerRoom());
+    return kEnemiesFledBattle;
+  }
+
+  battleOrder[currentCharacter] = 1;
+  animationTimer = kBattleAnimationInterval;
+
+  return kResumeCurrentState;
+}
+
+
+enum EGameMenuState isBattleFinished(void) {
+  if (aliveHeroes == 0) {
+    return kBadGameOverEpilogue;
+  }
+  
+  if (aliveMonsters == 0) {
+    if (getPlayerRoom() == 22) {
+      return kGoodVictoryEpilogue;
+    } else {
+      return kBattleResultScreen;
+    }
+  }
+
+  return kResumeCurrentState;
+}
+
+void createRandomOrderForBattle(void) {
+  if (party[4].inParty && party[4].hp > 0 ) {
+    int m;
+    /* Force giving priority to monsters, so they can kill Nico */
+    for (m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
+      if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] == 0 && monsterHP[m] > 0) {
+	currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
+	goto done_selecting_monster;
+      }
+    }
+    
+    do {
+      currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+    } while( battleOrder[currentCharacter] != 0 );
+    
+  done_selecting_monster:
+    m = 0;
+    
+  } else {
+    
+    do {
+      currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
+    } while( battleOrder[currentCharacter] != 0 &&
+	     (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY ?
+	      monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0 :
+	      (party[currentCharacter].inParty && party[currentCharacter].hp > 0))
+	     );
+  } 
+}
+
 void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     int c, d;
     (void) tag;
@@ -442,53 +632,21 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
             batteCharacterOrder++;
-
-            if (party[4].inParty && party[4].hp > 0 ) {
-            	int m;
-                /* Force giving priority to monsters, so they can kill Nico */
-                for (m = 0; m < TOTAL_MONSTER_COUNT; ++m) {
-                    if (battleOrder[TOTAL_CHARACTERS_IN_PARTY + m] == 0 && monsterHP[m] > 0) {
-                        currentCharacter = TOTAL_CHARACTERS_IN_PARTY + m;
-                        goto done_selecting_monster;
-                    }
-                }
-
-                do {
-                    currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
-                } while( battleOrder[currentCharacter] != 0 );
-
-            done_selecting_monster:
-                splatMonster = -1;
-                monsterAttacking = -1;
-
-            } else {
-
-                do {
-                    currentCharacter = nextRandomInteger() % (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY);
-                } while( battleOrder[currentCharacter] != 0 &&
-                        (currentCharacter >= TOTAL_CHARACTERS_IN_PARTY ?
-                        monsterHP[currentCharacter - TOTAL_CHARACTERS_IN_PARTY] > 0 :
-                        (party[currentCharacter].inParty && party[currentCharacter].hp > 0))
-                        );
-            }
+	    splatMonster = -1;
+	    monsterAttacking = -1;
+	    createRandomOrderForBattle();
 
             battleOrder[currentCharacter] = 1;
 
             if (batteCharacterOrder == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
+	      enum EGameMenuState battleSituation;
                 currentCharacter = batteCharacterOrder = 0;
                 currentBattleState = kPlayerSelectingMoves;
 
-                if (aliveHeroes == 0) {
-                    return kBadGameOverEpilogue;
-                }
-
-                if (aliveMonsters == 0) {
-                    if (getPlayerRoom() == 22) {
-                        return kGoodVictoryEpilogue;
-                    } else {
-                        return kBattleResultScreen;
-                    }
-                }
+		battleSituation = isBattleFinished();
+		if (battleSituation != kResumeCurrentState) {
+		  return battleSituation;
+		}		
             }
         }
     }
@@ -511,8 +669,7 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
             case kCommandFire1:
                 /* No energy for special or no special? Nothing happens */
                 if (cursorPosition == kSpecial &&
-                    ( party[currentCharacter].specialStype == kNone ||
-                      party[currentCharacter].energy < 4)) {
+		    !canCastSpecial(currentCharacter)) {
                     return kResumeCurrentState;
                 }
 
@@ -520,136 +677,15 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
                 battleActions[currentCharacter] = cursorPosition;
 
-                currentCharacter++;
                 cursorPosition = 0;
 
-                /* skipping dead or absent characters */
-                while (currentCharacter < (TOTAL_CHARACTERS_IN_PARTY) &&
-                    (!party[currentCharacter].inParty || party[currentCharacter].hp == 0)) {
-                    currentCharacter++;
-                }
+		skipToNextValidCharacter();
 
                 if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
-                    int c;
-                    int totalDamage = 0;
-                    currentCharacter = batteCharacterOrder = 0;
-                    currentBattleState = kAttackPhase;
-
-                    /* Reset battle order to be selected later */
-                    for (c = 0; c < (TOTAL_MONSTER_COUNT + TOTAL_CHARACTERS_IN_PARTY); ++c) {
-                        battleOrder[c] = 0;
-                        battleDamages[c] = 0;
-                    }
-
-                    /* Selecting targets */
-                    for (c = 0; c < (TOTAL_MONSTER_COUNT); ++c) {
-                        if (monsterHP[c] > 0) {
-                            int hero;
-                            /* If Nico is in the party and alive, he's the target */
-                            if (party[4].inParty && party[4].hp > 0) {
-                                hero = 4;
-                            } else {
-                                do {
-                                    hero = nextRandomInteger() % TOTAL_CHARACTERS_IN_PARTY;
-                                } while (party[hero].hp == 0 || !party[hero].inParty);
-                            }
-
-                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = hero;
-                            battleActions[c + TOTAL_CHARACTERS_IN_PARTY] = kAttack;
-                        }
-                    }
-
-                    for (c = 0; c < (TOTAL_CHARACTERS_IN_PARTY); ++c) {
-                        if (battleActions[c] == kAttack) {
-                            int monster;
-                            do {
-                                monster =  TOTAL_CHARACTERS_IN_PARTY + (nextRandomInteger() % (TOTAL_MONSTER_COUNT));
-                            } while ( monsterHP[monster - TOTAL_CHARACTERS_IN_PARTY] == 0);
-
-                            battleTargets[c] = monster;
-                        }
-                    }
-
-                    /* Compute damages */
-
-                    for (c = 0; c < TOTAL_CHARACTERS_IN_PARTY; ++c) {
-                        /* If Nick is alive, you deal no damage */
-                        if (party[4].inParty && party[4].hp > 0) {
-                            battleDamages[c] = 0;
-                        } else if (party[c].inParty && party[c].hp > 0) {
-                            if (battleActions[c] == kAttack) {
-                                int monsterTargetted = battleTargets[c];
-                                int attack = (nextRandomInteger() % party[c].attack);
-                                int agil1 = party[c].agility;
-                                int agil2 = monsterArchetypes[monsterType[monsterTargetted]].agility;
-                                int diffAgility = 1 + abs( agil1 - agil2);
-                                int roll = nextRandomInteger();
-                                int hit = roll % diffAgility;
-                                int defense = ((battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kDefend) ? 2 : 1) *  monsterArchetypes[monsterType[monsterTargetted]].defense;
-                                int calc = attack - ((hit == 0) ? 0 : defense);
-                                battleDamages[c] = max(0, calc * party[c].level);
-                                totalDamage += battleDamages[c];
-                            } else if (battleActions[c] == kSpecial) {
-                                int wisdom = party[c].wisdom;
-                                int roll = nextRandomInteger();
-                                int hit = roll % wisdom;
-                                battleDamages[c] = hit * party[c].level;
-                                totalDamage += battleDamages[c];
-                                battleTargets[c] = 0;
-                            } else {
-                                battleDamages[c] = 0;
-                            }
-                        } else {
-                            battleDamages[c] = 0;
-                        }
-                    }
-
-                    for (c = 0; c < TOTAL_MONSTER_COUNT; ++c) {
-                        /* If Nico is alive, all damage goes to him */
-                        if (party[4].inParty && party[4].hp > 0) {
-                            battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = party[4].hp;
-                            battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 4;
-                        } else if (monsterHP[c] > 0){
-                            if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kAttack) {
-                                int heroTargetted = battleTargets[c + TOTAL_CHARACTERS_IN_PARTY];
-                                int attack = (nextRandomInteger() % monsterArchetypes[monsterType[c]].attack);
-                                int agil1 = party[heroTargetted].agility;
-                                int agil2 = monsterArchetypes[monsterType[c]].agility;
-                                int diffAgility = 1 + abs( agil1 - agil2 );
-                                int roll = nextRandomInteger();
-                                int hit = roll % diffAgility;
-                                int defense = ((battleActions[c] == kDefend) ? 2 : 1) *  party[heroTargetted].defense;
-                                int calc = attack - ((hit == 0) ? 0 : defense);
-                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = max(0, calc);
-                                totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
-                            } else if (battleActions[c + TOTAL_CHARACTERS_IN_PARTY] == kSpecial) {
-                                int wisdom = monsterArchetypes[monsterType[c]].wisdom;
-                                int roll = nextRandomInteger();
-                                int hit = roll % wisdom;
-                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = hit;
-                                totalDamage += battleDamages[c + TOTAL_CHARACTERS_IN_PARTY];
-                                battleTargets[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
-                            } else {
-                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
-                            }
-                        } else {
-                                battleDamages[c + TOTAL_CHARACTERS_IN_PARTY] = 0;
-                        }
-                    }
-
-                    if (totalDamage == 0 ) {
-                        ++roundsWithTies;
-                    } else {
-                        roundsWithTies = 0;
-                    }
-
-                    if (roundsWithTies >= kMaxRoundsWithTies ) {
-                        initRoom(getPlayerRoom());
-                        return kEnemiesFledBattle;
-                    }
-
-                    battleOrder[currentCharacter] = 1;
-                    animationTimer = kBattleAnimationInterval;
+		  enum EGameMenuState nextTurn = prepareNextTurn();
+		  if (nextTurn != kResumeCurrentState) {
+		    return nextTurn;
+		  }
                 }
                 break;
 
