@@ -106,7 +106,7 @@ uint8_t battleOrder[TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT];
 
 enum EBattleStates currentBattleState;
 
-uint8_t batteCharacterOrder = 0;
+uint8_t battleCharacterOrder = 0;
 uint8_t monsterTypeOffset = 0;
 int32_t animationTimer = 0;
 uint8_t monstersPresent = 0;
@@ -138,7 +138,7 @@ void skipToNextValidCharacter(void) {
 enum EGameMenuState prepareNextTurn(void) {
     int c;
     int totalDamage = 0;
-    currentCharacter = batteCharacterOrder = 0;
+    currentCharacter = battleCharacterOrder = 0;
     currentBattleState = kAttackPhase;
 
     /* Reset battle order to be selected later */
@@ -316,7 +316,7 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     (void) tag;
     cursorPosition = 0;
     needsToRedrawVisibleMeshes = 0;
-    batteCharacterOrder = 0;
+    battleCharacterOrder = 0;
     monsterTypeOffset = 0;
     animationTimer = 0;
     monstersPresent = 0;
@@ -650,16 +650,16 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
         if (animationTimer < 0) {
             animationTimer = kBattleAnimationInterval;
-            batteCharacterOrder++;
+            battleCharacterOrder++;
             splatMonster = -1;
             monsterAttacking = -1;
             createRandomOrderForBattle();
 
             battleOrder[currentCharacter] = 1;
 
-            if (batteCharacterOrder == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
+            if (battleCharacterOrder == (TOTAL_CHARACTERS_IN_PARTY + TOTAL_MONSTER_COUNT)) {
                 enum EGameMenuState battleSituation;
-                currentCharacter = batteCharacterOrder = 0;
+                currentCharacter = battleCharacterOrder = 0;
                 currentBattleState = kPlayerSelectingMoves;
 
                 battleSituation = isBattleFinished();
