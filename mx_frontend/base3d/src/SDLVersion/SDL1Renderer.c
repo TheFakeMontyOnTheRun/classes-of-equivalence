@@ -83,6 +83,8 @@ void graphicsInit(void) {
     stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
                                            video->format->Bmask, video->format->Amask);
 #endif
+    SDL_EnableKeyRepeat(256, 256);
+    SDL_WM_SetCaption("Sub Mare Imperium: Tragedy of the Uncanny", NULL);
 }
 
 void handleSystemEvents(void) {
@@ -321,9 +323,8 @@ void flipRenderer(void) {
     }
 
     SDL_UnlockSurface(stretchedBuffer);
-    SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
     SDL_BlitSurface(stretchedBuffer, NULL, video, NULL);
-    
+    memset(framebuffer, getPaletteEntry(0xFF000000), XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     SDL_Flip(video);
 #ifndef __EMSCRIPTEN__
     SDL_Delay(1000 / 60);
