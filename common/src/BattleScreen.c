@@ -671,45 +671,53 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
     }
 
     if (currentBattleState == kPlayerSelectingMoves) {
-
-        switch (cmd) {
-            case kCommandUp:
-                if (cursorPosition > 0) {
-                    cursorPosition--;
-                    firstFrameOnCurrentState = 1;
+        int action;
+        
+        if (party[currentCharacter].specialStype == kNone) {
+            
+            action = handleCursor(
+                                  0,
+                                  (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                                  9 + 2,
+                                  kDummyBattleOptionsCount + 2,
+                                  BattleScreen_optionsNoSpecial,
+                                  NULL,
+                                  kDummyBattleOptionsCount,
+                                  cmd,
+                                  kResumeCurrentState);
+        } else {
+            action = handleCursor(
+                                  0,
+                                  (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
+                                  9 + 2,
+                                  kDummyBattleOptionsCount + 2,
+                                  BattleScreen_options,
+                                  NULL,
+                                  kDummyBattleOptionsCount,
+                                  cmd,
+                                  kResumeCurrentState);
+        }
+        
+        
+        /* No energy for special or no special? Nothing happens */
+        if (action == kSpecial &&
+            !canCastSpecial(currentCharacter)) {
+            return kResumeCurrentState;
+        } else if (action != kResumeCurrentState ){
+            firstFrameOnCurrentState = 1;
+            
+            battleActions[currentCharacter] = action;
+            
+            cursorPosition = 0;
+            
+            skipToNextValidCharacter();
+            
+            if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
+                enum EGameMenuState nextTurn = prepareNextTurn();
+                if (nextTurn != kResumeCurrentState) {
+                    return nextTurn;
                 }
-                break;
-            case kCommandDown:
-                if (cursorPosition < kDummyBattleOptionsCount) {
-                    cursorPosition++;
-                    firstFrameOnCurrentState = 1;
-                }
-                break;
-            case kCommandFire1:
-                /* No energy for special or no special? Nothing happens */
-                if (cursorPosition == kSpecial &&
-                    !canCastSpecial(currentCharacter)) {
-                    return kResumeCurrentState;
-                }
-
-                firstFrameOnCurrentState = 1;
-
-                battleActions[currentCharacter] = cursorPosition;
-
-                cursorPosition = 0;
-
-                skipToNextValidCharacter();
-
-                if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
-                    enum EGameMenuState nextTurn = prepareNextTurn();
-                    if (nextTurn != kResumeCurrentState) {
-                        return nextTurn;
-                    }
-                }
-                break;
-
-            default:
-                break;
+            }
         }
     }
 

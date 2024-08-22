@@ -140,7 +140,11 @@ enum EGameMenuState handleCursor(const int x,
         case kCommandFire1:
         case kCommandFire2:
         case kCommandFire3:
-            return options[cursorPosition];
+            if (options == NULL) {
+                return cursorPosition;
+            } else {
+                return options[cursorPosition];
+            }
     }
 
     if (cursorPosition >= optionsCount) {
