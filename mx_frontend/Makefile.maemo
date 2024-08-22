@@ -55,7 +55,7 @@ menudata: packager
 	ls res/*.*  | xargs ./packer
 	mv ./data.pfs ./menu.pfs
 
-dist: clean all
+dist:
 	make -p maemo/usr/bin
 	cp game maemo/usr/bin/tragedy
 	sudo dpkg-deb -Zgzip -b maemo tragedy-0.9.deb
