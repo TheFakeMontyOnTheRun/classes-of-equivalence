@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=0.9
+Encoding=UTF-8
+Name=Tragedy of the Uncanny
+Type=Application
+Exec=/usr/bin/tragedy
+Icon=/usr/share/pixmaps/tragedy.png
+X-Window-Icon=tragedy
+X-Window-Icon-Dimmed=tragedy
+StartupWMClass=tragedy
+X-Osso-Type=application/x-executable
+Terminal=false
+Categories=Game;
+
