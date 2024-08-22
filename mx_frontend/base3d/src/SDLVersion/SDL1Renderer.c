@@ -53,7 +53,12 @@ void graphicsInit(void) {
     int r, g, b, c;
 
     SDL_Init(SDL_INIT_EVERYTHING);
+#ifdef MAEMO22
+    video = SDL_SetVideoMode(800, 480, 16, SDL_FULLSCREEN);
+    SDL_ShowCursor(SDL_DISABLE);
+#else
     video = SDL_SetVideoMode(320, 240, 32, 0);
+#endif
     for (r = 0; r < 256; r += 16) {
         for (g = 0; g < 256; g += 8) {
             for (b = 0; b < 256; b += 8) {
@@ -71,9 +76,15 @@ void graphicsInit(void) {
 #endif
     defaultFont = loadBitmap("font.img");
     enableSmoothMovement = TRUE;
-
+#ifdef MAEMO22
+    stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 800, 480, 16, video->format->Rmask, video->format->Gmask,
+                                           video->format->Bmask, video->format->Amask);
+#else
     stretchedBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, video->format->Rmask, video->format->Gmask,
                                            video->format->Bmask, video->format->Amask);
+#endif
+    SDL_EnableKeyRepeat(256, 256);
+    SDL_WM_SetCaption("Sub Mare Imperium: Tragedy of the Uncanny", NULL);
 }
 
 void handleSystemEvents(void) {
@@ -86,6 +97,20 @@ void handleSystemEvents(void) {
             return;
         }
 #endif
+        
+
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            int x, y;
+            SDL_GetMouseState(&x , &y);
+#ifdef MAEMO22
+            pointerClickPositionX = (x / 2) / 8;
+            pointerClickPositionY = (((y / 2) * 200) / 240 ) / 8;
+#else
+            pointerClickPositionX = (x) / 8;
+            pointerClickPositionY = (((y * 200 ) / 240 )) / 8;
+#endif
+        }
+
         if (event.type == SDL_KEYDOWN) {
 
             SDLKey key = event.key.keysym.sym;
@@ -130,6 +155,7 @@ void handleSystemEvents(void) {
             switch (key) {
                 case SDLK_RETURN:
                 case SDLK_z:
+	        case SDLK_F4:
                     mBufferedCommand = kCommandFire1;
                     visibilityCached = FALSE;
                     needsToRedrawVisibleMeshes = TRUE;
@@ -207,6 +233,7 @@ void handleSystemEvents(void) {
 }
 
 void graphicsShutdown(void) {
+    SDL_FreeSurface(stretchedBuffer);
     SDL_Quit();
 
     releaseBitmap(defaultFont);
@@ -223,7 +250,13 @@ void flipRenderer(void) {
     int heightY = 1;
 
     uint8_t *src;
+
+#ifdef MAEMO22
+    uint16_t *dst;
+#else
     uint32_t *dst;
+#endif
+    
 
     uint8_t newFrame[XRES_FRAMEBUFFER * YRES_FRAMEBUFFER];
 
@@ -235,38 +268,63 @@ void flipRenderer(void) {
 
     for (y = 0; y < YRES_FRAMEBUFFER; ++y) {
         int chunky;
-
+#ifdef MAEMO22
+        if (scaller == 4) {
+            heightY = 4;
+        } else {
+            heightY = 2;
+        }
+#else
         if (scaller == 4) {
             heightY = 2;
         } else {
             heightY = 1;
         }
-
+#endif
 
         for (chunky = 0; chunky < heightY; ++chunky) {
+#ifdef MAEMO22
+	    uint16_t fragment;
+            dst = (uint16_t *) stretchedBuffer->pixels;
+            src = &newFrame[(XRES_FRAMEBUFFER * y)];
+            dst += (800 * (dstY + chunky));
+#else
             dst = (uint32_t *) stretchedBuffer->pixels;
             src = &newFrame[(XRES_FRAMEBUFFER * y)];
             dst += (XRES_FRAMEBUFFER * (dstY + chunky));
+#endif
 
             for (x = 0; x < XRES_FRAMEBUFFER; ++x) {
+#ifdef MAEMO22
+		uint16_t fragment = palette[*src++];
+		*dst++ = fragment;
+	        *dst++ = fragment;
+#else
                 *dst++ = palette[*src++];
+#endif
             }
         }
-
+#ifdef MAEMO22
+        dstY+=2;
+#else
         dstY++;
+#endif
         scaller++;
 
 
         if (scaller == 5) {
             scaller = 0;
-            dstY++;
+#ifdef MAEMO22
+        dstY+=2;
+#else
+        dstY++;
+#endif
         }
     }
 
     SDL_UnlockSurface(stretchedBuffer);
-    SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
     SDL_BlitSurface(stretchedBuffer, NULL, video, NULL);
-
+    memset(framebuffer, getPaletteEntry(0xFF000000), XRES_FRAMEBUFFER * YRES_FRAMEBUFFER);
     SDL_Flip(video);
 #ifndef __EMSCRIPTEN__
     SDL_Delay(1000 / 60);

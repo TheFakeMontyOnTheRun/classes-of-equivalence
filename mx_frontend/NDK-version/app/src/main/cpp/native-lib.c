@@ -143,7 +143,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
     srand(time(NULL));
     initHW(0, NULL);
     enableSmoothMovement = TRUE;
-    enterState(kPlayGame);
+    enterState(kMainMenu);
 }
 
 JNIEXPORT void JNICALL
@@ -233,4 +233,21 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_sendCommand(JNIEnv *env, jclass claz
             mBufferedCommand = kCommandStrafeRight;
             break;
     }
+}
+
+JNIEXPORT void JNICALL
+Java_pt_b13h_spacetrashmanblues_DerelictJNI_setTouchCoords(JNIEnv *env, jclass clazz,
+                                                           jfloat multiplier, jint size_x,
+                                                           jint size_y, jint pointX,
+                                                           jint pointY) {
+
+    float marginsWidth = (size_x - (XRES_FRAMEBUFFER * multiplier)) / 2.0f;
+    float marginsHeight = (size_y - (YRES_FRAMEBUFFER * multiplier * 1.2f )) / 2.0f;
+
+    float effectiveSizeWidth = size_x - (2.0f * marginsWidth);
+    float effectiveSizeHeight = size_y - (2.0f * marginsHeight);
+
+    pointerClickPositionX = ((pointX - marginsWidth) / ( effectiveSizeWidth / XRES_FRAMEBUFFER) ) / 8;
+    pointerClickPositionY = (((pointY - marginsHeight) / ( effectiveSizeHeight / YRES_FRAMEBUFFER ) )) / 8;
+    multiplier = 0;
 }

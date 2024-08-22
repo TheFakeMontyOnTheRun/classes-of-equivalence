@@ -46,6 +46,8 @@
 
 #define STANDARD_HEIGHT (Div(intToFix(180), intToFix(100)))
 
+int pointerClickPositionX = -1;
+int pointerClickPositionY = -1;
 
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;

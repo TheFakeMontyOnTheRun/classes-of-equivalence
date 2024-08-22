@@ -117,3 +117,4 @@ gl_frontend/build/derelict64.elf
 gl_frontend/build/derelict64.elf.stripped
 gl_frontend/build/derelict64.elf.sym
 gl_frontend/build/derelict64.map
+game

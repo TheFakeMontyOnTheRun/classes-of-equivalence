@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sub Mare Imperium - Classes of Equivalence (Software Renderer)"
+rootProject.name = "Sub Mare Imperium - Tragedy of the Uncanny (Software Renderer)"
 include(":app")

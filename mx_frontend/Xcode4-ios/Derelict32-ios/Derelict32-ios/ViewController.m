@@ -171,6 +171,21 @@ void shutdownHW(void) {
     CGColorSpaceRelease(rgb);
 }
 
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView: playField];
+    CGSize margins;
+    CGSize effectiveSize;
+
+    margins.width = (playField.bounds.size.width - (XRES_FRAMEBUFFER * multiplier)) / 2.0f;
+    margins.height = (playField.bounds.size.height - (YRES_FRAMEBUFFER * multiplier * 1.2f )) / 2.0f;
+
+    effectiveSize.width = playField.bounds.size.width - (2.0f * margins.width);
+    effectiveSize.height = playField.bounds.size.height - (2.0f * margins.height);
+
+    pointerClickPositionX = ((point.x - margins.width) / ( effectiveSize.width / XRES_FRAMEBUFFER) ) / 8;
+    pointerClickPositionY = (((point.y - margins.height) / ( effectiveSize.height / YRES_FRAMEBUFFER ) )) / 8;
+}
 
 - ( void ) draw {
     UIGraphicsBeginImageContext( playField.frame.size);
@@ -267,10 +282,11 @@ void shutdownHW(void) {
     mFont = loadBitmap("font.img");
     defaultFont = mFont;
 
-    enterState(kPlayGame);
+    enterState(kMainMenu);
     
     menuTick(50);
     [self initTimer];
+    [playField setMultipleTouchEnabled: NO];
 }
 
 - (void)didReceiveMemoryWarning

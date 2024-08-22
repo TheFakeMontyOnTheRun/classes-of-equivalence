@@ -22,6 +22,8 @@
 #include "UI.h"
 #include "Engine.h"
 
+int pointerClickPositionX = -1;
+int pointerClickPositionY = -1;
 int visibilityCached = FALSE;
 int needsToRedrawVisibleMeshes = TRUE;
 uint8_t texturesUsed = 0;

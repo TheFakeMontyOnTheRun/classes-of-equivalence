@@ -3409,7 +3409,13 @@ void MainMenu_repaintCallback(void) {
 
 enum EGameMenuState MainMenu_tickCallback(enum ECommand cmd, void *data) {
     (void)data;
-    return handleCursor(&MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
+
+    return handleCursor((XRES_FRAMEBUFFER / 8) - (int) 9 - 6,
+                        (YRES_FRAMEBUFFER / 8) - 4 - kMainMenuOptionsCount,
+                        9 + 4,
+                        kMainMenuOptionsCount + 2,
+                        &MainMenu_options[0],
+                        &MainMenu_nextStateNavigation[0], kMainMenuOptionsCount, cmd, kResumeCurrentState);
 }
 
 void MainMenu_unloadStateCallback(enum EGameMenuState newState) {

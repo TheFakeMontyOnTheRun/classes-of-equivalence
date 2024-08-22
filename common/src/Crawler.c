@@ -384,48 +384,28 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
 
     if (showPromptToAbandonMission) {
-
-        switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
-            case kCommandUp:
-                timeUntilNextState = 1000;
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                --cursorPosition;
-                break;
-            case kCommandDown:
-                timeUntilNextState = 1000;
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                ++cursorPosition;
-                break;
-            case kCommandFire1:
-            case kCommandFire2:
-            case kCommandFire3:
-
-                if (cursorPosition == 0) {
-                    showPromptToAbandonMission = FALSE;
-                    needsToRedrawVisibleMeshes = TRUE;
-                    return kResumeCurrentState;
-                }
-                timeUntilNextState = 1000;
-                return AbandonMission_navigation[cursorPosition];
+        int option = handleCursor((XRES_FRAMEBUFFER / 8) - biggestOption - 4,
+                              ((YRES_FRAMEBUFFER / 8) + 1) - (AbandonMission_count) - 4,
+                              biggestOption + 2,
+                              AbandonMission_count + 2,
+                              AbandonMission_options,
+                              NULL,
+                              AbandonMission_count,
+                              cmd,
+                              0);
+        
+        if (option == 0) {
+            showPromptToAbandonMission = FALSE;
+            needsToRedrawVisibleMeshes = TRUE;
+            return kResumeCurrentState;
+        } else if (option != kResumeCurrentState){
+            timeUntilNextState = 1000;
+            return AbandonMission_navigation[option];
         }
-
-        if (cursorPosition >= AbandonMission_count) {
-            cursorPosition = AbandonMission_count - 1;
-        }
-
-        if (cursorPosition < 0) {
-            cursorPosition = 0;
-        }
-
-        return kResumeCurrentState;
     }
 
     if (drawActionsWindow) {
         switch (cmd) {
-            case kCommandBack:
-                return kMainMenu;
             case kCommandUp:
                 timeUntilNextState = 1000;
                 playSound(MENU_SELECTION_CHANGE_SOUND);
@@ -437,16 +417,17 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
                 ++cursorPosition;
                 break;
 	    case kCommandFire2:
-        case kCommandLeft:
+	    case kCommandBack:
+            case kCommandLeft:
                 if (selectedAction != 0xFF) {
                     selectedAction = 0xFF;
                 } else {
                     drawActionsWindow = 0;
                 }
   	        break;
-        case kCommandFire1:
-        case kCommandRight:
-            {
+            case kCommandFire1:
+            case kCommandRight: {
+
                 char cmdBuffer[256];
                 struct Item *item;
                 needsToRedrawVisibleMeshes = TRUE;

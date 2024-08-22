@@ -25,6 +25,22 @@
 #include "UI.h"
 #include "SoundSystem.h"
 
+
+int pointerInsideRect (int x, int y, int dx, int dy) {
+    int offsettedX = pointerClickPositionX - (x / 8);
+    int offsettedY = pointerClickPositionY - (y / 8);
+
+    if (pointerClickPositionX == -1) {
+        return 0;
+    }
+
+    if (offsettedX >= 0 && offsettedY >= 0 && offsettedX < (dx / 8)  && offsettedY < (dy / 8)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 void
 drawWindowWithOptions(const int x,
                       const int y,
@@ -85,7 +101,30 @@ drawTextWindow(const int x, const int y, const unsigned int dx, const unsigned i
     drawTextAtWithMargin( x + 1, y + 2, ( 1 + x + dx) * 8, content, getPaletteEntry(0xFFFFFFFF));
 }
 
-enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t optionsCount, const enum ECommand cmd, enum EGameMenuState backState) {
+enum EGameMenuState handleCursor(const int x,
+                                 const int y,
+                                 const unsigned int dx,
+                                 const unsigned int dy,
+                                 const char **optionsStr,
+                                 const enum EGameMenuState* options,
+                                 uint8_t optionsCount, const enum ECommand cmd, enum
+                                 EGameMenuState backState) {
+    int c;
+    for (c = 0; c < optionsCount; ++c) {
+        size_t len = strlen(&optionsStr[c][0]);
+
+        if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
+            if (c == cursorPosition) {
+                if (options == NULL) {
+                    return c;
+                } else {
+                    return options[c];
+                }
+            } else {
+                cursorPosition = c;
+            }
+        }
+    }
 
     switch (cmd) {
         case kCommandBack:
@@ -101,7 +140,11 @@ enum EGameMenuState handleCursor(const enum EGameMenuState* options, uint8_t opt
         case kCommandFire1:
         case kCommandFire2:
         case kCommandFire3:
-            return options[cursorPosition];
+            if (options == NULL) {
+                return cursorPosition;
+            } else {
+                return options[cursorPosition];
+            }
     }
 
     if (cursorPosition >= optionsCount) {

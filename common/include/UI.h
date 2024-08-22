@@ -32,10 +32,15 @@ int drawAppearingWindow(const int x, const int y, const unsigned int dx, const u
 
 void updateMap(void);
 
-enum EGameMenuState handleCursor(const enum EGameMenuState* options,
-				 uint8_t optionsCount,
-				 const enum ECommand cmd,
-				 enum EGameMenuState backState);
+enum EGameMenuState handleCursor(const int x,
+                                 const int y,
+                                 const unsigned int dx,
+                                 const unsigned int dy,
+                                 const char **optionsStr,
+                                 const enum EGameMenuState* options,
+                                 uint8_t optionsCount,
+                                 const enum ECommand cmd,
+                                 enum EGameMenuState backState);
 
 void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t *shapes);
 
@@ -44,5 +49,7 @@ extern int8_t cursorPosition;
 void clearScreen(void);
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour);
+
+int pointerInsideRect (int x, int y, int dx, int dy);
 
 #endif /*UI_H*/

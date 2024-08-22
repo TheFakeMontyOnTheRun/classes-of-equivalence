@@ -49,12 +49,18 @@ void HelpScreen_repaintCallback(void) {
     drawWindowWithOptions((XRES_FRAMEBUFFER / 8) - 4 - 4,
                           ((YRES_FRAMEBUFFER / 8) + 1) - 1 - 5,
                           4 + 2,
-                          1 + 2, "Help", HelpScreen_options, 1, cursorPosition);
+                          1 + 2,
+                          "Help", HelpScreen_options, 1, cursorPosition);
 }
 
 enum EGameMenuState HelpScreen_tickCallback(enum ECommand cmd, void* data) {
     (void)data;
-    return handleCursor(HelpScreen_nextStateNavigation, 1, cmd, kMainMenu);
+    return handleCursor((XRES_FRAMEBUFFER / 8) - 4 - 4,
+                        ((YRES_FRAMEBUFFER / 8) + 1) - 1 - 5,
+                        4 + 2,
+                        1 + 2,
+                        &HelpScreen_options[0],
+                        HelpScreen_nextStateNavigation, 1, cmd, kMainMenu);
 }
 
 void HelpScreen_unloadStateCallback(enum EGameMenuState newState) {

@@ -1,0 +1,15 @@
+Package: tragedy
+Version: 1.0
+Section: user/games
+Priority: optional
+Architecture: armel
+Pre-Depends: maemo-select-menu-location
+Depends:
+Installed-Size: 420
+Maintainer: Daniel Monteiro <monteiroquiet@gmail.com>
+Description: A classic first person exploratory RPG with turn-based combat
+Maemo-Icon-26: 
+   iVBORw0KGgoAAAANSUhEUgAAABoAAAAaAgMAAADUJKRdAAAACVBMVEUhISFrXjDCq1WbHdslAAAA
+  SklEQVQI12PQdGAAA82sVUCwAEGnhgJBABINE18K5cPoJQxcYHEEzQkV5wSaDaNXrULQqxrQ6CnI
+  NBCA6aWhqPQSBtYQVBoE0GgAhhRDuQ/9e64AAAAASUVORK5CYII=
+  ====

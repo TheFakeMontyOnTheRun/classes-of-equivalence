@@ -1,0 +1,6 @@
+# Service description file for Sub Mare Imperium: Tragedy of the Uncanny
+# (c) 2007 by Klaus Rotter , 2024 Daniel Monteiro (based on Klaus Rotter work)
+# Distribution under GPL V2, all rights reserved.
+[D-BUS Service]
+Name=tragedy
+Exec=/usr/bin/tragedy
