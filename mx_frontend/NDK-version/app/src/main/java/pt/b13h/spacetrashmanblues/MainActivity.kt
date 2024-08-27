@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     private var running = false
     private var multiplier : Float = 0f
 
-    fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
+    private fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
         multiplier = if (((320.0f / 240.0f) * sizeHeight) < sizeWidth) {
             (sizeHeight.toFloat()) / 240.0f
         } else {
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
 
     override fun onBackPressed() {
         if (DerelictJNI.isOnMainMenu() == 1) {
-            super.onBackPressed();
+            super.onBackPressed()
         } else {
             DerelictJNI.sendCommand('q')
         }
@@ -115,7 +115,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                     val btnUp = findViewById<ImageButton>(R.id.btnUp)
                     val btnDown = findViewById<ImageButton>(R.id.btnDown)
                     val btnUse = findViewById<Button>(R.id.btnUse)
-                    val btnNextItem = findViewById<Button>(R.id.btnNextItem)
                     val btnUseWith = findViewById<Button>(R.id.btnUseWith)
                     val btnLeft = findViewById<ImageButton>(R.id.btnLeft)
                     val btnRight = findViewById<ImageButton>(R.id.btnRight)
@@ -135,7 +134,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
                         btnUse.setOnClickListener(this)
-                        btnNextItem.setOnClickListener(this)
                         btnUseWith.setOnClickListener(this)
                         btnLeft.setOnClickListener(this)
                         btnRight.setOnClickListener(this)
@@ -199,7 +197,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     }
 
     private fun redraw() {
-        setMultiplier(imageView?.width!!, imageView?.height!!);
+        setMultiplier(imageView?.width!!, imageView?.height!!)
         DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
         imageView?.invalidate()
@@ -238,7 +236,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
 
             R.id.btnUse -> toSend = 'z'
             R.id.btnUseWith -> toSend = 'x'
-            R.id.btnNextItem -> toSend = 'c'
 
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
@@ -283,8 +280,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         val height = imageView?.height!!
 
         if (event.actionIndex == 0 && ((event.action == ACTION_UP) || (event.action == ACTION_POINTER_UP)) ) {
-            DerelictJNI.setTouchCoords( multiplier, width, height, touchX, touchY );
+            DerelictJNI.setTouchCoords( multiplier, width, height, touchX, touchY )
         }
-        return true;
+        return true
     }
 }
