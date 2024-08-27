@@ -91,6 +91,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         super.onDestroy()
     }
 
+    override fun onBackPressed() {
+        if (DerelictJNI.isOnMainMenu() == 1) {
+            super.onBackPressed();
+        } else {
+            DerelictJNI.sendCommand('q')
+        }
+    }
+
     override fun onPostResume() {
         super.onPostResume()
 
@@ -209,7 +217,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
             KeyEvent.KEYCODE_BUTTON_L1, KeyEvent.KEYCODE_A -> 'n'
             KeyEvent.KEYCODE_BUTTON_R1, KeyEvent.KEYCODE_D -> 'm'
 
-            KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_Z -> 'z'
+            KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_Z, KeyEvent.KEYCODE_DPAD_CENTER -> 'z'
             KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_X-> 'x'
             KeyEvent.KEYCODE_BUTTON_C, KeyEvent.KEYCODE_BUTTON_Y, KeyEvent.KEYCODE_C-> 'c'
             KeyEvent.KEYCODE_BUTTON_START, KeyEvent.KEYCODE_BUTTON_X, KeyEvent.KEYCODE_ENTER -> 'q'
