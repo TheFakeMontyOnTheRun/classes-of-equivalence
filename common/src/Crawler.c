@@ -510,9 +510,15 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
     
     if (showDialogEntry) {
+
         if (cmd == kCommandFire1 || cmd == kCommandFire2) {
             showDialogEntry = 0;
         }
+
+        if (pointerInsideRect(0, 0, 8 * ((XRES_FRAMEBUFFER / 8) - 1), 8 * ((YRES_FRAMEBUFFER / 8) - 1))) {
+            showDialogEntry = 0;
+        }
+
         return kResumeCurrentState;
     }
 
