@@ -213,9 +213,14 @@ int handleCursorForInventoryWindow(const int x,
                                    const enum ECommand cmd) {
     int c = 0;
     struct ObjectNode *head = getPlayerItems();
-    
+    int biggest = strlen("Inventory");
+
     while (head != NULL) {
         int len = strlen( getItem(head->item)->name );
+        
+        if (len > biggest) {
+            biggest = len;
+        }
         
         if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
             if (c == cursorPosition) {
@@ -228,7 +233,12 @@ int handleCursorForInventoryWindow(const int x,
         head = head->next;
         ++c;
     }
-    
+
+    if ( pointerClickPositionX != -1 && !pointerInsideRect(x * 8, y * 8, biggest * 8, c * 8)) {
+        cursorPosition = 0;
+        selectedAction = 0xFF;
+        return kResumeCurrentState;
+    }
 
     switch (cmd) {
         case kCommandBack:
@@ -614,7 +624,7 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (currentPresentationState == kWaitingForInput) {
 
-        if (cmd == kCommandFire1) {
+        if (cmd == kCommandFire1 || pointerClickPositionX != -1) {
             drawActionsWindow = 1;
             selectedAction = 0xFF;
         }
