@@ -50,6 +50,12 @@
 		F1A987C52B9F3D80004DF107 /* RendererRasterization.c in Sources */ = {isa = PBXBuildFile; fileRef = F1A987B72B9F3D80004DF107 /* RendererRasterization.c */; };
 		F1A987C62B9F3D80004DF107 /* RendererTesselation.c in Sources */ = {isa = PBXBuildFile; fileRef = F1A987B82B9F3D80004DF107 /* RendererTesselation.c */; };
 		F1B282BB2B9F940200635EC6 /* base.pfs in Resources */ = {isa = PBXBuildFile; fileRef = F1B282BA2B9F940200635EC6 /* base.pfs */; };
+		F1EE8E202C824B4000AD57E9 /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1A2C824B4000AD57E9 /* down.png */; };
+		F1EE8E212C824B4000AD57E9 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1B2C824B4000AD57E9 /* left.png */; };
+		F1EE8E222C824B4000AD57E9 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1C2C824B4000AD57E9 /* right.png */; };
+		F1EE8E232C824B4000AD57E9 /* strafe_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1D2C824B4000AD57E9 /* strafe_left.png */; };
+		F1EE8E242C824B4000AD57E9 /* strafe_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1E2C824B4000AD57E9 /* strafe_right.png */; };
+		F1EE8E252C824B4000AD57E9 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EE8E1F2C824B4000AD57E9 /* up.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,6 +129,12 @@
 		F1A987B72B9F3D80004DF107 /* RendererRasterization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererRasterization.c; sourceTree = "<group>"; };
 		F1A987B82B9F3D80004DF107 /* RendererTesselation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RendererTesselation.c; sourceTree = "<group>"; };
 		F1B282BA2B9F940200635EC6 /* base.pfs */ = {isa = PBXFileReference; lastKnownFileType = file; name = base.pfs; path = ../../../base.pfs; sourceTree = "<group>"; };
+		F1EE8E1A2C824B4000AD57E9 /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down.png; sourceTree = "<group>"; };
+		F1EE8E1B2C824B4000AD57E9 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		F1EE8E1C2C824B4000AD57E9 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		F1EE8E1D2C824B4000AD57E9 /* strafe_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = strafe_left.png; sourceTree = "<group>"; };
+		F1EE8E1E2C824B4000AD57E9 /* strafe_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = strafe_right.png; sourceTree = "<group>"; };
+		F1EE8E1F2C824B4000AD57E9 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +182,12 @@
 		F1A986FF2B9F3C8C004DF107 /* Derelict32-ios */ = {
 			isa = PBXGroup;
 			children = (
+				F1EE8E1A2C824B4000AD57E9 /* down.png */,
+				F1EE8E1B2C824B4000AD57E9 /* left.png */,
+				F1EE8E1C2C824B4000AD57E9 /* right.png */,
+				F1EE8E1D2C824B4000AD57E9 /* strafe_left.png */,
+				F1EE8E1E2C824B4000AD57E9 /* strafe_right.png */,
+				F1EE8E1F2C824B4000AD57E9 /* up.png */,
 				F1A987082B9F3C8C004DF107 /* AppDelegate.h */,
 				F1A987092B9F3C8C004DF107 /* AppDelegate.m */,
 				F1A987112B9F3C8C004DF107 /* ViewController.h */,
@@ -367,6 +385,12 @@
 				F1A987162B9F3C8C004DF107 /* ViewController_iPhone.xib in Resources */,
 				F1A987192B9F3C8C004DF107 /* ViewController_iPad.xib in Resources */,
 				F1B282BB2B9F940200635EC6 /* base.pfs in Resources */,
+				F1EE8E202C824B4000AD57E9 /* down.png in Resources */,
+				F1EE8E212C824B4000AD57E9 /* left.png in Resources */,
+				F1EE8E222C824B4000AD57E9 /* right.png in Resources */,
+				F1EE8E232C824B4000AD57E9 /* strafe_left.png in Resources */,
+				F1EE8E242C824B4000AD57E9 /* strafe_right.png in Resources */,
+				F1EE8E252C824B4000AD57E9 /* up.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
