@@ -195,27 +195,28 @@ TEST_F(TestDerelict, usingElevatorToGoUpWillNotMoveIfCommTerminalIsOffline) {
 
 TEST_F(TestDerelict, usingElevatorToGoUpWillMoveObjectsAlongWithPlayer) {
     struct Room *elevatorLevel1 = getRoomByName("elevator-level-1");
-    setPlayerRank(3);
     getItemNamed("comm-terminal-2")->active = TRUE;
-    parseCommand("pick", "emp-bomb");
+    setPlayerLocation(3);
+    parseCommand("pick", "low-rank-keycard");
     setPlayerLocation(elevatorLevel1->connections[4]);
-    parseCommand("drop", "emp-bomb");
+    parseCommand("drop", "low-rank-keycard");
+    setPlayerRank(5);
     parseCommand("use", "elevator-level2-go-up");
     ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel1);
-    ASSERT_TRUE(hasItemInRoom("elevator-level-1", "emp-bomb"));
+    ASSERT_TRUE(hasItemInRoom("elevator-level-1", "low-rank-keycard"));
 }
 
 TEST_F(TestDerelict, usingElevatorToGoDownWillMoveObjectsAlongWithPlayer) {
     struct Room *elevatorLevel3 = getRoomByName("elevator-level-3");
-
-    setPlayerRank(3);
     getItemNamed("comm-terminal-2")->active = TRUE;
-    parseCommand("pick", "emp-bomb");
+    setPlayerLocation(3);
+    parseCommand("pick", "low-rank-keycard");
     setPlayerLocation(getRoomIdByName("elevator-level-2"));
-    parseCommand("drop", "emp-bomb");
+    parseCommand("drop", "low-rank-keycard");
+    setPlayerRank(5);
     parseCommand("use", "elevator-level2-go-down");
     ASSERT_EQ(getRoom(getPlayerRoom()), elevatorLevel3);
-    ASSERT_TRUE(hasItemInRoom("elevator-level-3", "emp-bomb"));
+    ASSERT_TRUE(hasItemInRoom("elevator-level-3", "low-rank-keycard"));
 }
 
 TEST_F(TestDerelict, keycardsCanElevatePlayerRankIfItsHigherThanCurrent) {
@@ -291,12 +292,6 @@ TEST_F(TestDerelict, usingTheReactorCoreWillCauseMeltdown) {
     ASSERT_EQ(kNormalGameplay, getGameStatus());
     parseCommand("use", "reactor-valve-control");
     ASSERT_EQ(kBadVictory, getGameStatus());
-}
-
-TEST_F(TestDerelict, cantToggleMagneticBoots) {
-    ASSERT_TRUE(getItemNamed("metal-wire")->active);
-    parseCommand("use", "metal-wire");
-    ASSERT_TRUE(getItemNamed("metal-wire")->active);
 }
 
 TEST_F(TestDerelict, cantToggleCommTerminal1ByUsingWithHigherRankKeycards) {

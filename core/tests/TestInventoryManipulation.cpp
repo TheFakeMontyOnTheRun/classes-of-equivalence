@@ -151,18 +151,18 @@ TEST_F(TestInventoryManipulation, cantAddInvalidObjectToRoom) {
 
 
 TEST_F(TestInventoryManipulation, cantAddObjectsToInvalidRoom) {
-    struct Item *emp = getItemNamed("emp-controller");
+    struct Item *emp = getItemNamed("low-rank-keycard");
 
     setErrorHandlerCallback(myErrorHandler);
 
     addToRoom("", emp);
-    ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+    ASSERT_TRUE(hasItemInRoom("hall-2", "low-rank-keycard"));
 
     addToRoom("farofinha", emp);
-    ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+    ASSERT_TRUE(hasItemInRoom("hall-2", "low-rank-keycard"));
 
     addToRoom(NULL, emp);
-    ASSERT_TRUE(hasItemInRoom("lss-daedalus", "emp-controller"));
+    ASSERT_TRUE(hasItemInRoom("hall-2", "low-rank-keycard"));
 }
 
 TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
