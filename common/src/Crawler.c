@@ -390,6 +390,7 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     if (tag == kPlayGame) {
         initStation();
         showDialogEntry = 1;
+        getRoom(getPlayerRoom())->storyPoint = 0;
         timeUntilNextState = 1000;
         gameTicks = 0;
         enteredThru = 0;
