@@ -282,7 +282,7 @@ void shutdownHW(void) {
     mFont = loadBitmap("font.img");
     defaultFont = mFont;
 
-    enterState(kMainMenu);
+    enterState(kPlayGame);
     
     menuTick(50);
     [self initTimer];
