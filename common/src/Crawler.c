@@ -473,9 +473,6 @@ void recenterView(void) {
 }
 
 void redrawHUD(void) {
-    int line = 0;
-    struct ObjectNode *head;
-    int c;
     struct Item *itemPtr = itemInFrontOfPlayer();
     
     if (itemPtr != NULL) {
@@ -490,7 +487,8 @@ void redrawHUD(void) {
     }
     
     if (drawActionsWindow) {
-
+        turnStep = turnTarget;
+        leanX = leanY = turning = 0;
         if (itemPtr != NULL) {
             drawWindowWithOptions(0,
                     /*(YRES_FRAMEBUFFER / 8) - 10*/0,
@@ -522,7 +520,9 @@ void Crawler_repaintCallback(void) {
 
     if (showPromptToAbandonMission) {
         int optionsHeight = 8 * (AbandonMission_count);
+
         turnStep = turnTarget;
+        leanX = leanY = turning = 0;
 
         /* The dithered filter on top of the 3D rendering*/
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
@@ -543,6 +543,7 @@ void Crawler_repaintCallback(void) {
             int c;
             int yWindow = 0;
             char buffer[64];
+
             renderTick(30);
 
             recenterView();
@@ -562,6 +563,8 @@ void Crawler_repaintCallback(void) {
     }
 
     if (showDialogEntry) {
+        turnStep = turnTarget;
+        leanX = leanY = turning = 0;
         drawTextWindow(0, 0, (XRES_FRAMEBUFFER / 8) - 1, (YRES_FRAMEBUFFER / 8) - 1,
                        "Press any key to continue", storyPoint[showDialogEntry]);
     }
