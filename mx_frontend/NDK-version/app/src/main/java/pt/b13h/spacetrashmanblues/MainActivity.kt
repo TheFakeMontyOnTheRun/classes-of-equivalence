@@ -109,13 +109,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         Thread {
             while (running) {
                 runOnUiThread {
-                    val llActions = findViewById<LinearLayout>(R.id.llActions)
                     val llDirections = findViewById<LinearLayout>(R.id.llDirections)
                     val llScreenControllers = findViewById<LinearLayout>(R.id.llScreenControllers)
                     val btnUp = findViewById<ImageButton>(R.id.btnUp)
                     val btnDown = findViewById<ImageButton>(R.id.btnDown)
-                    val btnUse = findViewById<Button>(R.id.btnUse)
-                    val btnUseWith = findViewById<Button>(R.id.btnUseWith)
                     val btnLeft = findViewById<ImageButton>(R.id.btnLeft)
                     val btnRight = findViewById<ImageButton>(R.id.btnRight)
                     val btnStrafeLeft = findViewById<ImageButton>(R.id.btnStrafeLeft)
@@ -124,7 +121,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                     if (!(application as SubMareImperiumApplication).hasPhysicalController()) {
 
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llActions.visibility = View.VISIBLE
                             llDirections.visibility = View.VISIBLE
                         } else {
                             llScreenControllers.visibility = View.VISIBLE
@@ -133,15 +129,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                         imageView?.setOnTouchListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
-                        btnUse.setOnClickListener(this)
-                        btnUseWith.setOnClickListener(this)
                         btnLeft.setOnClickListener(this)
                         btnRight.setOnClickListener(this)
                         btnStrafeLeft.setOnClickListener(this)
                         btnStrafeRight.setOnClickListener(this)
                     } else {
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llActions.visibility = View.GONE
                             llDirections.visibility = View.GONE
                         } else {
                             llScreenControllers.visibility = View.GONE
@@ -197,7 +190,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     }
 
     private fun redraw() {
-        setMultiplier(imageView?.width!!, imageView?.height!!)
+        if (imageView != null) {
+            setMultiplier(imageView?.width!!, imageView?.height!!)
+        }
+
         DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
         imageView?.invalidate()
@@ -233,10 +229,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
             R.id.btnDown -> toSend = 's'
             R.id.btnLeft -> toSend = 'a'
             R.id.btnRight -> toSend = 'd'
-
-            R.id.btnUse -> toSend = 'z'
-            R.id.btnUseWith -> toSend = 'x'
-
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
         }
