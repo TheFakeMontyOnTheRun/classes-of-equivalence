@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     private var running = false
     private var multiplier : Float = 0f
 
-    fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
+    private fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
         multiplier = if (((320.0f / 240.0f) * sizeHeight) < sizeWidth) {
             (sizeHeight.toFloat()) / 240.0f
         } else {
@@ -63,13 +63,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        }
-
         if  ( (application as SubMareImperiumApplication).mayEnableSound() ) {
             initAudio()
         } else {
@@ -91,6 +84,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         super.onDestroy()
     }
 
+    override fun onBackPressed() {
+        if (DerelictJNI.isOnMainMenu() == 1) {
+            super.onBackPressed()
+        } else {
+            DerelictJNI.sendCommand('q')
+        }
+    }
+
     override fun onPostResume() {
         super.onPostResume()
 
@@ -101,45 +102,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         Thread {
             while (running) {
                 runOnUiThread {
-                    val llActions = findViewById<LinearLayout>(R.id.llActions)
                     val llDirections = findViewById<LinearLayout>(R.id.llDirections)
-                    val llScreenControllers = findViewById<LinearLayout>(R.id.llScreenControllers)
                     val btnUp = findViewById<ImageButton>(R.id.btnUp)
                     val btnDown = findViewById<ImageButton>(R.id.btnDown)
-                    val btnUse = findViewById<Button>(R.id.btnUse)
-                    val btnNextItem = findViewById<Button>(R.id.btnNextItem)
-                    val btnUseWith = findViewById<Button>(R.id.btnUseWith)
                     val btnLeft = findViewById<ImageButton>(R.id.btnLeft)
                     val btnRight = findViewById<ImageButton>(R.id.btnRight)
                     val btnStrafeLeft = findViewById<ImageButton>(R.id.btnStrafeLeft)
                     val btnStrafeRight = findViewById<ImageButton>(R.id.btnStrafeRight)
 
                     if (!(application as SubMareImperiumApplication).hasPhysicalController()) {
-
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llActions.visibility = View.VISIBLE
-                            llDirections.visibility = View.VISIBLE
-                        } else {
-                            llScreenControllers.visibility = View.VISIBLE
-                        }
-
+                        llDirections?.visibility = View.VISIBLE
                         imageView?.setOnTouchListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
-                        btnUse.setOnClickListener(this)
-                        btnNextItem.setOnClickListener(this)
-                        btnUseWith.setOnClickListener(this)
                         btnLeft.setOnClickListener(this)
                         btnRight.setOnClickListener(this)
                         btnStrafeLeft.setOnClickListener(this)
                         btnStrafeRight.setOnClickListener(this)
                     } else {
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llActions.visibility = View.GONE
-                            llDirections.visibility = View.GONE
-                        } else {
-                            llScreenControllers.visibility = View.GONE
-                        }
+                        llDirections.visibility = View.GONE
                     }
                 }
 
@@ -191,7 +172,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     }
 
     private fun redraw() {
-        setMultiplier(imageView?.width!!, imageView?.height!!);
+        if (imageView != null) {
+            setMultiplier(imageView?.width!!, imageView?.height!!)
+        }
+
         DerelictJNI.getPixelsFromNative(pixels)
         bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
         imageView?.invalidate()
@@ -209,7 +193,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
             KeyEvent.KEYCODE_BUTTON_L1, KeyEvent.KEYCODE_A -> 'n'
             KeyEvent.KEYCODE_BUTTON_R1, KeyEvent.KEYCODE_D -> 'm'
 
-            KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_Z -> 'z'
+            KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_Z, KeyEvent.KEYCODE_DPAD_CENTER -> 'z'
             KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_X-> 'x'
             KeyEvent.KEYCODE_BUTTON_C, KeyEvent.KEYCODE_BUTTON_Y, KeyEvent.KEYCODE_C-> 'c'
             KeyEvent.KEYCODE_BUTTON_START, KeyEvent.KEYCODE_BUTTON_X, KeyEvent.KEYCODE_ENTER -> 'q'
@@ -227,11 +211,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
             R.id.btnDown -> toSend = 's'
             R.id.btnLeft -> toSend = 'a'
             R.id.btnRight -> toSend = 'd'
-
-            R.id.btnUse -> toSend = 'z'
-            R.id.btnUseWith -> toSend = 'x'
-            R.id.btnNextItem -> toSend = 'c'
-
             R.id.btnStrafeLeft-> toSend = 'n'
             R.id.btnStrafeRight-> toSend = 'm'
         }
@@ -275,8 +254,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         val height = imageView?.height!!
 
         if (event.actionIndex == 0 && ((event.action == ACTION_UP) || (event.action == ACTION_POINTER_UP)) ) {
-            DerelictJNI.setTouchCoords( multiplier, width, height, touchX, touchY );
+            DerelictJNI.setTouchCoords( multiplier, width, height, touchX, touchY )
         }
-        return true;
+        return true
     }
 }

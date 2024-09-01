@@ -143,7 +143,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
     srand(time(NULL));
     initHW(0, NULL);
     enableSmoothMovement = TRUE;
-    enterState(kMainMenu);
+    enterState(kPlayGame);
 }
 
 JNIEXPORT void JNICALL

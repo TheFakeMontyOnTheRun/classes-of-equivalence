@@ -111,9 +111,9 @@ enum EGameMenuState handleCursor(const int x,
                                  EGameMenuState backState) {
     int c;
     for (c = 0; c < optionsCount; ++c) {
-        size_t len = strlen(&optionsStr[c][0]);
+//        size_t len = strlen(&optionsStr[c][0]);
 
-        if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
+        if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, dx * 8, 8)) {
             if (c == cursorPosition) {
                 if (options == NULL) {
                     return c;
@@ -124,6 +124,10 @@ enum EGameMenuState handleCursor(const int x,
                 cursorPosition = c;
             }
         }
+    }
+    
+    if ( pointerClickPositionX != -1 && !pointerInsideRect(x * 8, y * 8, dx * 8, dy * 8)) {
+        return backState;
     }
 
     switch (cmd) {

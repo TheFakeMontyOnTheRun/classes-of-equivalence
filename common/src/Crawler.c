@@ -54,38 +54,38 @@ extern int currentSelectedItem;
 extern struct CActor playerCrawler;
 
 static const char *storyPoint[] = {
-    "",
-    "It's been so long you don't even remember why. Every day they try to extract information, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
-    "I wonder how many of my former comrades are being held here - perhaps our collective strength could be useful."
+        "",
+        "It's been so long you don't even remember why. Every day they try to extract information, further frying your implants. Until...\n\"Come with me! I've cleared the way, but hurry! Reinforcements are in the way. There's a transport coming. We need to reach...\naaaagh!\"",
+        "I wonder how many of my former comrades are being held here - perhaps our collective strength could be useful."
 };
 
 uint8_t drawActionsWindow = 0;
 uint8_t selectedAction = 0xFF;
 
 static const char *CrawlerActions_optionsPickUse[] = {
-    "Use",
-    "Pick",
-    "Use with...",
+        "Use",
+        "Pick",
+        "Use with...",
 };
 
 static const char *CrawlerActions_optionsDrop[] = {
-    "Use",
-    "Drop"
+        "Use",
+        "Drop"
 };
 
 static const char *commandTemplate_optionsPickUse[] = {
-    "use",
-    "pick",
-    "use-with"
+        "use",
+        "pick",
+        "use-with"
 };
 
 static const char *commandTemplate_optionsDrop[] = {
-    "use",
-    "drop"
+        "use",
+        "drop"
 };
 
 
-struct Item* getNthPlayerObject(int nth) {
+struct Item *getNthPlayerObject(int nth) {
     struct ObjectNode *head;
     struct Item *itemPtr = NULL;
     struct Item *item = NULL;
@@ -106,7 +106,7 @@ struct Item* getNthPlayerObject(int nth) {
     return NULL;
 }
 
-struct Item* itemInFrontOfPlayer() {
+struct Item *itemInFrontOfPlayer() {
     struct ObjectNode *head;
     struct Item *itemPtr = NULL;
     
@@ -127,6 +127,21 @@ struct Item* itemInFrontOfPlayer() {
     }
 
     return NULL;
+}
+
+int maxInventoryWidth(void) {
+    int biggest = 0;
+    struct ObjectNode *head = getPlayerItems();
+
+    while (head != NULL) {
+        int len = strlen( getItem(head->item)->name );
+        if (len > biggest) {
+            biggest = len;
+        }
+        head = head->next;
+    }
+
+    return biggest;
 }
 
 int getTotalItemsWithPlayer(void) {
@@ -169,7 +184,7 @@ void drawInventoryWindow(void) {
         ++totalItems;
     }
 
-    listItemPtr = itemList = allocMem( sizeof(char*) * totalItems, GENERAL_MEMORY, 1);
+    listItemPtr = itemList = allocMem(sizeof(char *) * totalItems, GENERAL_MEMORY, 1);
     itemPtr = NULL;
     item = NULL;
     head = getPlayerItems();
@@ -193,12 +208,189 @@ void drawInventoryWindow(void) {
     disposeMem(itemList);
 }
 
+int handleCursorForInventoryWindow(const int x,
+                                   const int y,
+                                   const enum ECommand cmd) {
+    int c = 0;
+    struct ObjectNode *head = getPlayerItems();
+    int biggest = strlen("Inventory");
+
+    while (head != NULL) {
+        int len = strlen( getItem(head->item)->name );
+        
+        if (len > biggest) {
+            biggest = len;
+        }
+        
+        if (pointerInsideRect((x + 1) * 8, (y + 2 + c) * 8, len * 8, 8)) {
+            if (c == cursorPosition) {
+                return c;
+            } else {
+                cursorPosition = c;
+            }
+        }
+
+        head = head->next;
+        ++c;
+    }
+
+    if ( pointerClickPositionX != -1 && !pointerInsideRect(x * 8, y * 8, biggest * 8, c * 8)) {
+        cursorPosition = 0;
+        selectedAction = 0xFF;
+        return kResumeCurrentState;
+    }
+
+    switch (cmd) {
+        case kCommandBack:
+            /* go back to selecting some action and hide the inventory */
+            cursorPosition = 0;
+            selectedAction = 0xFF;
+            return kResumeCurrentState;
+        case kCommandUp:
+            playSound(2);
+            --cursorPosition;
+            break;
+        case kCommandDown:
+            playSound(2);
+            ++cursorPosition;
+            break;
+        case kCommandFire1:
+        case kCommandFire2:
+        case kCommandFire3:
+            return cursorPosition;
+    }
+
+    if (cursorPosition >= c) {
+        cursorPosition = c - 1;
+    }
+
+    if (cursorPosition < 0) {
+        cursorPosition = 0;
+    }
+
+    return kResumeCurrentState;
+}
+
+void handleCascadingMenu(enum ECommand cmd) {
+    char cmdBuffer[256];
+    struct Item *item;
+    int action;
+    int totalItems = getTotalItemsWithPlayer();
+    needsToRedrawVisibleMeshes = TRUE;
+    timeUntilNextState = 1000;
+
+    item = itemInFrontOfPlayer();
+
+    if (item) {
+
+        /* cursor is on the first level - there's no action selected (0xFF) */
+        if (selectedAction == 0xFF) {
+            action = handleCursor(0,
+                                  0,
+                                  11 + 2,
+                                  5,
+                                  CrawlerActions_optionsPickUse,
+                                  NULL,
+                                  3, cmd, kBackToGame);
+
+            if (action == kResumeCurrentState) {
+                return;
+            }
+            
+            if (action == kBackToGame) {
+                drawActionsWindow = 0;
+                cursorPosition = 0;
+                return;
+            }
+
+            /* use-with is a composite action and requires a secondary parameter */
+            if (action == 2) {
+                selectedAction = action;
+                cursorPosition = 0;
+            } else {
+                /* Please note the index! This the case of a action that doesn't open the cascading menu */
+                parseCommand(commandTemplate_optionsPickUse[action], item->name);
+                drawActionsWindow = 0;
+                currentSelectedItem = action;
+                selectedAction = 0xFF;
+            }
+        } else {
+             
+            int c;
+
+            action = handleCursorForInventoryWindow(13, 0, cmd);
+            
+            if (action == kResumeCurrentState) {
+                return;
+            }
+            
+            /* Please note the index! This the case of a action that doesn't open the cascading menu */
+            if (selectedAction == 2) {
+                char *operand1;
+                char *operator1;
+                /* Terrible terrible hack*/
+                sprintf(&cmdBuffer[0], "use-with %s %s", getNthPlayerObject(action)->name,
+                        item->name);
+                operator1 = strtok(&cmdBuffer[0], "\n ");
+                operand1 = strtok(NULL, "\n ");
+                parseCommand(operator1, operand1);
+                drawActionsWindow = 0;
+                currentSelectedItem = action;
+                selectedAction = 0xFF;
+            } else {
+                puts("THIS SHOULDN'T BE HAPENNING!");
+            }
+        }
+    } else /* Nothing in front of player */ {
+
+        /* No action selected. Time to open the cascading menu */
+        if (selectedAction == 0xFF) {
+
+            action = handleCursor(0,
+                                  0,
+                                  11 + 2,
+                                  4,
+                                  CrawlerActions_optionsDrop,
+                                  NULL,
+                                  2, cmd, kBackToGame);
+
+            if (action == kResumeCurrentState) {
+                return;
+            }
+            
+            if (action == kBackToGame) {
+                cursorPosition = 0;
+                drawActionsWindow = 0;
+                return;
+            }
+
+            selectedAction = action;
+            cursorPosition = 0;
+        } else /* There's a selected action and the player has now selected the item to act on */ {
+            action = handleCursorForInventoryWindow(13, 0, cmd);
+
+            if (action == kResumeCurrentState) {
+                return;
+            }
+
+            parseCommand(commandTemplate_optionsDrop[selectedAction],
+                         getNthPlayerObject(action)->name);
+            drawActionsWindow = 0;
+            currentSelectedItem = action;
+            selectedAction = 0xFF;
+        }
+    }
+
+    loopTick(kCommandFire4);
+}
+
 void Crawler_initStateCallback(enum EGameMenuState tag) {
     int c;
 
     if (tag == kPlayGame) {
         initStation();
         showDialogEntry = 1;
+        getRoom(getPlayerRoom())->storyPoint = 0;
         timeUntilNextState = 1000;
         gameTicks = 0;
         enteredThru = 0;
@@ -281,9 +473,6 @@ void recenterView(void) {
 }
 
 void redrawHUD(void) {
-    int line = 0;
-    struct ObjectNode *head;
-    int c;
     struct Item *itemPtr = itemInFrontOfPlayer();
     
     if (itemPtr != NULL) {
@@ -291,38 +480,37 @@ void redrawHUD(void) {
         int lines;
         len = strlen(itemPtr->name);
         lines = 2 + (len / (XRES / 8));
-        fillRect(0, YRES_FRAMEBUFFER - (lines * 8), XRES, (lines * 8), getPaletteEntry(0xFF000000), 1);
-        drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, itemPtr->name, getPaletteEntry(0xFFFFFFFF), ' ');
+        fillRect(0, YRES_FRAMEBUFFER - (lines * 8), XRES, (lines * 8), getPaletteEntry(0xFF000000),
+                 1);
+        drawTextAtWithMarginWithFiltering(1, (YRES / 8) - lines, XRES, itemPtr->name,
+                                          getPaletteEntry(0xFFFFFFFF), ' ');
     }
     
     if (drawActionsWindow) {
-      struct Item *item = NULL;
-        
-      item = itemInFrontOfPlayer();
-
-      if (item != NULL) {
-          drawWindowWithOptions(0,
-			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    11 + 2,
-			    5,
-			    "Action",
-			    CrawlerActions_optionsPickUse,
-			    3,
-                (selectedAction == 0xFF) ? cursorPosition : selectedAction);
-      } else {
-	      drawWindowWithOptions(0,
-			    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
-			    11 + 2,
-			    4,
-			    "Action",
-			    CrawlerActions_optionsDrop,
-			    2,
-			    (selectedAction == 0xFF) ? cursorPosition : selectedAction);
-      }
+        turnStep = turnTarget;
+        leanX = leanY = turning = 0;
+        if (itemPtr != NULL) {
+            drawWindowWithOptions(0,
+                    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
+                                  11 + 2,
+                                  5,
+                                  "Action",
+                                  CrawlerActions_optionsPickUse,
+                                  3,
+                                  (selectedAction == 0xFF) ? cursorPosition : selectedAction);
+        } else {
+            drawWindowWithOptions(0,
+                    /*(YRES_FRAMEBUFFER / 8) - 10*/0,
+                                  11 + 2,
+                                  4,
+                                  "Action",
+                                  CrawlerActions_optionsDrop,
+                                  2,
+                                  (selectedAction == 0xFF) ? cursorPosition : selectedAction);
+        }
         if (selectedAction != 0xFF) {
             drawInventoryWindow();
         }
-
     }
 }
 
@@ -332,7 +520,9 @@ void Crawler_repaintCallback(void) {
 
     if (showPromptToAbandonMission) {
         int optionsHeight = 8 * (AbandonMission_count);
+
         turnStep = turnTarget;
+        leanX = leanY = turning = 0;
 
         /* The dithered filter on top of the 3D rendering*/
         fillRect(0, 0, XRES_FRAMEBUFFER, YRES_FRAMEBUFFER, getPaletteEntry(0xFF000000), TRUE);
@@ -353,6 +543,7 @@ void Crawler_repaintCallback(void) {
             int c;
             int yWindow = 0;
             char buffer[64];
+
             renderTick(30);
 
             recenterView();
@@ -372,7 +563,10 @@ void Crawler_repaintCallback(void) {
     }
 
     if (showDialogEntry) {
-        drawTextWindow(0, 0, (XRES_FRAMEBUFFER / 8) - 1, (YRES_FRAMEBUFFER / 8) - 1, "Press any key to continue", storyPoint[showDialogEntry]);
+        turnStep = turnTarget;
+        leanX = leanY = turning = 0;
+        drawTextWindow(0, 0, (XRES_FRAMEBUFFER / 8) - 1, (YRES_FRAMEBUFFER / 8) - 1,
+                       "Press any key to continue", storyPoint[showDialogEntry]);
     }
 }
 
@@ -385,134 +579,40 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
 
     if (showPromptToAbandonMission) {
         int option = handleCursor((XRES_FRAMEBUFFER / 8) - biggestOption - 4,
-                              ((YRES_FRAMEBUFFER / 8) + 1) - (AbandonMission_count) - 4,
-                              biggestOption + 2,
-                              AbandonMission_count + 2,
-                              AbandonMission_options,
-                              NULL,
-                              AbandonMission_count,
-                              cmd,
-                              0);
-        
+                                  ((YRES_FRAMEBUFFER / 8) + 1) - (AbandonMission_count) - 4,
+                                  biggestOption + 2,
+                                  AbandonMission_count + 2,
+                                  AbandonMission_options,
+                                  NULL,
+                                  AbandonMission_count,
+                                  cmd,
+                                  0);
+
         if (option == 0) {
             showPromptToAbandonMission = FALSE;
             needsToRedrawVisibleMeshes = TRUE;
             return kResumeCurrentState;
-        } else if (option != kResumeCurrentState){
+        } else if (option != kResumeCurrentState) {
             timeUntilNextState = 1000;
             return AbandonMission_navigation[option];
         }
     }
 
     if (drawActionsWindow) {
-        switch (cmd) {
-            case kCommandUp:
-                timeUntilNextState = 1000;
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                --cursorPosition;
-                break;
-            case kCommandDown:
-                timeUntilNextState = 1000;
-                playSound(MENU_SELECTION_CHANGE_SOUND);
-                ++cursorPosition;
-                break;
-	    case kCommandFire2:
-	    case kCommandBack:
-            case kCommandLeft:
-                if (selectedAction != 0xFF) {
-                    selectedAction = 0xFF;
-                } else {
-                    drawActionsWindow = 0;
-                }
-  	        break;
-            case kCommandFire1:
-            case kCommandRight: {
-
-                char cmdBuffer[256];
-                struct Item *item;
-                needsToRedrawVisibleMeshes = TRUE;
-                timeUntilNextState = 1000;
-
-                item = itemInFrontOfPlayer();
-
-                if (item) {
-                    if (selectedAction == 0xFF) {
-                        if (cursorPosition == 2) {
-                            selectedAction = cursorPosition;
-                            cursorPosition = 0;
-                        } else {
-                            /* Please note the index! This the case of a action that doesn't open the cascading menu */
-                            parseCommand(commandTemplate_optionsPickUse[cursorPosition], item->name);
-                            drawActionsWindow = 0;
-                            currentSelectedItem = cursorPosition;
-                            selectedAction = 0xFF;
-                        }
-                    } else {
-                        if (selectedAction == 2) {
-                            char *operand1;
-                            char *operator1;
-                            /* Terrible terrible hack*/
-                            sprintf(&cmdBuffer[0], "use-with %s %s", getNthPlayerObject(cursorPosition)->name, item->name);
-                            operator1 = strtok(&cmdBuffer[0], "\n ");
-                            operand1 = strtok(NULL, "\n ");
-                            parseCommand(operator1, operand1);
-
-                            
-                            drawActionsWindow = 0;
-                            currentSelectedItem = cursorPosition;
-                            selectedAction = 0xFF;
-                        } else {
-                            puts("THIS SHOULDN'T BE HAPENNING!");
-                        }
-                    }
-                } else {
-                    if (selectedAction == 0xFF) {
-                        selectedAction = cursorPosition;
-                        cursorPosition = 0;
-                    } else {
-                        parseCommand(commandTemplate_optionsDrop[selectedAction], getNthPlayerObject(cursorPosition)->name);
-                        drawActionsWindow = 0;
-                        currentSelectedItem = cursorPosition;
-                        selectedAction = 0xFF;
-                    }
-                }
-
-                loopTick(kCommandFire4);
-
-            }
-            return kResumeCurrentState;
-        }
-        
-        if (drawActionsWindow) {
-            if (selectedAction != 0xFF) {
-                int total = getTotalItemsWithPlayer();
-                if (cursorPosition >= total ) {
-                    cursorPosition = total - 1;
-                }
-            } else {
-                if (itemInFrontOfPlayer()) {
-                    if (cursorPosition >= 3 ) {
-                        cursorPosition = 2;
-                    }
-                } else {
-                    if (cursorPosition >= 2 ) {
-                        cursorPosition = 1;
-                    }
-                }
-            }
-        }
-
-        if (cursorPosition < 0) {
-            cursorPosition = 0;
-        }
-
+        handleCascadingMenu(cmd);
         return kResumeCurrentState;
     }
     
     if (showDialogEntry) {
+
         if (cmd == kCommandFire1 || cmd == kCommandFire2) {
             showDialogEntry = 0;
         }
+
+        if (pointerInsideRect(0, 0, 8 * ((XRES_FRAMEBUFFER / 8) - 1), 8 * ((YRES_FRAMEBUFFER / 8) - 1))) {
+            showDialogEntry = 0;
+        }
+
         return kResumeCurrentState;
     }
 
@@ -527,8 +627,8 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
     }
 
     if (currentPresentationState == kWaitingForInput) {
-        
-        if (cmd ==  kCommandFire1 ) {
+
+        if (cmd == kCommandFire1 || pointerClickPositionX != -1) {
             drawActionsWindow = 1;
             selectedAction = 0xFF;
         }
