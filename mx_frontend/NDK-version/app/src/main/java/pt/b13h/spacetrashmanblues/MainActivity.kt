@@ -103,7 +103,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
             while (running) {
                 runOnUiThread {
                     val llDirections = findViewById<LinearLayout>(R.id.llDirections)
-                    val llScreenControllers = findViewById<LinearLayout>(R.id.llScreenControllers)
                     val btnUp = findViewById<ImageButton>(R.id.btnUp)
                     val btnDown = findViewById<ImageButton>(R.id.btnDown)
                     val btnLeft = findViewById<ImageButton>(R.id.btnLeft)
@@ -112,13 +111,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                     val btnStrafeRight = findViewById<ImageButton>(R.id.btnStrafeRight)
 
                     if (!(application as SubMareImperiumApplication).hasPhysicalController()) {
-
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llDirections.visibility = View.VISIBLE
-                        } else {
-                            llScreenControllers.visibility = View.VISIBLE
-                        }
-
+                        llDirections?.visibility = View.VISIBLE
                         imageView?.setOnTouchListener(this)
                         btnUp.setOnClickListener(this)
                         btnDown.setOnClickListener(this)
@@ -127,11 +120,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                         btnStrafeLeft.setOnClickListener(this)
                         btnStrafeRight.setOnClickListener(this)
                     } else {
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            llDirections.visibility = View.GONE
-                        } else {
-                            llScreenControllers.visibility = View.GONE
-                        }
+                        llDirections.visibility = View.GONE
                     }
                 }
 
