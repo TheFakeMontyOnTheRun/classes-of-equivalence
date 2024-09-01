@@ -118,3 +118,4 @@ gl_frontend/build/derelict64.elf.stripped
 gl_frontend/build/derelict64.elf.sym
 gl_frontend/build/derelict64.map
 game
+vr_frontend/NDK-version/.idea
