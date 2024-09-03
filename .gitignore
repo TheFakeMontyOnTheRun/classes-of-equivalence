@@ -119,3 +119,5 @@ gl_frontend/build/derelict64.elf.sym
 gl_frontend/build/derelict64.map
 game
 vr_frontend/NDK-version/.idea
+vr_frontend/NDK-version/common/build
+vr_frontend/NDK-version/core/build
