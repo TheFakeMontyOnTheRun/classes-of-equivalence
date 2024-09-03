@@ -14,4 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Sub Mare Imperium - Equivalence (CardboardVR)"
-include(":app")
+include (":app", ":common", ":core" )
+
