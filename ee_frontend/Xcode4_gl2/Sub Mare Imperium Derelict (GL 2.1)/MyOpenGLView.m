@@ -206,6 +206,24 @@ void flipRenderer() {
 
 }
 
+- (void)mouseUp:(NSEvent *)theEvent {
+    NSPoint point = [theEvent locationInWindow];
+    NSSize windowSize = self.bounds.size;
+
+    NSSize margins;
+    NSSize effectiveSize;
+
+    margins.width = (self.bounds.size.width - (XRES_FRAMEBUFFER * multiplier)) / 2.0f;
+    margins.height = (self.bounds.size.height - (YRES_FRAMEBUFFER * multiplier * 1.2f )) / 2.0f;
+
+    effectiveSize.width = self.bounds.size.width - (2.0f * margins.width);
+    effectiveSize.height = self.bounds.size.height - (2.0f * margins.height);
+
+    pointerClickPositionX = (point.x) / 16;
+    pointerClickPositionY = ((windowSize.height - point.y) / 1.2f) / 16;
+
+    [self setNeedsDisplay:YES];
+}
 
 - (void)drawRect:(NSRect)rect {
     
