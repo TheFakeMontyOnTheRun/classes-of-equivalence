@@ -99,7 +99,7 @@ void handleSystemEvents(void) {
     }
 
     if (pressed.c[0].B) {
-        mBufferedCommand = kCommandFire2;
+        mBufferedCommand = kCommandBack;
     }
 
     if (pressed.c[0].Z) {
