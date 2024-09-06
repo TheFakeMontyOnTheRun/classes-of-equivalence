@@ -57,6 +57,8 @@ enum EColor {
 };
 
 long frame = 0;
+int mouseX, mouseY;
+uint8_t mousePresent = 0;
 
 void graphicsShutdown(void) {
 	texturesUsed = 0;
@@ -171,6 +173,14 @@ uint8_t getPaletteEntry(uint32_t origin) {
 }
 
 void graphicsInit(void) {
+    __dpmi_regs regs;
+
+    // Initialize mouse (INT 33h, AX = 0)
+    regs.x.ax = 0;
+    __dpmi_int(0x33, &regs);
+
+    mousePresent = (regs.x.ax != 0);
+
 	textmode(C80);
 	clrscr();
 	drawTitleBox();
@@ -200,6 +210,22 @@ void graphicsInit(void) {
 void handleSystemEvents(void) {
 
 	int lastKey = 0;
+    
+    if (mousePresent) {
+        __dpmi_regs regs;
+        
+        regs.x.ax = 3;
+        __dpmi_int(0x33, &regs);
+
+        mouseX = regs.x.cx;
+        mouseY = regs.x.dx;
+        int buttons = regs.x.bx;
+
+        if (buttons & 1) {
+            pointerClickPositionX = mouseX / 16;
+            pointerClickPositionY = mouseY / 8;
+        }
+    }
 
 	if (kbhit()) {
 		char getched = getch();
@@ -330,6 +356,10 @@ void waitVSync(void) {
 }
 
 void flipRenderer(void) {
+    if (mousePresent) {
+        fillRect((mouseX / 16) * 8, ((mouseY / 8) * 8), 8, 8, getPaletteEntry(0xFF0000FF), 1);
+    }
+    
     renderPageFlip(&turnBuffer[0], framebuffer,
                    previousFrame, turnStep, turnTarget, 0);
     dosmemput(&turnBuffer[0], XRES_FRAMEBUFFER * YRES_FRAMEBUFFER, 0xa0000);
