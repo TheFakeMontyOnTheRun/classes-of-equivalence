@@ -72,8 +72,6 @@ void loadTexturesForLevel(const uint8_t levelNumber);
 
 void loadTileProperties(const uint8_t levelNumber);
 
-void updateCursorForRenderer(const int x, const int y);
-
 enum ECommand getInput(void);
 
 void handleSystemEvents(void);

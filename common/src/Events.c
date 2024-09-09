@@ -73,8 +73,6 @@ void tickMission(enum ECommand cmd) {
     rotation = snapshot.camera_rotation;
     crawlerGameState = snapshot.should_continue;
 
-    updateCursorForRenderer(snapshot.playerTarget.x, snapshot.playerTarget.y);
-
     if (crawlerGameState != kCrawlerGameInProgress) {
         gameTicks = 0;
     }

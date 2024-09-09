@@ -275,7 +275,6 @@ void handleCascadingMenu(enum ECommand cmd) {
     char cmdBuffer[256];
     struct Item *item;
     int action;
-    int totalItems = getTotalItemsWithPlayer();
     needsToRedrawVisibleMeshes = TRUE;
     timeUntilNextState = 1000;
 

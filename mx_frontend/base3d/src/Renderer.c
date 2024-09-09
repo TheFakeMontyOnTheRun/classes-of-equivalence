@@ -185,12 +185,6 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     playerHeightChangeRate = 0;
 }
 
-void updateCursorForRenderer(const int x, const int z) {
-#ifndef AGS
-    needsToRedrawVisibleMeshes = TRUE;
-#endif
-}
-
 void renderRoomTransition(void) {
     struct Vec3 center;
 
