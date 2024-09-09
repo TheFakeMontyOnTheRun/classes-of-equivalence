@@ -106,10 +106,6 @@ void loadMap(int map, struct MapWithCharKey *collisionMap) {
     disposeDiskBuffer(buffer);
 }
 
-void renderTick(long ms) {
-    render(ms);
-}
-
 int loopTick(enum ECommand command) {
 
     int needRedraw = 0;
