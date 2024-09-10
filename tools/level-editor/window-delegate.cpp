@@ -143,7 +143,9 @@ void onClick(int buttonIndex, int buttonX, int buttonY, int width, int height) {
                     int y1 = (pivotY < y) ? y : pivotY;
                     for (int _y = y0; _y <= y1; ++_y) {
                         printf("filling %d, %d\n", pivotX, _y);
-                        setFlags(&map, pivotX, _y, VERTICAL_LINE);
+                        uint32_t flag = getFlags(&map, pivotX, _y);
+                        flag |= VERTICAL_LINE;
+                        setFlags(&map, pivotX, _y, flag);
                     }
                 } else if (y == pivotY) {
                     int x0 = (pivotX < x) ? pivotX : x;
@@ -151,7 +153,9 @@ void onClick(int buttonIndex, int buttonX, int buttonY, int width, int height) {
                     
                     for (int _x = x0; _x <= x1; ++_x) {
                         printf("filling %d, %d\n", _x, pivotY);
-                        setFlags(&map, _x, pivotY, HORIZONTAL_LINE);
+                        uint32_t flag = getFlags(&map, _x, pivotY);
+                        flag |= HORIZONTAL_LINE;
+                        setFlags(&map, _x, pivotY, flag);
                     }
                 }
                 
