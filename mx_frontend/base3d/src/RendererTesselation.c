@@ -318,7 +318,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
             drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
         } else {
-            fillTriangle(&coords[0], 0);
+            fillTriangle(&coords[0], getPaletteEntry(0xFF000000));
         }
 
         coords[0] = fixToInt(llz0.mX); /* 0 */
@@ -347,7 +347,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 
             drawTexturedTriangle(&coords[0], &uvCoords[0], (struct Texture *) texture, fixToInt(p0.mZ));
         } else {
-            fillTriangle(&coords[0], 0);
+            fillTriangle(&coords[0], getPaletteEntry(0xFF000000));
         }
 
         return;
@@ -366,7 +366,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
     lrz1 = projectionVertices[3].second;
 
     if (p0.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+        maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
     } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ),
@@ -415,7 +415,7 @@ void drawFloorAt(const struct Vec3 center,
 
     if (center.mY <= 0) {
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
         } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
@@ -466,7 +466,7 @@ void drawCeilingAt(const struct Vec3 center,
     if (center.mY >= 0) {
 
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, 0);
+            maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
         } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),

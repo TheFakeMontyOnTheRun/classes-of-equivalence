@@ -74,6 +74,7 @@ void maskWall(
     FixP_t lowerDyDx;
     int32_t ix;
     FramebufferPixelFormat *bufferData = &framebuffer[0];
+    FramebufferPixelFormat pixel = getPaletteEntry(0xFF000000);
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -179,7 +180,7 @@ void maskWall(
         destinationLine = bufferData + (XRES_FRAMEBUFFER * iY0) + ix;
 
         for (iy = iY0; iy < iY1; ++iy) {
-            *(destinationLine) = 0;
+            *(destinationLine) = pixel;
             destinationLine += (XRES_FRAMEBUFFER);
         }
 
@@ -435,7 +436,7 @@ void drawMask(
         _y1 = YRES - 1;
     }
 
-    fillRect(_x0, _y0, _x1 - _x0, _y1 - _y0, 0, FALSE);
+    fillRect(_x0, _y0, _x1 - _x0, _y1 - _y0, getPaletteEntry(0xFF000000), FALSE);
 }
 
 #ifdef AGS
