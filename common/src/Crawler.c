@@ -51,7 +51,7 @@ const enum EGameMenuState AbandonMission_navigation[2] = {kResumeCurrentState, k
 const int AbandonMission_count = 2;
 uint8_t showDialogEntry = 0;
 extern int currentSelectedItem;
-extern struct CActor playerCrawler;
+extern struct GameSnapshot gameSnapshot;
 
 static const char *storyPoint[] = {
         "",
@@ -111,10 +111,10 @@ struct Item *itemInFrontOfPlayer() {
     struct Item *itemPtr = NULL;
     
     struct Item *item = NULL;
-    struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+    struct Vec2i offseted = mapOffsetForDirection(gameSnapshot.camera_rotation);
     head = getRoom(getPlayerRoom())->itemsPresent->next;
-    offseted.x += playerCrawler.position.x;
-    offseted.y += playerCrawler.position.y;
+    offseted.x += gameSnapshot.camera_x;
+    offseted.y += gameSnapshot.camera_z;
 
     needsToRedrawHUD = TRUE;
 

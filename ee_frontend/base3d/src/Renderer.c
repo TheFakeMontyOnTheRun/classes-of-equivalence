@@ -202,9 +202,11 @@ void renderRoomTransition(void) {
     }
 }
 
-void drawMap(const struct CActor *current) {
-    const struct Vec2i mapCamera = current->position;
-    cameraDirection = current->rotation;
+void createRenderListFor(uint8_t cameraX, uint8_t cameraZ, enum EDirection rotation) {
+    struct Vec2i mapCamera;
+    mapCamera.x = cameraX;
+    mapCamera.y = cameraZ;
+    cameraDirection = rotation;
     hasSnapshot = TRUE;
 
     if (abs(yCameraOffset) <= 1000) {
@@ -281,7 +283,7 @@ enum ECommand getInput(void) {
     return toReturn;
 }
 
-void render(const long ms) {
+void renderTick(long ms) {
     static FixP_t zero = 0;
     FixP_t two = intToFix(2);
     FixP_t four = intToFix(4);

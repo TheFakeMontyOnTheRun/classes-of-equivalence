@@ -33,8 +33,6 @@
 
 #define STANDARD_HEIGHT (Div(intToFix(230), intToFix(100)))
 
-extern const char *thisMissionName;
-extern int16_t thisMissionNameLen;
 extern const char *focusItemName;
 extern int leanX, leanY, turning;
 
@@ -236,11 +234,13 @@ void renderRoomTransition(void) {
     }
 }
 
-void drawMap(const struct CActor *current) {
+void createRenderListFor(uint8_t cameraX, uint8_t cameraZ, enum EDirection rotation) {
 
     int8_t z, x;
-    const struct Vec2i mapCamera = current->position;
-    cameraDirection = current->rotation;
+    struct Vec2i mapCamera;
+    mapCamera.x = cameraX;
+    mapCamera.y = cameraZ;
+    cameraDirection = rotation;
     hasSnapshot = TRUE;
 
     if (!enable3DRendering) {

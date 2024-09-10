@@ -53,8 +53,6 @@ void clearRenderer(void);
 
 void flipRenderer(void);
 
-void render(long ms);
-
 void loadTexturesForLevel(const uint8_t levelNumber);
 
 void loadTileProperties(const uint8_t levelNumber);
@@ -98,7 +96,7 @@ void drawMesh(const struct Mesh *mesh, const struct Vec3 at, enum EDirection rot
 
 void renderRoomTransition(void);
 
-void drawMap(const struct CActor *current);
+void createRenderListFor(uint8_t cameraX, uint8_t cameraZ, enum EDirection rotation);
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);
 

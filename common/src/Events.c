@@ -26,14 +26,8 @@
 #include "Core.h"
 #include "LoadBitmap.h"
 
+extern struct GameSnapshot gameSnapshot;
 
-int x = 0;
-int z = 0;
-int rotation = 0;
-enum CrawlerState crawlerGameState = kCrawlerGameInProgress;
-struct CActor actor;
-const char *thisMissionName;
-int16_t thisMissionNameLen;
 
 void clearMapCache(void) {
     memFill(&(ITEMS_IN_MAP(0, 0)), 0xFF, MAP_SIZE * MAP_SIZE);
@@ -54,11 +48,6 @@ void clearTileProperties(void) {
 
 void onLevelLoaded(int index) {
     clearMapCache();
-    crawlerGameState = kCrawlerGameInProgress;
-
-    thisMissionName = getRoomDescription();
-    thisMissionNameLen = (int16_t) (strlen(thisMissionName));
-
     clearTileProperties();
     loadTexturesForLevel(index);
     loadTileProperties(index);
@@ -66,14 +55,9 @@ void onLevelLoaded(int index) {
 
 void tickMission(enum ECommand cmd) {
 
-    struct GameSnapshot snapshot = dungeonTick(cmd);
+    dungeonTick(cmd);
 
-    x = snapshot.camera_x;
-    z = snapshot.camera_z;
-    rotation = snapshot.camera_rotation;
-    crawlerGameState = snapshot.should_continue;
-
-    if (crawlerGameState != kCrawlerGameInProgress) {
+    if (gameSnapshot.should_continue != kCrawlerGameInProgress) {
         gameTicks = 0;
     }
 }
@@ -109,7 +93,7 @@ int loopTick(enum ECommand command) {
     int needRedraw = 0;
 
     if (command == kCommandBack) {
-        crawlerGameState = kCrawlerQuit;
+        gameSnapshot.should_continue = kCrawlerQuit;
     } else if (command != kCommandNone || gameTicks == 0) {
 
         if (command == kCommandFire1 || command == kCommandFire2
@@ -120,23 +104,20 @@ int loopTick(enum ECommand command) {
 
         tickMission(command);
 
-        if (crawlerGameState == kCrawlerGameFinished) {
+        if (gameSnapshot.should_continue == kCrawlerGameFinished) {
             return kCrawlerGameFinished;
         }
 
         if (gameTicks != 0) {
             yCameraOffset = ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     LEVEL_MAP(x, z)))->mFloorHeight -
+                                                                     LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z)))->mFloorHeight -
                             ((struct CTile3DProperties *) getFromMap(&tileProperties,
-                                                                     LEVEL_MAP(actor.position.x,
-                                                                               actor.position.y)))->mFloorHeight;
+                                                                     LEVEL_MAP(gameSnapshot.camera_x,
+                                                                               gameSnapshot.camera_z)))->mFloorHeight;
         } else {
             yCameraOffset = 0;
         }
 
-        actor.position.x = x;
-        actor.position.y = z;
-        actor.rotation = (enum EDirection) (rotation);
 
         needRedraw = 1;
     }
@@ -147,18 +128,18 @@ int loopTick(enum ECommand command) {
 
 
     if (needRedraw) {
-        drawMap(&actor);
+        createRenderListFor(gameSnapshot.camera_x, gameSnapshot.camera_z, gameSnapshot.camera_rotation);
         if (!enable3DRendering) {
             enable3DRendering = TRUE;
             visibilityCached = FALSE;
         }
     }
-    return crawlerGameState;
+    return gameSnapshot.should_continue;
 }
 
 void initRoom(int room) {
     int16_t c;
-    crawlerGameState = kCrawlerGameInProgress;
+    gameSnapshot.should_continue = kCrawlerGameInProgress;
     mBufferedCommand = kCommandNone;
     gameTicks = 0;
     visibilityCached = FALSE;

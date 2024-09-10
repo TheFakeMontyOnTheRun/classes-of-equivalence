@@ -37,7 +37,6 @@ uint8_t *map;
 uint8_t *itemsInMap;
 uint8_t *collisionMap;
 int enteredThru = 0;
-struct CActor playerCrawler;
 int currentSelectedItem = 0;
 
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
@@ -64,7 +63,7 @@ void updateMapObjects(void) {
     }
 }
 
-struct GameSnapshot dungeonTick(const enum ECommand command) {
+void dungeonTick(const enum ECommand command) {
     int currentPlayerRoom;
     int cell;
     struct WorldPosition worldPos;
@@ -77,7 +76,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
     {
         switch (command) {
             case kCommandRight:
-                playerCrawler.rotation = rightOf(playerCrawler.rotation);
+                gameSnapshot.camera_rotation = rightOf(gameSnapshot.camera_rotation);
                 turnRight();
 #ifdef PAGE_FLIP_ANIMATION
                 turnStep = PAGE_FLIP_TARGET;
@@ -86,7 +85,7 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
 
             case kCommandLeft:
-                playerCrawler.rotation = leftOf(playerCrawler.rotation);
+                gameSnapshot.camera_rotation = leftOf(gameSnapshot.camera_rotation);
                 turnLeft();
 #ifdef PAGE_FLIP_ANIMATION
                 turnStep = 0;
@@ -95,16 +94,15 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
             case kCommandUp: {
                 struct Vec2i offset = mapOffsetForDirection(
-                        playerCrawler.rotation);
+                                                            gameSnapshot.camera_rotation);
                 gameSnapshot.turn++;
+                gameSnapshot.camera_x += offset.x;
+                gameSnapshot.camera_z += offset.y;
 
-                playerCrawler.position.x += offset.x;
-                playerCrawler.position.y += offset.y;
 
-
-                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
-                    playerCrawler.position.x -= offset.x;
-                    playerCrawler.position.y -= offset.y;
+                if (collisionMap[LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z)] == '1') {
+                    gameSnapshot.camera_x -= offset.x;
+                    gameSnapshot.camera_z -= offset.y;
                 } else {
                     walkBy(0);
                     if (enableSmoothMovement) {
@@ -115,14 +113,14 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
             case kCommandDown: {
                 struct Vec2i offset = mapOffsetForDirection(
-                        playerCrawler.rotation);
+                                                            gameSnapshot.camera_rotation);
                 gameSnapshot.turn++;
-                playerCrawler.position.x -= offset.x;
-                playerCrawler.position.y -= offset.y;
+                gameSnapshot.camera_x -= offset.x;
+                gameSnapshot.camera_z -= offset.y;
 
-                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
-                    playerCrawler.position.x += offset.x;
-                    playerCrawler.position.y += offset.y;
+                if (collisionMap[LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z)] == '1') {
+                    gameSnapshot.camera_x += offset.x;
+                    gameSnapshot.camera_z += offset.y;
                 } else {
                     walkBy(2);
                     if (enableSmoothMovement) {
@@ -136,11 +134,11 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 int index = 0;
                 struct ObjectNode *head1 = getRoom(getPlayerRoom())->itemsPresent->next;
                 struct Item *item1 = NULL;
-                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                struct Vec2i offseted = mapOffsetForDirection(gameSnapshot.camera_rotation);
                 struct ObjectNode *head2 = getPlayerItems();
                 struct Item *item2 = NULL;
-                offseted.x += playerCrawler.position.x;
-                offseted.y += playerCrawler.position.y;
+                offseted.x += gameSnapshot.camera_x;
+                offseted.y += gameSnapshot.camera_z;
 
                 needsToRedrawHUD = TRUE;
 
@@ -180,10 +178,10 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
             case kCommandFire2: {
                 struct Item *item = NULL;
-                struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+                struct Vec2i offseted = mapOffsetForDirection(gameSnapshot.camera_rotation);
                 head = getRoom(getPlayerRoom())->itemsPresent->next;
-                offseted.x += playerCrawler.position.x;
-                offseted.y += playerCrawler.position.y;
+                offseted.x += gameSnapshot.camera_x;
+                offseted.y += gameSnapshot.camera_z;
 
                 needsToRedrawHUD = TRUE;
 
@@ -261,15 +259,15 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
             case kCommandStrafeLeft: {
                 struct Vec2i offset =
-                        mapOffsetForDirection(leftOf(playerCrawler.rotation));
+                        mapOffsetForDirection(leftOf(gameSnapshot.camera_rotation));
                 gameSnapshot.turn++;
 
-                playerCrawler.position.x += offset.x;
-                playerCrawler.position.y += offset.y;
+                gameSnapshot.camera_x += offset.x;
+                gameSnapshot.camera_z += offset.y;
 
-                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
-                    playerCrawler.position.x -= offset.x;
-                    playerCrawler.position.y -= offset.y;
+                if (collisionMap[LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z)] == '1') {
+                    gameSnapshot.camera_x -= offset.x;
+                    gameSnapshot.camera_z -= offset.y;
                 } else {
                     walkBy(3);
                     if (enableSmoothMovement) {
@@ -280,15 +278,15 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 break;
             case kCommandStrafeRight: {
                 struct Vec2i offset =
-                        mapOffsetForDirection(rightOf(playerCrawler.rotation));
+                        mapOffsetForDirection(rightOf(gameSnapshot.camera_rotation));
                 gameSnapshot.turn++;
 
-                playerCrawler.position.x += offset.x;
-                playerCrawler.position.y += offset.y;
+                gameSnapshot.camera_x += offset.x;
+                gameSnapshot.camera_z += offset.y;
 
-                if (collisionMap[LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y)] == '1') {
-                    playerCrawler.position.x -= offset.x;
-                    playerCrawler.position.y -= offset.y;
+                if (collisionMap[LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z)] == '1') {
+                    gameSnapshot.camera_x -= offset.x;
+                    gameSnapshot.camera_z -= offset.y;
                 } else {
                     walkBy(1);
                     if (enableSmoothMovement) {
@@ -303,13 +301,9 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
     }
 
     worldPos = *getPlayerPosition();
-    playerCrawler.position.x = worldPos.x;
-    playerCrawler.position.y = worldPos.y;
-    playerCrawler.rotation = getPlayerDirection();
-
-    gameSnapshot.camera_x = playerCrawler.position.x;
-    gameSnapshot.camera_z = playerCrawler.position.y;
-    gameSnapshot.camera_rotation = playerCrawler.rotation;
+    gameSnapshot.camera_x = worldPos.x;
+    gameSnapshot.camera_z = worldPos.y;
+    gameSnapshot.camera_rotation = getPlayerDirection();
 
     if (oldTurn != gameSnapshot.turn) {
 
@@ -317,22 +311,22 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             case kBadVictory:
                 gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadVictoryEpilogue);
-                return gameSnapshot;
+                return;
 
             case kBadGameOver:
                 gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kBadGameOverEpilogue);
-                return gameSnapshot;
+                return;
 
             case kGoodVictory:
                 gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodVictoryEpilogue);
-                return gameSnapshot;
+                return;
 
             case kGoodGameOver:
                 gameSnapshot.should_continue = kCrawlerGameFinished;
                 enterState(kGoodGameOverEpilogue);
-                return gameSnapshot;
+                return;
             default:
             case kNormalGameplay:
                 break;
@@ -342,10 +336,10 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
         {
             struct ObjectNode *roomItems = getRoom(getPlayerRoom())->itemsPresent->next;
             struct Item *item = NULL;
-            struct Vec2i offseted = mapOffsetForDirection(playerCrawler.rotation);
+            struct Vec2i offseted = mapOffsetForDirection(gameSnapshot.camera_rotation);
             focusItemName = NULL;
-            offseted.x += playerCrawler.position.x;
-            offseted.y += playerCrawler.position.y;
+            offseted.x += gameSnapshot.camera_x;
+            offseted.y += gameSnapshot.camera_z;
 
             while (roomItems != NULL && item == NULL) {
                 struct Item *itemCandidate = getItem(roomItems->item);
@@ -367,15 +361,12 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             setPlayerDirection((enum EDirection) enteredThru);
             initRoom(getPlayerRoom());
 
-            thisMissionName = getRoomDescription();
-            thisMissionNameLen = strlen(getRoomDescription());
-
             setPlayerPosition(&oldPosition);
 
-            return gameSnapshot;
+            return;
         }
 
-        cell = LEVEL_MAP(playerCrawler.position.x, playerCrawler.position.y);
+        cell = LEVEL_MAP(gameSnapshot.camera_x, gameSnapshot.camera_z);
 
         if ('0' <= cell && cell <= '3') {
 
@@ -396,18 +387,14 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
                 setPlayerDirection((enum EDirection) enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
-                thisMissionName = getRoomDescription();
-                thisMissionNameLen = strlen(thisMissionName);
 
             } else { /* Something prevented the player from moving - maybe not enough clearance */
                 setPlayerPosition(&oldPosition);
-                playerCrawler.position.x = oldPosition.x;
-                playerCrawler.position.y = oldPosition.y;
-                gameSnapshot.camera_x = playerCrawler.position.x;
-                gameSnapshot.camera_z = playerCrawler.position.y;
+                gameSnapshot.camera_x = oldPosition.x;
+                gameSnapshot.camera_z = oldPosition.y;
             }
 
-            return gameSnapshot;
+            return;
         }
 
 
@@ -419,8 +406,6 @@ struct GameSnapshot dungeonTick(const enum ECommand command) {
             head = head->next;
         }
     }
-
-    return gameSnapshot;
 }
 
 void dungeon_loadMap(const uint8_t *__restrict__ mapData,
@@ -432,7 +417,7 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
 
     gameSnapshot.should_continue = kCrawlerGameInProgress;
     gameSnapshot.camera_rotation = 0;
-    playerCrawler.rotation = kNorth;
+    gameSnapshot.camera_rotation = kNorth;
     memCopyToFrom(collisionMap, (void *) collisions, 256);
 
     for (y = 0; y < MAP_SIZE; ++y) {
@@ -458,8 +443,8 @@ void dungeon_loadMap(const uint8_t *__restrict__ mapData,
     x = worldPos.x;
     y = worldPos.y;
     setPlayerPosition(&worldPos);
-    playerCrawler.position.x = x;
-    playerCrawler.position.y = y;
+    gameSnapshot.camera_x = x;
+    gameSnapshot.camera_z = y;
 
     updateMapObjects();
 

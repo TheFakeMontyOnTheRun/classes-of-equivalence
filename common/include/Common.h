@@ -68,8 +68,6 @@ extern size_t biggestOption;
 extern const char *focusItemName;
 extern int currentSelectedItem;
 extern int shouldContinue;
-extern const char *thisMissionName;
-extern int16_t thisMissionNameLen;
 extern size_t biggestOption;
 
 int nextRandomInteger(void);
