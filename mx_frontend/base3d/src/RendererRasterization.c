@@ -891,7 +891,6 @@ void drawFloor(FixP_t y0,
         const FixP_t diffX = (x1 - x0);
         uint8_t lastU = 0;
         FixP_t u = 0;
-        int stipple;
 
         if (diffX == 0) {
             continue;
@@ -920,13 +919,14 @@ void drawFloor(FixP_t y0,
         destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + ix;
         sourceLineStart = texture + (fixToInt(v) * NATIVE_TEXTURE_SIZE);
         pixel = *(sourceLineStart);
-        stipple = ((iX0 + iy) & 1) ? 0xFFFFFFFF : 0;
 
         if (iX1 >= XRES) {
             iX1 = XRES - 1;
         }
 
-        if (farEnoughForStipple == 2  || ( farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3) ) {
+        if (farEnoughForStipple >= 2  || ( farEnoughForStipple == 1 && iy & 1)) {
+            int stipple = ((iX0 + iy) & 1) ? 0xFFFFFFFF : 0;
+
             for (; ix < iX1; ++ix) {
                 const int32_t iu = fixToInt(u);
                 stipple = ~stipple;
