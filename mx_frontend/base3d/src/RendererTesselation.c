@@ -393,27 +393,28 @@ void drawFloorAt(const struct Vec3 center,
         return;
     }
 
-    ptr0 = &projectionVertices[0].first;
-    ptr1 = &projectionVertices[1].first;
-    ptr2 = &projectionVertices[2].first;
-    ptr3 = &projectionVertices[3].first;
-
-    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
-    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
-
-    ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
-
-    ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
-    ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
-
-    projectAllVertices(4);
-
-    llz0 = projectionVertices[0].second;
-    lrz0 = projectionVertices[1].second;
-    llz1 = projectionVertices[2].second;
-    lrz1 = projectionVertices[3].second;
-
     if (center.mY <= 0) {
+        
+        ptr0 = &projectionVertices[0].first;
+        ptr1 = &projectionVertices[1].first;
+        ptr2 = &projectionVertices[2].first;
+        ptr3 = &projectionVertices[3].first;
+
+        ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+        ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+        ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
+
+        ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
+        ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
+
+        projectAllVertices(4);
+
+        llz0 = projectionVertices[0].second;
+        lrz0 = projectionVertices[1].second;
+        llz1 = projectionVertices[2].second;
+        lrz1 = projectionVertices[3].second;
+
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
         } else {
@@ -443,27 +444,27 @@ void drawCeilingAt(const struct Vec3 center,
         return;
     }
 
-    ptr0 = &projectionVertices[0].first;
-    ptr1 = &projectionVertices[1].first;
-    ptr2 = &projectionVertices[2].first;
-    ptr3 = &projectionVertices[3].first;
-
-    ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
-    ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
-
-    ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
-
-    ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
-    ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
-
-    projectAllVertices(4);
-
-    llz0 = projectionVertices[0].second;
-    lrz0 = projectionVertices[1].second;
-    llz1 = projectionVertices[2].second;
-    lrz1 = projectionVertices[3].second;
-
     if (center.mY >= 0) {
+        
+        ptr0 = &projectionVertices[0].first;
+        ptr1 = &projectionVertices[1].first;
+        ptr2 = &projectionVertices[2].first;
+        ptr3 = &projectionVertices[3].first;
+
+        ptr0->mX = ptr2->mX = center.mX - FIXP_ONE;
+        ptr1->mX = ptr3->mX = center.mX + FIXP_ONE;
+
+        ptr0->mY = ptr1->mY = ptr2->mY = ptr3->mY = center.mY;
+
+        ptr0->mZ = ptr1->mZ = center.mZ - FIXP_ONE;
+        ptr2->mZ = ptr3->mZ = center.mZ + FIXP_ONE;
+
+        projectAllVertices(4);
+
+        llz0 = projectionVertices[0].second;
+        lrz0 = projectionVertices[1].second;
+        llz1 = projectionVertices[2].second;
+        lrz1 = projectionVertices[3].second;
 
         if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
