@@ -160,9 +160,6 @@ void drawColumnAt(const struct Vec3 center,
 
            front
   */
-    textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
-    z = fixToInt(center.mZ);
-    originalZ = z;
 
     ptr0 = &projectionVertices[0].first;
     ptr1 = &projectionVertices[1].first;
@@ -185,56 +182,60 @@ void drawColumnAt(const struct Vec3 center,
     p2 = projectionVertices[2].second;
     p3 = projectionVertices[3].second;
 
-    if ((mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+    if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+        if ((mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
             drawMask(p2.mX, p2.mY, p3.mX, p3.mY);
-        } else {
-            drawFrontWall(p2.mX, p2.mY, p3.mX, p3.mY, texture->rotations[0],
-                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
-        }
-    }
-
-    if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
-
-        if (mask & ~MASK_BEHIND) {
-            z -= 2;
         }
 
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+        if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
             maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
-        } else {
-            drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
-                     (textureScale), z);
         }
 
-        z = originalZ;
-    }
-
-    if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
-        if (mask & ~MASK_BEHIND) {
-            z -= 2;
-        }
-
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+        if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
             maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
-        } else {
-            drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
-                     (textureScale), z);
         }
 
-        z = originalZ;
-    }
-
-    if ((mask & MASK_FRONT)) {
-        if (mask & ~MASK_BEHIND) {
-            z -= 2;
-        }
-
-        if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
+        if ((mask & MASK_FRONT)) {
             drawMask(p0.mX, p0.mY, p1.mX, p1.mY);
-        } else {
+        }
+    } else {
+        textureScale = (repeatedTexture ? halfScale : FIXP_ONE);
+        z = fixToInt(center.mZ);
+        originalZ = z;
+
+        if ((mask & MASK_BEHIND) || (enableAlpha && (mask & MASK_FRONT))) {
+                drawFrontWall(p2.mX, p2.mY, p3.mX, p3.mY, texture->rotations[0],
+                              (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
+        }
+
+        if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
+
+            if (mask & ~MASK_BEHIND) {
+                z -= 2;
+            }
+            drawWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, texture->rowMajor,
+                         (textureScale), z);
+            z = originalZ;
+        }
+
+        if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
+            if (mask & ~MASK_BEHIND) {
+                z -= 2;
+            }
+
+            drawWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, texture->rowMajor,
+                         (textureScale), z);
+
+            z = originalZ;
+        }
+
+        if ((mask & MASK_FRONT)) {
+            if (mask & ~MASK_BEHIND) {
+                z -= 2;
+            }
+
             drawFrontWall(p0.mX, p0.mY, p1.mX, p1.mY, texture->rotations[0],
-                          (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
+                              (textureScale), z, enableAlpha, NATIVE_TEXTURE_SIZE);
         }
     }
 }
@@ -380,17 +381,16 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 void drawFloorAt(const struct Vec3 center,
                  const struct Texture *texture, enum EDirection rotation) {
 
-    struct Vec2 llz0;
-    struct Vec2 lrz0;
-    struct Vec2 llz1;
-    struct Vec2 lrz1;
-    struct Vec3 *ptr0;
-    struct Vec3 *ptr1;
-    struct Vec3 *ptr2;
-    struct Vec3 *ptr3;
-
     if (center.mZ > kMinZCull && center.mY <= 0) {
-        
+        struct Vec2 llz0;
+        struct Vec2 lrz0;
+        struct Vec2 llz1;
+        struct Vec2 lrz1;
+        struct Vec3 *ptr0;
+        struct Vec3 *ptr1;
+        struct Vec3 *ptr2;
+        struct Vec3 *ptr3;
+
         ptr0 = &projectionVertices[0].first;
         ptr1 = &projectionVertices[1].first;
         ptr2 = &projectionVertices[2].first;
@@ -427,17 +427,17 @@ void drawFloorAt(const struct Vec3 center,
 
 void drawCeilingAt(const struct Vec3 center,
                    const struct Texture *texture, enum EDirection rotation) {
-    struct Vec2 llz0;
-    struct Vec2 lrz0;
-    struct Vec2 llz1;
-    struct Vec2 lrz1;
-    struct Vec3 *ptr0;
-    struct Vec3 *ptr1;
-    struct Vec3 *ptr2;
-    struct Vec3 *ptr3;
 
     if (center.mZ > kMinZCull && center.mY >= 0) {
-        
+        struct Vec2 llz0;
+        struct Vec2 lrz0;
+        struct Vec2 llz1;
+        struct Vec2 lrz1;
+        struct Vec3 *ptr0;
+        struct Vec3 *ptr1;
+        struct Vec3 *ptr2;
+        struct Vec3 *ptr3;
+
         ptr0 = &projectionVertices[0].first;
         ptr1 = &projectionVertices[1].first;
         ptr2 = &projectionVertices[2].first;

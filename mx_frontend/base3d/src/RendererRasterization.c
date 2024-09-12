@@ -372,14 +372,18 @@ void drawWall(FixP_t x0,
 
             stipple = ~stipple;
 
-            if (iv != lastV && !(stipple && shouldStippleLine)) {
-                pixel = *(lineOffset);
-                lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
-                lastV = iv;
-            }
+            if ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && iy & 1)) {
+                *(destinationLine) = 0;
+            } else {
+                if (iv != lastV) {
+                    pixel = *(lineOffset);
+                    lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
+                    lastV = iv;
+                }
 
-            if (pixel != TRANSPARENCY_COLOR) {
-                *(destinationLine) = ((shouldStippleLine && stipple) || (farEnoughForStipple == 3 && (iy & 1))) ? 0 : pixel;
+                if (pixel != TRANSPARENCY_COLOR) {
+                    *(destinationLine) = pixel;
+                }
             }
 
             destinationLine += (XRES_FRAMEBUFFER);
