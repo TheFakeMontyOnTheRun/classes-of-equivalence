@@ -122,9 +122,9 @@ void maskWall(
     } else {
         FixP_t oneOverDx;
 
-        if (dX > 0 && dX < intToFix(320)) {
+        if (dX > 0 && dX < intToFix(XRES_FRAMEBUFFER)) {
             oneOverDx = divLut[limit - x];
-        } else if (dX < 0 && dX > -intToFix(320)) {
+        } else if (dX < 0 && dX > -intToFix(XRES_FRAMEBUFFER)) {
             oneOverDx = -divLut[-limit + x];
         } else {
             oneOverDx = Div(intToFix(1), dX);
@@ -292,9 +292,9 @@ void drawWall(FixP_t x0,
     } else {
         FixP_t oneOverDx;
 
-        if (dX > 0 && dX < intToFix(320)) {
+        if (dX > 0 && dX < intToFix(XRES_FRAMEBUFFER)) {
             oneOverDx = divLut[limit - x];
-        } else if (dX < 0 && dX > -intToFix(320)) {
+        } else if (dX < 0 && dX > -intToFix(XRES_FRAMEBUFFER)) {
             oneOverDx = -divLut[-limit + x];
         } else {
             oneOverDx = Div(intToFix(1), dX);
@@ -514,9 +514,9 @@ void drawFrontWall(FixP_t x0,
         return;
     }
 
-    if (diffX > 0 && diffX < intToFix(320)) {
+    if (diffX > 0 && diffX < intToFix(XRES_FRAMEBUFFER)) {
         du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
-    } else if (diffX < 0 && diffX > -intToFix(320)) {
+    } else if (diffX < 0 && diffX > -intToFix(XRES_FRAMEBUFFER)) {
         du = -Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX0 - iX1]);
     } else {
         du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
@@ -674,9 +674,9 @@ void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP
         return;
     } else {
         FixP_t oneOverDy;
-        if (dY > 0 && dY < intToFix(320)) {
+        if (dY > 0 && dY < intToFix(XRES_FRAMEBUFFER)) {
             oneOverDy = divLut[limit - y];
-        } else if (dY < 0 && dY > -intToFix(320)) {
+        } else if (dY < 0 && dY > -intToFix(XRES_FRAMEBUFFER)) {
             oneOverDy = -divLut[-limit + y];
         } else {
             oneOverDy = Div(intToFix(1), dY);
@@ -850,9 +850,9 @@ void drawFloor(FixP_t y0,
         return;
     } else {
         FixP_t oneOverDy;
-        if (dY > 0 && dY < intToFix(320)) {
+        if (dY > 0 && dY < intToFix(XRES_FRAMEBUFFER)) {
             oneOverDy = divLut[limit - y];
-        } else if (dY < 0 && dY > -intToFix(320)) {
+        } else if (dY < 0 && dY > -intToFix(XRES_FRAMEBUFFER)) {
             oneOverDy = -divLut[-limit + y];
         } else {
             oneOverDy = Div(intToFix(1), dY);
@@ -899,9 +899,9 @@ void drawFloor(FixP_t y0,
         iX1 = fixToInt(x1);
 
         if (diffX != lastDiffX) {
-            if (diffX > 0 && diffX < intToFix(320)) {
+            if (diffX > 0 && diffX < intToFix(XRES_FRAMEBUFFER)) {
                 du = Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX1 - iX0]);
-            } else if (diffX < 0 && diffX > -intToFix(320)) {
+            } else if (diffX < 0 && diffX > -intToFix(XRES_FRAMEBUFFER)) {
                 du = -Mul(FIXP_NATIVE_TEXTURE_SIZE, divLut[iX0 - iX1]);
             } else {
                 du = Div(FIXP_NATIVE_TEXTURE_SIZE, diffX);
@@ -910,7 +910,7 @@ void drawFloor(FixP_t y0,
         }
 
         if (ix < 0) {
-            FixP_t diff = intToFix((-ix));
+            FixP_t diff = -intToFix(ix);
             u += Mul(diff, du);
             ix = 0;
         }
@@ -1285,9 +1285,9 @@ void drawTexturedBottomFlatTriangle(int *coords, uint8_t *uvCoords, struct Textu
 
         if (limit) {
             FramebufferPixelFormat *destination;
-            if (limit > 0 && limit < 320) {
+            if (limit > 0 && limit < XRES_FRAMEBUFFER) {
                 oneOverLimit = divLut[limit];
-            } else if (limit < 0 && limit > -320) {
+            } else if (limit < 0 && limit > -XRES_FRAMEBUFFER) {
                 oneOverLimit = -divLut[-limit];
             } else {
                 oneOverLimit = Div(intToFix(1), (fX1 - fX0));
@@ -1453,9 +1453,9 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
 
         if (limit) {
             FramebufferPixelFormat *destination;
-            if (limit > 0 && limit < 320) {
+            if (limit > 0 && limit < XRES_FRAMEBUFFER) {
                 oneOverLimit = divLut[limit];
-            } else if (limit < 0 && limit > -320) {
+            } else if (limit < 0 && limit > -XRES_FRAMEBUFFER) {
                 oneOverLimit = -divLut[-limit];
             } else {
                 oneOverLimit = Div(intToFix(1), (fX1 - fX0));
