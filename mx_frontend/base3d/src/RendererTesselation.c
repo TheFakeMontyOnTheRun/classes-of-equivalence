@@ -389,11 +389,7 @@ void drawFloorAt(const struct Vec3 center,
     struct Vec3 *ptr2;
     struct Vec3 *ptr3;
 
-    if (center.mZ <= kMinZCull) {
-        return;
-    }
-
-    if (center.mY <= 0) {
+    if (center.mZ > kMinZCull && center.mY <= 0) {
         
         ptr0 = &projectionVertices[0].first;
         ptr1 = &projectionVertices[1].first;
@@ -440,11 +436,7 @@ void drawCeilingAt(const struct Vec3 center,
     struct Vec3 *ptr2;
     struct Vec3 *ptr3;
 
-    if (center.mZ <= kMinZCull) {
-        return;
-    }
-
-    if (center.mY >= 0) {
+    if (center.mZ > kMinZCull && center.mY >= 0) {
         
         ptr0 = &projectionVertices[0].first;
         ptr1 = &projectionVertices[1].first;

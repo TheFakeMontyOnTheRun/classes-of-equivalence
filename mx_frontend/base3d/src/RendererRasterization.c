@@ -368,12 +368,11 @@ void drawWall(FixP_t x0,
         for (; iy < iY1; ++iy) {
 
             const int32_t iv = fixToInt(v);
-            const int shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
+            const int shouldStippleLine = (farEnoughForStipple >= 2) || (farEnoughForStipple == 1 && iy & 1);
 
             stipple = ~stipple;
 
             if (iv != lastV && !(stipple && shouldStippleLine)) {
-
                 pixel = *(lineOffset);
                 lineOffset = ((iv & (NATIVE_TEXTURE_SIZE - 1)) + sourceLineStart);
                 lastV = iv;
@@ -543,7 +542,9 @@ void drawFrontWall(FixP_t x0,
         int ix;
         int stipple;
         lastU = 0;
-        shouldStippleLine = (farEnoughForStipple == 2) || (farEnoughForStipple == 1 && iy & 1) || (farEnoughForStipple == 3);
+        if (shouldStippleLine = (farEnoughForStipple >= 2) || (farEnoughForStipple == 1 && iy & 1)) {
+            stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
+        }
 
         if (!farEnoughForStipple
             && ((!enableAlpha && iv == lastV)
@@ -573,8 +574,6 @@ void drawFrontWall(FixP_t x0,
         if (iX1 >= XRES) {
             iX1 = XRES - 1;
         }
-
-        stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
 
         for (; ix < iX1; ++ix) {
             const uint8_t iu = fixToInt(u) & (NATIVE_TEXTURE_SIZE - 1);

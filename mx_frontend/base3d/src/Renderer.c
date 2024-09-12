@@ -225,7 +225,7 @@ void renderRoomTransition(void) {
         center.mZ = intToFix(3);
         drawCeilingAt(center, nativeTextures[0], kNorth);
 
-        zCameraOffset -= Div(intToFix(1), intToFix(4));
+        zCameraOffset -= intToFix(1) / 4;
 
         if (zCameraOffset == 0) {
             currentPresentationState = kCheckingForRandomBattle;
@@ -252,22 +252,22 @@ void createRenderListFor(uint8_t cameraX, uint8_t cameraZ, enum EDirection rotat
     }
 
     if (yCameraOffset > 0) {
-        yCameraOffset -= Div(intToFix(1), intToFix(2));
+        yCameraOffset -= intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     } else if (zCameraOffset > 0) {
-        zCameraOffset -= Div(intToFix(1), intToFix(2));
+        zCameraOffset -= intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     } else if (zCameraOffset < 0) {
-        zCameraOffset += Div(intToFix(1), intToFix(2));
+        zCameraOffset += intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     } else if (xCameraOffset > 0) {
-        xCameraOffset -= Div(intToFix(1), intToFix(2));
+        xCameraOffset -= intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     } else if (xCameraOffset < 0) {
-        xCameraOffset += Div(intToFix(1), intToFix(2));
+        xCameraOffset += intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     } else if (yCameraOffset < 0) {
-        yCameraOffset += Div(intToFix(1), intToFix(2));
+        yCameraOffset += intToFix(1) / 2;
         needsToRedrawVisibleMeshes = TRUE;
     }
 
@@ -636,14 +636,14 @@ void renderTick(long ms) {
                     enum EDirection newDirection = cameraDirection;
 
                     tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
-
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
                     if (cameraDirection == kNorth) {
                         newDirection = kSouth;
                     }
                     if (cameraDirection == kSouth) {
                         newDirection = kNorth;
                     }
-
+#endif
                     drawCeilingAt(
                             tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection);
                 }
@@ -656,8 +656,8 @@ void renderTick(long ms) {
 
                     FixP_t adjust = 0;
 
-                    if (((heightDiff * 2) - intToFix(integerPart)) >= Div(intToFix(1), intToFix(2))) {
-                        adjust = Div(Div(intToFix(1), intToFix(2)), intToFix(8));
+                    if (((heightDiff * 2) - intToFix(integerPart)) >= intToFix(1) / 2) {
+                        adjust = ((intToFix(1) / 2) / (8));
                     }
 
                     switch (tileProp->mGeometryType) {
