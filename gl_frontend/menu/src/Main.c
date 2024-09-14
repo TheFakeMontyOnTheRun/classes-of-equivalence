@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     initHW(argc, argv);
 
-    enterState(kMainMenu);
+    enterState(kPlayGame);
 
     end_clock = 0;
     prev = 0;
