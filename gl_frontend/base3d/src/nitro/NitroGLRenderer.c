@@ -25,7 +25,7 @@
 #include "CTile3DProperties.h"
 #include "Renderer.h"
 
-#define COOLDOWN 0x10
+#define COOLDOWN 0x7
 int snapshotSignal = '.';
 
 #define ANGLE_TURN_THRESHOLD 40
@@ -97,7 +97,7 @@ void handleSystemEvents(void) {
 
         if ((keys & KEY_B)) {
             cooldown = COOLDOWN;
-            mBufferedCommand = kCommandFire2;
+            mBufferedCommand = kCommandBack;
         }
 
         if ((keys & KEY_X)) {
