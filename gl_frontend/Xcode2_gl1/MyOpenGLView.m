@@ -44,7 +44,7 @@ extern int turning;
 extern int leanX;
 extern int leanY;
 
-NSMutableSet *playingSounds;
+/*NSMutableSet *playingSounds */;
 int nextAudioChannel = -1;
 float multiplier = 1.0f;
 extern uint8_t isRunning;
@@ -70,6 +70,7 @@ id delegate;
 int bufferedInput = -1;
 
 void setupOPL2(int port) {
+    /*
 	int c;
 	NSBundle *bundle = [NSBundle mainBundle];
 	playingSounds = [[NSMutableSet alloc] init];
@@ -79,21 +80,26 @@ void setupOPL2(int port) {
 		playerSounds[c] = [[NSSound alloc] initWithContentsOfFile:path byReference:NO];
 		[playerSounds[c] setDelegate:delegate];
 	}
+     */
 }
 
 void stopSounds(void) {}
 
 void playSound(const int action) {
+    /*
 	NSSound *original = playerSounds[action];
 	NSSound *newSound = (NSSound * )
 	[original copy];
 	[playingSounds addObject:newSound];
 	[newSound play];
+     */
 }
 
 - (void)sound:(NSSound *)sound didFinishPlaying:(BOOL)aBool {
+    /*
 	[sound release];
 	[playingSounds removeObject:sound];
+     */
 }
 
 void soundTick(void) {}
