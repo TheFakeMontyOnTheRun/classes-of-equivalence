@@ -500,9 +500,9 @@ void drawFrontWall(FixP_t x0,
 
     /* what if the quad is flipped horizontally? */
     if (x0 > x1) {
-        x0 = x0 + x1;
-        x1 = x0 - x1;
-        x0 = x0 - x1;
+        FixP_t tmp = x1;
+        x1 = x0;
+        x0 = tmp;
     }
 
     dY = (y1 - y0);
@@ -546,7 +546,8 @@ void drawFrontWall(FixP_t x0,
         int ix;
         int stipple;
         lastU = 0;
-        if (shouldStippleLine = (farEnoughForStipple >= 2) || (farEnoughForStipple == 1 && iy & 1)) {
+        if ((shouldStippleLine = (farEnoughForStipple >= 2)) ||
+            (farEnoughForStipple == 1 && iy & 1)) {
             stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
         }
 
