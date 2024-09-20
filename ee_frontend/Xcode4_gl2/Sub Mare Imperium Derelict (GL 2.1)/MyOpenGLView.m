@@ -131,6 +131,7 @@ void handleSystemEvents() {
 			break;
 	}
 	bufferedInput = -1;
+    visibilityCached = FALSE;
 }
 
 void graphicsShutdown() {
