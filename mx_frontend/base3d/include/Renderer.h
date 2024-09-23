@@ -120,13 +120,13 @@ void drawTextAt(const int x,
                 const FramebufferPixelFormat colour);
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation);
+                struct Texture *texture, enum EDirection rotation);
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t rotation, uint8_t flipTexture);
+                struct Texture *texture, uint8_t rotation, uint8_t flipTexture);
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation);
+                   struct Texture *texture, enum EDirection rotation);
 
 void drawLeftNear(const struct Vec3 center,
                   const FixP_t scale,

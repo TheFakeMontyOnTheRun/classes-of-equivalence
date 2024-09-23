@@ -20,9 +20,9 @@ struct Bitmap {
 
 struct Texture {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
-    TexturePixelFormat rotations[4][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat *rotations[4];
 #else
-    TexturePixelFormat rotations[1][NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
+    TexturePixelFormat *rotations[1];
 #endif
     TexturePixelFormat rowMajor[NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE];
 };
@@ -34,5 +34,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename);
 struct Bitmap *loadBitmap(const char *__restrict__ filename);
 
 void releaseBitmap(struct Bitmap *ptr);
+
+void initTextureForRotation(struct Texture *texture, enum EDirection direction);
 
 #endif
