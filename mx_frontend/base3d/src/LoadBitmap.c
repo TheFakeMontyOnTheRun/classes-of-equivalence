@@ -35,7 +35,18 @@ extern struct Bitmap *itemSprites[TOTAL_ITEMS];
 extern int currentSelectedItem;
 
 void clearTextures(void) {
-    int c;
+    int c, d;
+    for (c = 0; c < usedTexture; ++c) {
+        if (nativeTextures[c]) {
+            for ( d = 0; d < 4; ++d) {
+                if (nativeTextures[c]->rotations[d] != NULL) {
+                    disposeMem(nativeTextures[c]->rotations[d]);
+                    nativeTextures[c]->rotations[d] = NULL;
+                }
+            }
+        }
+        nativeTextures[c] = NULL;
+    }
     usedTexture = 0;
     for (c = 0; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c] != NULL) {
