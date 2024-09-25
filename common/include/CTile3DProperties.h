@@ -21,18 +21,26 @@ enum GeometryType {
     kCustomMeshStart
 };
 
+struct TextureInstance {
+    TextureIndex* frames;
+    uint8_t frameTime;
+    uint8_t frameNumbers;
+    uint8_t currentFrameTime;
+    uint8_t currentFrame;
+};
+
 struct CTile3DProperties {
     int mNeedsAlphaTest;
     int mBlockVisibility;
     int mBlockMovement;
     int mBlockEnemySight;
     int mRepeatMainTexture;
-    TextureIndex mCeilingTextureIndex;
-    TextureIndex mFloorTextureIndex;
-    TextureIndex mMainWallTextureIndex;
+    struct TextureInstance mCeilingTexture;
+    struct TextureInstance mFloorTexture;
+    struct TextureInstance mMainWallTexture;
     uint8_t mGeometryType;
-    TextureIndex mCeilingRepeatedTextureIndex;
-    TextureIndex mFloorRepeatedTextureIndex;
+    struct TextureInstance mCeilingRepeatedTexture;
+    struct TextureInstance mFloorRepeatedTexture;
     uint8_t mCeilingRepetitions;
     uint8_t mFloorRepetitions;
     FixP_t mCeilingHeight;
