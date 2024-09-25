@@ -51,6 +51,12 @@ class GameActivity : CardboardActivity() {
     }
 
 
+    override fun onCardboardTrigger() {
+        super.onCardboardTrigger()
+
+        DerelictJNI.sendCommand('z')
+    }
+
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
         var toSend = '.'
