@@ -13,10 +13,10 @@ vector<char> readToBuffer(FILE *fileDescriptor) {
     const unsigned N = 1024;
 
     fseek(fileDescriptor, 0, SEEK_END);
-    auto endPos = ftell(fileDescriptor);
+    long endPos = ftell(fileDescriptor);
     rewind(fileDescriptor);
     vector<char> total(endPos);
-    auto writeHead = std::begin(total);
+    vector<char>::iterator writeHead = total.begin();
 
     for (int c = 0; c < endPos; ++c) {
         char buffer[N];
@@ -24,7 +24,7 @@ vector<char> readToBuffer(FILE *fileDescriptor) {
         if (read) {
             for (unsigned int c = 0; c < read; ++c) {
                 *writeHead = (buffer[c]);
-                writeHead = std::next(writeHead);
+                writeHead = ++writeHead;
             }
         }
         if (read < N) {
@@ -41,10 +41,10 @@ public:
 
     vector<char> mContent;
     std::string id;
-    uint32_t offset = 0;
+    uint32_t offset;
 };
 
-Entry::Entry(std::string path, std::string key) : id(key) {
+Entry::Entry(std::string path, std::string key) : id(key), offset(0) {
     FILE *in = fopen(path.c_str(), "rb");
     mContent = readToBuffer(in);
     fclose(in);
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     while (--c) {
         std::string filename = argv[c];
         std::cout << "adding " << filename << std::endl;
-        files.emplace_back(filename, filename.substr(filename.find('/') + 1));
+        files.push_back(Entry(filename, filename.substr(filename.find('/') + 1)));
     }
 
     FILE *file = fopen("data.pfs", "wb");
@@ -98,8 +98,8 @@ int main(int argc, char **argv) {
         std::cout << "writing a file " << files[e].id << " with " << size << " bytes at " << ftell(file) << std::endl;
         fwrite(&size, 4, 1, file);
 
-        for (const auto &c : files[e].mContent) {
-            fwrite(&c, 1, 1, file);
+        for (int f = 0; f < files[e].mContent.size(); ++f) {
+            fwrite(&files[e].mContent[f], 1, 1, file);
         }
     }
 
