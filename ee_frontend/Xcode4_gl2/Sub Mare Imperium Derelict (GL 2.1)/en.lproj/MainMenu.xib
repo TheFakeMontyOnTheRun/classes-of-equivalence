@@ -41,7 +41,7 @@
 				<array class="NSMutableArray" key="NSMenuItems">
 					<object class="NSMenuItem" id="694149608">
 						<reference key="NSMenu" ref="649796088"/>
-						<string key="NSTitle">Sub Mare Imperium Derelict (GL 2.1)</string>
+						<string key="NSTitle">Sub Mare Imperium - Tragedy of the Uncanny (GL 2.1)</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSKeyEquivModMask">1048576</int>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -55,7 +55,7 @@
 						</object>
 						<string key="NSAction">submenuAction:</string>
 						<object class="NSMenu" key="NSSubmenu" id="110575045">
-							<string key="NSTitle">Sub Mare Imperium Derelict (GL 2.1)</string>
+							<string key="NSTitle">Sub Mare Imperium - Tragedy of the Uncanny (GL 2.1)</string>
 							<array class="NSMutableArray" key="NSMenuItems">
 								<object class="NSMenuItem" id="238522557">
 									<reference key="NSMenu" ref="110575045"/>
@@ -1296,7 +1296,7 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{335, 390}, {640, 480}}</string>
 				<int key="NSWTFlags">1954021376</int>
-				<string key="NSWindowTitle">Sub Mare Imperium Derelict (GL 2.1)</string>
+				<string key="NSWindowTitle">Sub Mare Imperium - Tragedy of the Uncanny (GL 2.1)</string>
 				<string key="NSWindowClass">GameWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
