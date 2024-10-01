@@ -18,13 +18,13 @@ vector<char> readToBuffer(FILE *fileDescriptor) {
     vector<char> total(endPos);
     vector<char>::iterator writeHead = total.begin();
 
-    for (int c = 0; c < endPos; ++c) {
+    for (long c = 0; c < endPos; ++c) {
         char buffer[N];
         size_t read = fread((void *) &buffer[0], 1, N, fileDescriptor);
         if (read) {
             for (unsigned int c = 0; c < read; ++c) {
                 *writeHead = (buffer[c]);
-                writeHead = ++writeHead;
+                ++writeHead;
             }
         }
         if (read < N) {
@@ -98,8 +98,8 @@ int main(int argc, char **argv) {
         std::cout << "writing a file " << files[e].id << " with " << size << " bytes at " << ftell(file) << std::endl;
         fwrite(&size, 4, 1, file);
 
-        for (int f = 0; f < files[e].mContent.size(); ++f) {
-            fwrite(&files[e].mContent[f], 1, 1, file);
+        for (vector<char>::const_iterator it = files[e].mContent.begin(); it != files[e].mContent.end(); ++it) {
+            fwrite(&(*it), 1, 1, file);
         }
     }
 
