@@ -494,11 +494,78 @@ enum ECommand getInput(void) {
     return toReturn;
 }
 
+
+void updateTextureCycle(long ms) {
+    struct CTile3DProperties *tileProp;
+    for (int c = 0; c < 255; ++c) {
+        tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                            c));
+        if (tileProp != NULL) {
+            if (tileProp->mFloorTexture.frameNumbers > 1) {
+                int time = tileProp->mFloorTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mFloorTexture.frameTime = tileProp->mFloorTexture.frameTime + time;
+                    tileProp->mFloorTexture.currentFrame = (tileProp->mFloorTexture.currentFrame + 1) % tileProp->mFloorTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mFloorTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mCeilingTexture.frameNumbers > 1) {
+                int time = tileProp->mCeilingTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mCeilingTexture.frameTime = tileProp->mCeilingTexture.frameTime + time;
+                    tileProp->mCeilingTexture.currentFrame = (tileProp->mCeilingTexture.currentFrame + 1) % tileProp->mCeilingTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mCeilingTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mMainWallTexture.frameNumbers > 1) {
+                int time = tileProp->mMainWallTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mMainWallTexture.frameTime = tileProp->mMainWallTexture.frameTime + time;
+                    tileProp->mMainWallTexture.currentFrame = (tileProp->mMainWallTexture.currentFrame + 1) % tileProp->mMainWallTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mMainWallTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mFloorRepeatedTexture.frameNumbers > 1) {
+                int time = tileProp->mFloorRepeatedTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mFloorRepeatedTexture.frameTime = tileProp->mFloorRepeatedTexture.frameTime + time;
+                    tileProp->mFloorRepeatedTexture.currentFrame = (tileProp->mFloorRepeatedTexture.currentFrame + 1) % tileProp->mFloorRepeatedTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mFloorRepeatedTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mCeilingRepeatedTexture.frameNumbers > 1) {
+                int time = tileProp->mCeilingRepeatedTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mCeilingRepeatedTexture.frameTime = tileProp->mCeilingRepeatedTexture.frameTime + time;
+                    tileProp->mCeilingRepeatedTexture.currentFrame = (tileProp->mCeilingRepeatedTexture.currentFrame + 1) % tileProp->mCeilingRepeatedTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mCeilingRepeatedTexture.frameTime = time;
+                }
+            }
+        }
+    }
+}
+
 void renderTick(long ms) {
 
     if (!hasSnapshot) {
         return;
     }
+
+    updateTextureCycle(ms);
 
     if (playerHeight < playerHeightTarget) {
         playerHeight += playerHeightChangeRate;
@@ -719,7 +786,7 @@ void renderTick(long ms) {
                 tmp.mX = tmp2.mX = position.mX;
                 tmp.mZ = tmp2.mZ = position.mZ;
 
-                if (tileProp->mFloorRepeatedTextureIndex != 0xFF
+                if (tileProp->mFloorRepeatedTexture.frameNumbers != 0
                     && tileProp->mFloorRepetitions > 0) {
 
                     switch (tileProp->mGeometryType) {
@@ -730,7 +797,7 @@ void renderTick(long ms) {
                                       - intToFix(tileProp->mFloorRepetitions));
                             drawRightNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex],
+                                    nativeTextures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]],
                                     facesMask, TRUE);
 
                             break;
@@ -741,7 +808,7 @@ void renderTick(long ms) {
 
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex], facesMask, TRUE);
+                                    nativeTextures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]], facesMask, TRUE);
                             break;
 
                         case kCube:
@@ -750,53 +817,52 @@ void renderTick(long ms) {
                                      ((tileProp->mFloorHeight * 2) - intToFix(tileProp->mFloorRepetitions));
                             drawColumnAt(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    nativeTextures[tileProp->mFloorRepeatedTextureIndex],
+                                    nativeTextures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]],
                                     facesMask, FALSE, TRUE);
                             break;
                     }
                 }
 
-                if (tileProp->mCeilingRepeatedTextureIndex != 0xFF
+                if (tileProp->mCeilingRepeatedTexture.frameNumbers != 0
                     && tileProp->mCeilingRepetitions > 0) {
 
                     switch (tileProp->mGeometryType) {
                         case kRightNearWall:
                             tmp.mY = position.mY +
                                      ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions)),
-                                    drawRightNear(
-                                            tmp, intToFix(tileProp->mCeilingRepetitions),
-                                            nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                            facesMask, TRUE);
+                            drawRightNear(
+                                    tmp, intToFix(tileProp->mCeilingRepetitions),
+                                    nativeTextures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
+                                    facesMask, TRUE);
                             break;
 
                         case kLeftNearWall:
                             tmp.mY = position.mY +
                                      ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions)),
-                                    drawLeftNear(
-                                            tmp, intToFix(tileProp->mCeilingRepetitions),
-                                            nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                            facesMask, TRUE);
+                            drawLeftNear(
+                                    tmp, intToFix(tileProp->mCeilingRepetitions),
+                                    nativeTextures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
+                                    facesMask, TRUE);
                             break;
 
                         case kCube:
                         default:
                             tmp.mY = position.mY +
                                      ((tileProp->mCeilingHeight * 2) + intToFix(tileProp->mCeilingRepetitions)),
-
-                                    drawColumnAt(
-                                            tmp, intToFix(tileProp->mCeilingRepetitions),
-                                            nativeTextures[tileProp->mCeilingRepeatedTextureIndex],
-                                            facesMask, FALSE, TRUE);
+                            drawColumnAt(
+                                    tmp, intToFix(tileProp->mCeilingRepetitions),
+                                    nativeTextures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
+                                    facesMask, FALSE, TRUE);
                             break;
                     }
                 }
 
-                if (tileProp->mFloorTextureIndex != 0xFF) {
+                if (tileProp->mFloorTexture.frameNumbers != 0) {
                     tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
-                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTextureIndex], cameraDirection);
+                    drawFloorAt(tmp, nativeTextures[tileProp->mFloorTexture.frames[tileProp->mFloorTexture.currentFrame]], cameraDirection);
                 }
 
-                if (tileProp->mCeilingTextureIndex != 0xFF) {
+                if (tileProp->mCeilingTexture.frameNumbers != 0) {
 
                     uint8_t newDirection = cameraDirection;
                     tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
@@ -809,11 +875,11 @@ void renderTick(long ms) {
                     }
 
                     drawCeilingAt(
-                            tmp, nativeTextures[tileProp->mCeilingTextureIndex], newDirection);
+                            tmp, nativeTextures[tileProp->mCeilingTexture.frames[tileProp->mCeilingTexture.currentFrame]], newDirection);
                 }
 
                 if (tileProp->mGeometryType != kNoGeometry
-                    && tileProp->mMainWallTextureIndex != 0xFF) {
+                    && tileProp->mMainWallTexture.frameNumbers != 0) {
                     int integerPart = fixToInt(tileProp->mCeilingHeight)
                                       - fixToInt(tileProp->mFloorHeight);
 
@@ -845,8 +911,8 @@ void renderTick(long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + adjust),
-                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                         nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
@@ -871,8 +937,8 @@ void renderTick(long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + adjust),
-                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                         nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
@@ -898,8 +964,8 @@ void renderTick(long ms) {
                                     break;
                             }
 
-                            drawColumnAt(tmp, (heightDiff + adjust),
-                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                         nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                             break;
@@ -907,16 +973,16 @@ void renderTick(long ms) {
                         case kRightNearWall:
                             tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
                             drawRightNear(
-                                    tmp, (heightDiff + adjust),
-                                    nativeTextures[tileProp->mMainWallTextureIndex],
+                                    tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                    nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
 
                         case kLeftNearWall:
                             tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
                             drawLeftNear(
-                                    tmp, (heightDiff + adjust),
-                                    nativeTextures[tileProp->mMainWallTextureIndex],
+                                    tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                    nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                     facesMask, tileProp->mRepeatMainTexture);
                             break;
                         case kRampNorth: {
@@ -924,7 +990,7 @@ void renderTick(long ms) {
                             tmp.mY = position.mY + (tileProp->mFloorHeight * 2);
                             tmp2.mY = position.mY + (tileProp->mCeilingHeight * 2);
 
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]], cameraDirection,
                                        flipTextureVertical);
                         }
                             break;
@@ -933,7 +999,7 @@ void renderTick(long ms) {
                             uint8_t flipTextureVertical = 0;
                             tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
                             tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex], cameraDirection,
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]], cameraDirection,
                                        flipTextureVertical);
                         }
                             break;
@@ -942,7 +1008,7 @@ void renderTick(long ms) {
                             uint8_t flipTextureVertical = 0;
                             tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
                             tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                        (cameraDirection + 1) & 3, flipTextureVertical);
                         }
                             break;
@@ -950,14 +1016,14 @@ void renderTick(long ms) {
                             uint8_t flipTextureVertical = 0;
                             tmp.mY = position.mY + (tileProp->mCeilingHeight * 2);
                             tmp2.mY = position.mY + (tileProp->mFloorHeight * 2);
-                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawRampAt(tmp, tmp2, nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                        (cameraDirection + 3) & 3, flipTextureVertical);
                         }
                             break;
                         case kCube:
                             tmp.mY = position.mY + ((tileProp->mFloorHeight * 2) + heightDiff);
-                            drawColumnAt(tmp, (heightDiff + adjust),
-                                         nativeTextures[tileProp->mMainWallTextureIndex],
+                            drawColumnAt(tmp, (heightDiff + Div(adjust, intToFix(2))),
+                                         nativeTextures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
                                          tileProp->mRepeatMainTexture);
                         default:
