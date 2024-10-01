@@ -149,11 +149,7 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             dstLine++;
         }
     }
-/*
-    initTextureForRotation(toReturn, kEast);
-    initTextureForRotation(toReturn, kSouth);
-    initTextureForRotation(toReturn, kWest);
-*/
+
     return toReturn;
 }
 
