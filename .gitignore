@@ -121,3 +121,4 @@ game
 vr_frontend/NDK-version/.idea
 vr_frontend/NDK-version/common/build
 vr_frontend/NDK-version/core/build
+ee_frontend/cmake-build-debug

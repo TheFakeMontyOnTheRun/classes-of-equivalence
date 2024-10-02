@@ -241,7 +241,7 @@ void drawColumnAt(const struct Vec3 center,
 }
 
 void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
-                const struct Texture *texture, uint8_t cameraDirection, uint8_t flipTexture) {
+                struct Texture *texture, uint8_t cameraDirection, uint8_t flipTexture) {
 
     struct Vec2 llz0;
     struct Vec2 lrz0;
@@ -370,6 +370,9 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
         maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
     } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
+        if (texture->rotations[cameraDirection] == NULL) {
+            initTextureForRotation(texture, cameraDirection);
+        }
         drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(p0.mZ),
                   texture->rotations[cameraDirection]);
 #else
@@ -379,7 +382,7 @@ void drawRampAt(const struct Vec3 p0, const struct Vec3 p1,
 }
 
 void drawFloorAt(const struct Vec3 center,
-                 const struct Texture *texture, enum EDirection rotation) {
+                 struct Texture *texture, enum EDirection rotation) {
 
     if (center.mZ > kMinZCull && center.mY <= 0) {
         struct Vec2 llz0;
@@ -415,6 +418,10 @@ void drawFloorAt(const struct Vec3 center,
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
         } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
+            if (texture->rotations[cameraDirection] == NULL) {
+                initTextureForRotation(texture, cameraDirection);
+            }
+
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection]);
 #else
@@ -426,7 +433,7 @@ void drawFloorAt(const struct Vec3 center,
 }
 
 void drawCeilingAt(const struct Vec3 center,
-                   const struct Texture *texture, enum EDirection rotation) {
+                   struct Texture *texture, enum EDirection rotation) {
 
     if (center.mZ > kMinZCull && center.mY >= 0) {
         struct Vec2 llz0;
@@ -462,6 +469,10 @@ void drawCeilingAt(const struct Vec3 center,
             maskFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, getPaletteEntry(0xFF000000));
         } else {
 #ifndef FLOOR_TEXTURES_DONT_ROTATE
+            if (texture->rotations[cameraDirection] == NULL) {
+                initTextureForRotation(texture, cameraDirection);
+            }
+
             drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
                       texture->rotations[cameraDirection]);
 #else

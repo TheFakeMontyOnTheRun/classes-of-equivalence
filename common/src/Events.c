@@ -37,12 +37,30 @@ void clearMapCache(void) {
 void clearTileProperties(void) {
     int c;
     for (c = 0; c < 256; ++c) {
-        void *content = (void *) getFromMap(&tileProperties, c);
-        if (content) {
-            disposeMem(content);
+        struct CTile3DProperties *tileProp = (void *) getFromMap(&tileProperties, c);
+        if (tileProp) {
+            if (tileProp->mFloorTexture.frameNumbers > 0) {
+                disposeMem(tileProp->mFloorTexture.frames);
+            }
+
+            if (tileProp->mCeilingTexture.frameNumbers > 0) {
+                disposeMem(tileProp->mCeilingTexture.frames);
+            }
+
+            if (tileProp->mMainWallTexture.frameNumbers > 0) {
+                disposeMem(tileProp->mMainWallTexture.frames);
+            }
+
+            if (tileProp->mFloorRepeatedTexture.frameNumbers > 0) {
+                disposeMem(tileProp->mFloorRepeatedTexture.frames);
+            }
+
+            if (tileProp->mCeilingRepeatedTexture.frameNumbers > 0) {
+                disposeMem(tileProp->mCeilingRepeatedTexture.frames);
+            }
+            disposeMem(tileProp);
         }
     }
-
     clearMap(&tileProperties);
 }
 

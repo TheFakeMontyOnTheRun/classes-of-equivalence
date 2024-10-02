@@ -536,12 +536,25 @@ void startFrame(int x, int y, int width, int height) {
         x = 0;
         height = fHeight;
     }
-
-
-
-    firstFrameOnCurrentState = 1;
-    glViewport(x, y, width, height);
+    glUseProgram(program);
     checkGLError("start frame");
+
+    aPositionAttributeLocation = glGetAttribLocation(program, "aPosition");
+    aTexCoordAttributeLocation = glGetAttribLocation(program, "aTexCoord");
+    uProjectionMatrixUniformLocation = glGetUniformLocation(program, "uProjectionMatrix");
+    uViewMatrixUniformLocation = glGetUniformLocation(program, "uViewMatrix");
+    uTransformMatrixUniformLocation = glGetUniformLocation(program, "uTransformMatrix");
+
+    uRotateXMatrixUniformLocation = glGetUniformLocation(program, "uRotateXMatrix");
+    uRotateYMatrixUniformLocation = glGetUniformLocation(program, "uRotateYMatrix");
+    uRotateZMatrixUniformLocation = glGetUniformLocation(program, "uRotateZMatrix");
+
+    sTextureUniformLocation = glGetUniformLocation(program, "sTexture");
+
+    uModUniformLocation = glGetUniformLocation(program, "uMod");
+    uScaleUniformLocation = glGetUniformLocation(program, "uScale");
+    checkGLError("Fetching locations in shaders");
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     checkGLError("clear buffers");
@@ -572,11 +585,8 @@ void endFrame(void) {
 }
 
 void enter3D(void) {
-    mat4x4_perspective(projection_matrix, 75.0f,
-                       (float) XRES_FRAMEBUFFER / (float) YRES_FRAMEBUFFER, 1.0f, 1024.0f);
     glUniformMatrix4fv(uProjectionMatrixUniformLocation, 1, GL_FALSE, projection_matrix);
 
-    mat4x4_rotateY(viewMatrix, -leanX);
     glUniformMatrix4fv(uViewMatrixUniformLocation, 1, GL_FALSE, viewMatrix);
 
     glEnable(GL_DEPTH_TEST);

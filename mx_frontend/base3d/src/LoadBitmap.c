@@ -35,13 +35,76 @@ extern struct Bitmap *itemSprites[TOTAL_ITEMS];
 extern int currentSelectedItem;
 
 void clearTextures(void) {
-    int c;
+    int c, d;
+    for (c = 0; c < usedTexture; ++c) {
+        if (nativeTextures[c]) {
+            for ( d = 0; d < 4; ++d) {
+                if (nativeTextures[c]->rotations[d] != NULL) {
+                    disposeMem(nativeTextures[c]->rotations[d]);
+                    nativeTextures[c]->rotations[d] = NULL;
+                }
+            }
+        }
+        nativeTextures[c] = NULL;
+    }
     usedTexture = 0;
     for (c = 0; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c] != NULL) {
             releaseBitmap(itemSprites[c]);
             itemSprites[c] = NULL;
         }
+    }
+}
+
+void initTextureForRotation(struct Texture *texture, enum EDirection rotation) {
+    int x, y;
+    switch (rotation) {
+#ifndef FLOOR_TEXTURES_DONT_ROTATE
+        case kEast:
+            texture->rotations[1] = allocMem(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat), TEXTURE_MEMORY, FALSE);
+
+            for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
+                BitmapPixelFormat *sourceLine =  texture->rotations[0] + (y * NATIVE_TEXTURE_SIZE) + (NATIVE_TEXTURE_SIZE - 1);
+                BitmapPixelFormat *dstLine = texture->rotations[1] + (y);
+                for (x = (NATIVE_TEXTURE_SIZE - 1); x >= 0; --x) {
+                    *dstLine = *sourceLine;
+                    sourceLine--;
+                    dstLine += NATIVE_TEXTURE_SIZE;
+                }
+            }
+            break;
+        case kSouth:
+            texture->rotations[2] = allocMem(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat), TEXTURE_MEMORY, FALSE);
+
+            for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
+                BitmapPixelFormat *sourceLine = texture->rotations[0] + (y * NATIVE_TEXTURE_SIZE);
+                BitmapPixelFormat *dstLine = texture->rotations[2] + (((NATIVE_TEXTURE_SIZE - 1) - y) * NATIVE_TEXTURE_SIZE) +
+                                                                     (NATIVE_TEXTURE_SIZE - 1);
+                for (x = (NATIVE_TEXTURE_SIZE - 1); x >= 0; --x) {
+                    *dstLine = *sourceLine;
+                    sourceLine++;
+                    dstLine--;
+                }
+            }
+            break;
+        case kWest:
+            texture->rotations[3] = allocMem(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat), TEXTURE_MEMORY, FALSE);
+
+            for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
+                BitmapPixelFormat *sourceLine = texture->rotations[0] + (((NATIVE_TEXTURE_SIZE - 1) - y) * NATIVE_TEXTURE_SIZE);
+                BitmapPixelFormat *dstLine = texture->rotations[3] + y;
+                for (x = 0; x < NATIVE_TEXTURE_SIZE; ++x) {
+                    *dstLine = *sourceLine;
+                    sourceLine++;
+                    dstLine += NATIVE_TEXTURE_SIZE;
+                }
+            }
+            break;
+#endif
+        case kNorth:
+        default:
+            break;
+
     }
 }
 
@@ -56,56 +119,15 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
     int x, y;
 
     struct Bitmap* bPtr = loadBitmap(filename);
+    
+    toReturn = &textures[usedTexture++];
 
     for (c = 0; c < NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE; ++c) {
         buffer[c] = bPtr->data[c];
     }
 
     releaseBitmap(bPtr);
-
-    toReturn = &textures[usedTexture++];
-
-    for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
-        BitmapPixelFormat *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
-        BitmapPixelFormat *dstLine = &toReturn->rotations[0][(y * NATIVE_TEXTURE_SIZE)];
-        for (x = 0; x < NATIVE_TEXTURE_SIZE; ++x) {
-            *dstLine = *sourceLine;
-            sourceLine++;
-            dstLine++;
-        }
-    }
-#ifndef FLOOR_TEXTURES_DONT_ROTATE
-    for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
-        BitmapPixelFormat *sourceLine = &buffer[(y * NATIVE_TEXTURE_SIZE) + (NATIVE_TEXTURE_SIZE - 1)];
-        BitmapPixelFormat *dstLine = &toReturn->rotations[1][y];
-        for (x = (NATIVE_TEXTURE_SIZE - 1); x >= 0; --x) {
-            *dstLine = *sourceLine;
-            sourceLine--;
-            dstLine += NATIVE_TEXTURE_SIZE;
-        }
-    }
-
-    for (y = (NATIVE_TEXTURE_SIZE - 1); y >= 0; --y) {
-        BitmapPixelFormat *sourceLine = &buffer[(y * NATIVE_TEXTURE_SIZE)];
-        BitmapPixelFormat *dstLine = &toReturn->rotations[2][(((NATIVE_TEXTURE_SIZE - 1) - y) * NATIVE_TEXTURE_SIZE) +
-                                                   (NATIVE_TEXTURE_SIZE - 1)];
-        for (x = (NATIVE_TEXTURE_SIZE - 1); x >= 0; --x) {
-            *dstLine = *sourceLine;
-            sourceLine++;
-            dstLine--;
-        }
-    }
-
-    for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
-        BitmapPixelFormat *sourceLine = &buffer[(((NATIVE_TEXTURE_SIZE - 1) - y) * NATIVE_TEXTURE_SIZE)];
-        BitmapPixelFormat *dstLine = &toReturn->rotations[3][y];
-        for (x = 0; x < NATIVE_TEXTURE_SIZE; ++x) {
-            *dstLine = *sourceLine;
-            sourceLine++;
-            dstLine += NATIVE_TEXTURE_SIZE;
-        }
-    }
-#endif
+    
     for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
         BitmapPixelFormat *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
         BitmapPixelFormat *dstLine = &toReturn->rowMajor[y];
@@ -113,6 +135,18 @@ struct Texture *makeTextureFrom(const char *__restrict__ filename) {
             *dstLine = *sourceLine;
             sourceLine++;
             dstLine += NATIVE_TEXTURE_SIZE;
+        }
+    }
+
+    toReturn->rotations[0] = allocMem(NATIVE_TEXTURE_SIZE * NATIVE_TEXTURE_SIZE * sizeof(TexturePixelFormat), TEXTURE_MEMORY, FALSE);
+    
+    for (y = 0; y < NATIVE_TEXTURE_SIZE; ++y) {
+        BitmapPixelFormat *sourceLine = &buffer[y * NATIVE_TEXTURE_SIZE];
+        BitmapPixelFormat *dstLine = toReturn->rotations[0] + (y * NATIVE_TEXTURE_SIZE);
+        for (x = 0; x < NATIVE_TEXTURE_SIZE; ++x) {
+            *dstLine = *sourceLine;
+            sourceLine++;
+            dstLine++;
         }
     }
 
