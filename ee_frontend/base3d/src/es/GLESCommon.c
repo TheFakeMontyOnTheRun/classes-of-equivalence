@@ -474,7 +474,7 @@ void initGL(void) {
     checkGLError("Creating VBOs");
 
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
     glDepthMask(1);
     checkGLError("initGL");
 
@@ -543,7 +543,7 @@ void startFrame(int x, int y, int width, int height) {
     glViewport(x, y, width, height);
     checkGLError("start frame");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     checkGLError("clear buffers");
 
     glEnableVertexAttribArray(aPositionAttributeLocation);
