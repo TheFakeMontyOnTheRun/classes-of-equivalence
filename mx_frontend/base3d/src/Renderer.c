@@ -214,7 +214,9 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
             *head = 0;
             
             if (!strcmp(".anm", head - 4)) {
-                setInMap(&animations, texturesUsed, loadAnimation(nameStart) );
+                uint8_t key = texturesUsed;
+                int *anim = loadAnimation(nameStart);
+                setInMap(&animations, key, anim );
             } else {
                 nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
             }
