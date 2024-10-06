@@ -36,6 +36,13 @@ extern int currentSelectedItem;
 
 void clearTextures(void) {
     int c, d;
+    for (c = 0; c < 256; ++c) {
+        void* ptr = getFromMap(&animations, c);
+        if (ptr) {
+            disposeMem(ptr);
+        }
+    }
+    clearMap(&animations);
     for (c = 0; c < usedTexture; ++c) {
         if (nativeTextures[c]) {
             for ( d = 0; d < 4; ++d) {
