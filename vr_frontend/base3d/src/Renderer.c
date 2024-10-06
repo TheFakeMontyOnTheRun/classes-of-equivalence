@@ -283,6 +283,70 @@ enum ECommand getInput(void) {
     return toReturn;
 }
 
+void updateTextureCycle(long ms) {
+    struct CTile3DProperties *tileProp;
+    for (int c = 0; c < 255; ++c) {
+        tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
+                                                            c));
+        if (tileProp != NULL) {
+            if (tileProp->mFloorTexture.frameNumbers > 1) {
+                int time = tileProp->mFloorTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mFloorTexture.frameTime = tileProp->mFloorTexture.frameTime + time;
+                    tileProp->mFloorTexture.currentFrame = (tileProp->mFloorTexture.currentFrame + 1) % tileProp->mFloorTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mFloorTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mCeilingTexture.frameNumbers > 1) {
+                int time = tileProp->mCeilingTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mCeilingTexture.frameTime = tileProp->mCeilingTexture.frameTime + time;
+                    tileProp->mCeilingTexture.currentFrame = (tileProp->mCeilingTexture.currentFrame + 1) % tileProp->mCeilingTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mCeilingTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mMainWallTexture.frameNumbers > 1) {
+                int time = tileProp->mMainWallTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mMainWallTexture.frameTime = tileProp->mMainWallTexture.frameTime + time;
+                    tileProp->mMainWallTexture.currentFrame = (tileProp->mMainWallTexture.currentFrame + 1) % tileProp->mMainWallTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mMainWallTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mFloorRepeatedTexture.frameNumbers > 1) {
+                int time = tileProp->mFloorRepeatedTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mFloorRepeatedTexture.frameTime = tileProp->mFloorRepeatedTexture.frameTime + time;
+                    tileProp->mFloorRepeatedTexture.currentFrame = (tileProp->mFloorRepeatedTexture.currentFrame + 1) % tileProp->mFloorRepeatedTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mFloorRepeatedTexture.frameTime = time;
+                }
+            }
+
+            if (tileProp->mCeilingRepeatedTexture.frameNumbers > 1) {
+                int time = tileProp->mCeilingRepeatedTexture.frameTime - ms;
+                if ( time < 0 ) {
+                    tileProp->mCeilingRepeatedTexture.frameTime = tileProp->mCeilingRepeatedTexture.frameTime + time;
+                    tileProp->mCeilingRepeatedTexture.currentFrame = (tileProp->mCeilingRepeatedTexture.currentFrame + 1) % tileProp->mCeilingRepeatedTexture.frameNumbers;
+                    needsToRedrawVisibleMeshes = TRUE;
+                } else {
+                    tileProp->mCeilingRepeatedTexture.frameTime = time;
+                }
+            }
+        }
+    }
+}
+
 void renderTick(long ms) {
     static FixP_t zero = 0;
     FixP_t two = intToFix(2);
@@ -294,6 +358,8 @@ void renderTick(long ms) {
     if (!hasSnapshot) {
         return;
     }
+
+    updateTextureCycle(ms);
 
     if (playerHeight < playerHeightTarget) {
         playerHeight += playerHeightChangeRate;
@@ -330,7 +396,7 @@ void renderTick(long ms) {
 
         enter3D();
 
-        for (distance = 0; distance < (MAP_SIZE + MAP_SIZE); ++distance) {
+        for (distance = (MAP_SIZE + MAP_SIZE) - 1; distance >= 0; --distance) {
             uint8_t bucketPos;
 
             for (bucketPos = 0; bucketPos < MAP_SIZE; ++bucketPos) {
