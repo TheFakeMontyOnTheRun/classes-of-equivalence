@@ -76,9 +76,9 @@ def dumpProps(path):
             writeByte(f, '1' if prp.blocksMovement else '0')
             writeByte(f, '1' if prp.blocksEnemySight else '0')
             writeByte(f, '1' if prp.repeatMainTexture else '0')
-            writeByte(f, textureIndices[prp.ceilingTexture.replace(".img", "")])
-            writeByte(f, textureIndices[prp.floorTexture.replace(".img", "")])
-            writeByte(f, textureIndices[prp.mainTexture.replace(".img", "")])
+            writeByte(f, textureIndices[prp.ceilingTexture.replace(".img", "").replace(".anm", "")])
+            writeByte(f, textureIndices[prp.floorTexture.replace(".img", "").replace(".anm", "")])
+            writeByte(f, textureIndices[prp.mainTexture.replace(".img", "").replace(".anm", "")])
 
             if prp.geometryType not in geometryIndex.keys():
                 newIndex = len(geometryIndex)
@@ -87,9 +87,9 @@ def dumpProps(path):
 
             writeByte(f, geometryIndex[prp.geometryType])
             writeByte(f, textureIndices[
-                prp.ceilingRepeatTexture.replace(".img", "")])
+                prp.ceilingRepeatTexture.replace(".img", "").replace(".anm", "")])
             writeByte(f, textureIndices[
-                prp.floorRepeatTexture.replace(".img", "")])
+                prp.floorRepeatTexture.replace(".img", "").replace(".anm", "")])
             writeByte(f, prp.ceilingRepeats)
             writeByte(f, prp.floorRepeats)
             writeAsFixedPoint(f, prp.ceilingHeight)
@@ -127,20 +127,33 @@ def parseLine(line):
     return prp
 
 
+def countLines(path):
+    f = open(str("assets/" + path))
+    count = -1
+    for line in f:
+        count+=1
+    print("animation count: " + str(count))
+    return count
+
 def getTextureList(path):
     print("get texture list: " + str(path))
 
     f = open(str(path))
-
+    skips = 0
     for line in f:
-        textureName = str(line.replace("\n", "")).replace(".img", "")
-        # print("{" + textureName + "}")
-        textureIndex = len(textureList)
+        textureName = str(line.replace("\n", "")).replace(".img", "").replace(".anm", "")
+        textureIndex = skips + len(textureList)
         textureList.append(textureName)
         textureIndices[textureName] = textureIndex
+        
+        print("textureName: " + str(textureName) + " = " + str(textureIndex) + " skip: " + str(skips))
+
+        if (line.find(".anm") != -1):
+            skips += countLines(line.replace("\n", ""))
 
     f.close()
-
+#    if (path == "assets/tiles1.lst"):
+#        sys.exit(1)
 
 def getProperties(path):
     print("get properties: " + str(path))

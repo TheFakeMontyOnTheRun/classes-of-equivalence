@@ -163,6 +163,7 @@ void initRoom(int room) {
     visibilityCached = FALSE;
     needsToRedrawVisibleMeshes = TRUE;
     needsToRedrawHUD = TRUE;
+    clearMap(&animations);
     onLevelLoaded(room);
 
     for (c = 0; c < 256; ++c) {

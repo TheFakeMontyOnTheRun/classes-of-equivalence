@@ -30,6 +30,10 @@ typedef unsigned long size_t;
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 
+#define TOTAL_TEXTURES 32
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern struct MapWithCharKey animations;
+
 void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, struct MapWithCharKey *meshes) {
     int c;
     struct CTile3DProperties *prop;
@@ -80,22 +84,51 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, stru
 
         current = *(bufferHead++);
         if (current != 0xFF) {
-            prop->mFloorTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mFloorTexture.frames[0] = current;
-            prop->mFloorTexture.currentFrame = 0;
-            prop->mFloorTexture.frameNumbers = 1;
-            prop->mFloorTexture.frameTime = prop->mFloorTexture.currentFrameTime = 0xFE;
+            int *anim = (int*)getFromMap(&animations, current);
+            if (anim != NULL) {
+                int i;
+                prop->mFloorTexture.frames = allocMem(anim[0], GENERAL_MEMORY, 0);
+
+                for ( i = 0; i < anim[0]; ++i) {
+                    prop->mFloorTexture.frames[i] = anim[ i + 1];
+                }
+
+                prop->mFloorTexture.currentFrame = 0;
+                prop->mFloorTexture.frameNumbers = anim[0];
+                prop->mFloorTexture.frameTime = prop->mFloorTexture.currentFrameTime = 0xFE;
+            } else {
+                prop->mFloorTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
+                prop->mFloorTexture.frames[0] = current;
+                prop->mFloorTexture.currentFrame = 0;
+                prop->mFloorTexture.frameNumbers = 1;
+                prop->mFloorTexture.frameTime = prop->mFloorTexture.currentFrameTime = 0xFE;
+            }
+
         } else {
             prop->mFloorTexture.frameNumbers = 0;
         }
 
         current = *(bufferHead++);
         if (current != 0xFF) {
-            prop->mMainWallTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mMainWallTexture.frames[0] = current;
-            prop->mMainWallTexture.currentFrame = 0;
-            prop->mMainWallTexture.frameNumbers = 1;
-            prop->mMainWallTexture.frameTime = prop->mMainWallTexture.currentFrameTime = 0xFE;
+            int *anim = (int*)getFromMap(&animations, current);
+            if (anim != NULL) {
+                int i;
+                prop->mMainWallTexture.frames = allocMem(anim[0], GENERAL_MEMORY, 0);
+                
+                for ( i = 0; i < anim[0]; ++i) {
+                    prop->mMainWallTexture.frames[i] = anim[ i + 1];
+                }
+                
+                prop->mMainWallTexture.currentFrame = 0;
+                prop->mMainWallTexture.frameNumbers = anim[0];
+                prop->mMainWallTexture.frameTime = prop->mMainWallTexture.currentFrameTime = 0xFE;
+            } else {
+                prop->mMainWallTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
+                prop->mMainWallTexture.frames[0] = current;
+                prop->mMainWallTexture.currentFrame = 0;
+                prop->mMainWallTexture.frameNumbers = 1;
+                prop->mMainWallTexture.frameTime = prop->mMainWallTexture.currentFrameTime = 0xFE;
+            }
         } else {
             prop->mMainWallTexture.frameNumbers = 0;
         }
