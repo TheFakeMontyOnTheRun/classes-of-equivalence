@@ -249,6 +249,7 @@ void startFrame(int x, int y, int width, int height);
 
 void endFrame(void);
 
+extern struct MapWithCharKey animations;
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey colliders;
 extern int visibilityCached;

@@ -48,6 +48,7 @@ int turnStep = 0;
 FixP_t xCameraOffset;
 FixP_t yCameraOffset;
 FixP_t zCameraOffset;
+struct MapWithCharKey animations;
 
 #ifdef TILED_BITMAPS
 struct Bitmap *mapTopLevel[8];

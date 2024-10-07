@@ -52,6 +52,7 @@ int pointerClickPositionY = -1;
 extern const char *thisMissionName;
 extern int16_t thisMissionNameLen;
 
+struct MapWithCharKey animations;
 int enable3DRendering = TRUE;
 extern int leanX;
 extern int leanY;
@@ -496,8 +497,9 @@ enum ECommand getInput(void) {
 
 
 void updateTextureCycle(long ms) {
+    int c;
     struct CTile3DProperties *tileProp;
-    for (int c = 0; c < 255; ++c) {
+    for (c = 0; c < 255; ++c) {
         tileProp = ((struct CTile3DProperties *) getFromMap(&tileProperties,
                                                             c));
         if (tileProp != NULL) {
