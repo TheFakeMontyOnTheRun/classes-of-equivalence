@@ -56,7 +56,13 @@ extern struct Texture *itemSprites[TOTAL_ITEMS];
 void clearTextures(void) {
     int c;
     texturesUsed = 0;
-
+    for (c = 0; c < 256; ++c) {
+        void* ptr = getFromMap(&animations, c);
+        if (ptr) {
+            disposeMem(ptr);
+        }
+    }
+    clearMap(&animations);
     for (c = 1; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c]) {
             releaseBitmap(itemSprites[c]->raw);

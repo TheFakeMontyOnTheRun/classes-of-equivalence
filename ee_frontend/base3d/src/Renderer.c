@@ -99,6 +99,47 @@ void loadTileProperties(const uint8_t levelNumber) {
     disposeDiskBuffer(data);
 }
 
+int* loadAnimation(char* filename) {
+    struct StaticBuffer data;
+    char *head;
+    char *end;
+    char *nameStart;
+    char *buffer;
+    int *ptr;
+    int* anim;
+    int count = 0;
+    data = loadBinaryFileFromPath(filename);
+    buffer = (char *) allocMem(data.size, GENERAL_MEMORY, 1);
+    head = buffer;
+    memCopyToFrom(head, (void *) data.data, data.size);
+    end = head + data.size;
+    disposeDiskBuffer(data);
+    count = *head - '0';
+    anim = allocMem( sizeof(int) * (count + 1), GENERAL_MEMORY, 1);
+    *anim = count;
+    head += 2;
+    nameStart = head;
+    ptr = anim + 1;
+    while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
+        char val = *head;
+        if (val == '\n' || val == 0) {
+            *head = 0;
+            
+            nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
+            *ptr = (texturesUsed);
+            texturesUsed++;
+            ++ptr;
+            
+            nameStart = head + 1;
+        }
+        ++head;
+    }
+
+    disposeMem(buffer);
+    return anim;
+}
+
+
 void loadTexturesForLevel(const uint8_t levelNumber) {
     struct StaticBuffer data;
     char tilesFilename[64];
@@ -123,7 +164,15 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
         char val = *head;
         if (val == '\n' || val == 0) {
             *head = 0;
-            nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
+            
+            if (!strcmp(".anm", head - 4)) {
+                uint8_t key = texturesUsed;
+                int *anim = loadAnimation(nameStart);
+                setInMap(&animations, key, anim );
+            } else {
+                nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
+            }
+
             nameStart = head + 1;
             texturesUsed++;
         }
