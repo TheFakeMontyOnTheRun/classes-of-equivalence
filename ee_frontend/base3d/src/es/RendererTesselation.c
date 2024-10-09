@@ -378,6 +378,13 @@ void fillTriangle(int *coords, FramebufferPixelFormat fragment) {
 
 void clearTextures(void) {
     int c;
+    for (c = 0; c < 256; ++c) {
+        void* ptr = getFromMap(&animations, c);
+        if (ptr) {
+            disposeMem(ptr);
+        }
+    }
+    clearMap(&animations);
     texturesUsed = 0;
     for (c = 1; c < TOTAL_ITEMS; ++c) {
         if (itemSprites[c]) {

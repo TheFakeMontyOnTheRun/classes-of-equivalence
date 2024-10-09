@@ -28,7 +28,7 @@
 
 #define FIXP_DISTANCE_FOR_DARKNESS (intToFix(48))
 
-#define TOTAL_TEXTURES 16
+#define TOTAL_TEXTURES 32
 #ifndef RGBA32_FRAMEBUFFER
 #define TRANSPARENCY_COLOR 199
 #else
@@ -245,6 +245,7 @@ void startFrame(int x, int y, int width, int height);
 
 void endFrame(void);
 
+extern struct MapWithCharKey animations;
 extern struct MapWithCharKey occluders;
 extern struct MapWithCharKey enemySightBlockers;
 extern struct MapWithCharKey colliders;

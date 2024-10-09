@@ -30,6 +30,40 @@ typedef unsigned long size_t;
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 
+#define TOTAL_TEXTURES 32
+extern struct Texture *nativeTextures[TOTAL_TEXTURES];
+extern struct MapWithCharKey animations;
+
+struct TextureInstance loadTextureProps(uint8_t textureIndex) {
+    struct TextureInstance toReturn;
+    if (textureIndex != 0xFF) {
+        int *anim = (int*)getFromMap(&animations, textureIndex);
+        if (anim != NULL) {
+            int i;
+            toReturn.frames = allocMem(anim[0], GENERAL_MEMORY, 0);
+
+            for ( i = 0; i < anim[0]; ++i) {
+                toReturn.frames[i] = anim[ i + 1];
+            }
+
+            toReturn.currentFrame = 0;
+            toReturn.frameNumbers = anim[0];
+            toReturn.frameTime = toReturn.currentFrameTime = 0xFE;
+        } else {
+            toReturn.frames = allocMem(1, GENERAL_MEMORY, 0);
+            toReturn.frames[0] = textureIndex;
+            toReturn.currentFrame = 0;
+            toReturn.frameNumbers = 1;
+            toReturn.frameTime = toReturn.currentFrameTime = 0xFE;
+        }
+
+    } else {
+        toReturn.frameNumbers = 0;
+    }
+
+    return toReturn;
+}
+
 void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, struct MapWithCharKey *meshes) {
     int c;
     struct CTile3DProperties *prop;
@@ -68,61 +102,16 @@ void loadPropertyList(const char *propertyFile, struct MapWithCharKey *map, stru
         prop->mRepeatMainTexture = *(bufferHead++);
 
         current = *(bufferHead++);
-        if (current != 0xFF) {
-            prop->mCeilingTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mCeilingTexture.frames[0] = current;
-            prop->mCeilingTexture.currentFrame = 0;
-            prop->mCeilingTexture.frameNumbers = 1;
-            prop->mCeilingTexture.frameTime = prop->mCeilingTexture.currentFrameTime = 0xFE;
-        } else {
-            prop->mCeilingTexture.frameNumbers = 0;
-        }
-
+        prop->mCeilingTexture = loadTextureProps(current);
         current = *(bufferHead++);
-        if (current != 0xFF) {
-            prop->mFloorTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mFloorTexture.frames[0] = current;
-            prop->mFloorTexture.currentFrame = 0;
-            prop->mFloorTexture.frameNumbers = 1;
-            prop->mFloorTexture.frameTime = prop->mFloorTexture.currentFrameTime = 0xFE;
-        } else {
-            prop->mFloorTexture.frameNumbers = 0;
-        }
-
+        prop->mFloorTexture = loadTextureProps(current);
         current = *(bufferHead++);
-        if (current != 0xFF) {
-            prop->mMainWallTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mMainWallTexture.frames[0] = current;
-            prop->mMainWallTexture.currentFrame = 0;
-            prop->mMainWallTexture.frameNumbers = 1;
-            prop->mMainWallTexture.frameTime = prop->mMainWallTexture.currentFrameTime = 0xFE;
-        } else {
-            prop->mMainWallTexture.frameNumbers = 0;
-        }
-
+        prop->mMainWallTexture = loadTextureProps(current);
         prop->mGeometryType = (*(bufferHead++));
-
         current = *(bufferHead++);
-        if (current != 0xFF) {
-            prop->mCeilingRepeatedTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mCeilingRepeatedTexture.frames[0] = current;
-            prop->mCeilingRepeatedTexture.currentFrame = 0;
-            prop->mCeilingRepeatedTexture.frameNumbers = 1;
-            prop->mCeilingRepeatedTexture.frameTime = prop->mCeilingRepeatedTexture.currentFrameTime = 0xFE;
-        } else {
-            prop->mCeilingRepeatedTexture.frameNumbers = 0;
-        }
-
+        prop->mCeilingRepeatedTexture = loadTextureProps(current);
         current = *(bufferHead++);
-        if (current != 0xFF) {
-            prop->mFloorRepeatedTexture.frames = allocMem(1, GENERAL_MEMORY, 0);
-            prop->mFloorRepeatedTexture.frames[0] = current;
-            prop->mFloorRepeatedTexture.currentFrame = 0;
-            prop->mFloorRepeatedTexture.frameNumbers = 1;
-            prop->mFloorRepeatedTexture.frameTime = prop->mFloorRepeatedTexture.currentFrameTime = 0xFE;
-        } else {
-            prop->mFloorRepeatedTexture.frameNumbers = 0;
-        }
+        prop->mFloorRepeatedTexture = loadTextureProps(current);
 
         prop->mCeilingRepetitions = *(bufferHead++);
         prop->mFloorRepetitions = *(bufferHead++);

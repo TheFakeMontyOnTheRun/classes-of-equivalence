@@ -462,7 +462,7 @@ void drawFrontWall(FixP_t x0,
     FixP_t v = 0;
     uint8_t lastU;
     uint8_t lastV = 0xFF;
-    int32_t iy;
+    int32_t iy = 0;
     const TexturePixelFormat *data = texture;
     FixP_t dv;
     FixP_t diffX;
@@ -538,13 +538,13 @@ void drawFrontWall(FixP_t x0,
     }
 
     for (; iy < limit; ++iy) {
-        int shouldStippleLine;
+        int shouldStippleLine = 0;
         FixP_t u = 0;
         const uint8_t iv = fixToInt(v) & (NATIVE_TEXTURE_SIZE - 1);
         const TexturePixelFormat *sourceLineStart = data + (iv * NATIVE_TEXTURE_SIZE);
         FramebufferPixelFormat *destinationLine = bufferData + (XRES_FRAMEBUFFER * iy) + iX0;
-        int ix;
-        int stipple;
+        int ix = 0;
+        int stipple = 0;
         lastU = 0;
         if ((shouldStippleLine = (farEnoughForStipple >= 2)) ||
             (farEnoughForStipple == 1 && iy & 1)) {
