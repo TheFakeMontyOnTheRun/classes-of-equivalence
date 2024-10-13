@@ -253,8 +253,6 @@ void graphicsShutdown(void) {
 
 	releaseBitmap(defaultFont);
 
-	texturesUsed = 0;
-	
 	if (recordingCommand) {
 	  printf("%d, %d\n", commandRepetitions, mBufferedCommand);
 	}

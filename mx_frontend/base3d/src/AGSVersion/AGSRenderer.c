@@ -169,10 +169,6 @@ void handleSystemEvents(void) {
 }
 
 void graphicsShutdown(void) {
-
-	releaseBitmap(defaultFont);
-
-	texturesUsed = 0;
 }
 
 void flipRenderer(void) {

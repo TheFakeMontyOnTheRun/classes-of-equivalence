@@ -426,7 +426,6 @@ void Crawler_initStateCallback(enum EGameMenuState tag) {
     playerHeightChangeRate = 0;
 
     if (tag == kPlayGame) {
-        clearMap(&tileProperties);
         initRoom(getPlayerRoom());
     }
 }
@@ -652,12 +651,6 @@ enum EGameMenuState Crawler_tickCallback(enum ECommand cmd, void *data) {
         struct Room *playerNewRoom = getRoom(getPlayerRoom());
         int random = nextRandomInteger() % 10;
         currentPresentationState = kWaitingForInput;
-        texturesUsed = 0;
-        clearTextures();
-        nativeTextures[0] = makeTextureFrom("arch.img");
-        nativeTextures[1] = makeTextureFrom("floor.img");
-        texturesUsed = 2;
-
         showDialogEntry = getRoom(getPlayerRoom())->storyPoint;
         getRoom(getPlayerRoom())->storyPoint = 0;
 

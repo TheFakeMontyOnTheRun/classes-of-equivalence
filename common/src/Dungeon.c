@@ -387,6 +387,9 @@ void dungeonTick(const enum ECommand command) {
                 setPlayerDirection((enum EDirection) enteredThru);
                 zCameraOffset = intToFix(4);
                 currentPresentationState = kRoomTransitioning;
+                clearTextures();
+                nativeTextures[0] = makeTextureFrom("arch.img");
+                nativeTextures[1] = makeTextureFrom("floor.img");
 
             } else { /* Something prevented the player from moving - maybe not enough clearance */
                 setPlayerPosition(&oldPosition);

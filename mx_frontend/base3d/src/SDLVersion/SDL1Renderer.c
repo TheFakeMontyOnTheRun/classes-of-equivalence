@@ -237,8 +237,6 @@ void graphicsShutdown(void) {
     SDL_Quit();
 
     releaseBitmap(defaultFont);
-
-    texturesUsed = 0;
 }
 
 void flipRenderer(void) {

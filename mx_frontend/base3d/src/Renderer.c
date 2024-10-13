@@ -71,7 +71,7 @@ const int distanceForPenumbra = 16;
 struct MapWithCharKey tileProperties;
 struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
-uint8_t texturesUsed = 0;
+extern uint8_t usedTexture;
 enum ECommand mBufferedCommand = kCommandNone;
 struct Texture *nativeTextures[TOTAL_TEXTURES];
 struct Bitmap *itemSprites[TOTAL_ITEMS];
@@ -113,7 +113,6 @@ void loadTileProperties(const uint8_t levelNumber) {
 
     setLoggerDelegate(printMessageTo3DView);
 
-    clearMap(&tileProperties);
     clearMap(&customMeshes);
     clearMap(&occluders);
     clearMap(&colliders);
@@ -165,14 +164,14 @@ int* loadAnimation(char* filename) {
     head += 2;
     nameStart = head;
     ptr = anim + 1;
-    while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
+    while (head != end && (usedTexture < TOTAL_TEXTURES)) {
         char val = *head;
         if (val == '\n' || val == 0) {
             *head = 0;
-            
-            nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
-            *ptr = (texturesUsed);
-            texturesUsed++;
+            uint8_t index = usedTexture;
+            struct Texture* tmp = (makeTextureFrom(nameStart));
+            nativeTextures[index] = tmp;
+            *ptr = (index);
             ++ptr;
             
             nameStart = head + 1;
@@ -203,24 +202,20 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
 
     nameStart = head;
 
-    texturesUsed = 0;
-    
-    clearMap(&animations);
-    clearTextures();
-
-    while (head != end && (texturesUsed < TOTAL_TEXTURES)) {
+    while (head != end && (usedTexture < TOTAL_TEXTURES)) {
         char val = *head;
         if (val == '\n' || val == 0) {
             *head = 0;
             
             if (!strcmp(".anm", head - 4)) {
-                uint8_t key = texturesUsed;
+                uint8_t key = usedTexture;
                 int *anim = loadAnimation(nameStart);
                 setInMap(&animations, key, anim );
+                usedTexture++; /* We waste a slot for referencing the animation */
             } else {
-                nativeTextures[texturesUsed] = (makeTextureFrom(nameStart));
+                uint8_t key = usedTexture;
+                nativeTextures[key] = (makeTextureFrom(nameStart));
             }
-            texturesUsed++;
             nameStart = head + 1;
         }
         ++head;

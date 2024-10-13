@@ -268,7 +268,6 @@ extern int turnStep;
 extern int needsToRedrawHUD;
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
-extern uint8_t texturesUsed;
 extern enum ECommand mBufferedCommand;
 extern struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern uint16_t clippingY1;

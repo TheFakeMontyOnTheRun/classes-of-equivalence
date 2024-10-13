@@ -61,8 +61,6 @@ int mouseX, mouseY;
 uint8_t mousePresent = 0;
 
 void graphicsShutdown(void) {
-	texturesUsed = 0;
-
 	textmode(C80);
 	clrscr();
 	printf(
