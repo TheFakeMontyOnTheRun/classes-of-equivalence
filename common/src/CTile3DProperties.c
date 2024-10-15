@@ -30,8 +30,6 @@ typedef unsigned long size_t;
 #include "MapWithCharKey.h"
 #include "Mesh.h"
 
-#define TOTAL_TEXTURES 32
-extern struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern struct MapWithCharKey animations;
 
 struct TextureInstance loadTextureProps(uint8_t textureIndex) {

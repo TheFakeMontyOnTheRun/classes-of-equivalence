@@ -36,6 +36,7 @@ extern int currentSelectedItem;
 
 void clearTextures(void) {
     int c, d;
+    struct Texture* tex;
     for (c = 0; c < 256; ++c) {
         void* ptr = getFromMap(&animations, c);
         if (ptr) {
@@ -43,16 +44,16 @@ void clearTextures(void) {
         }
     }
     clearMap(&animations);
-    for (c = 0; c < usedTexture; ++c) {
-        if (nativeTextures[c]) {
+    tex = textures;
+    for (c = 0; c < usedTexture; ++c, ++tex) {
+        if (tex) {
             for ( d = 0; d < 4; ++d) {
-                if (nativeTextures[c]->rotations[d] != NULL) {
-                    disposeMem(nativeTextures[c]->rotations[d]);
-                    nativeTextures[c]->rotations[d] = NULL;
+                if (tex->rotations[d] != NULL) {
+                    disposeMem(tex->rotations[d]);
+                    tex->rotations[d] = NULL;
                 }
             }
         }
-        nativeTextures[c] = NULL;
     }
     usedTexture = 0;
     for (c = 0; c < TOTAL_ITEMS; ++c) {
