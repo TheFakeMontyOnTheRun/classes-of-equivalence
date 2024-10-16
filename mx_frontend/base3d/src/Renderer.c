@@ -555,7 +555,7 @@ void renderTick(long ms) {
 
                         position.mX = mCamera.mX - intToFix(2 * x);
                         position.mY = mCamera.mY;
-                        position.mZ = mCamera.mZ + intToFix(2 + 2 * z);
+                        position.mZ = mCamera.mZ + intToFix(2 * z);
 
                         /*						remember, bounds - 1!*/
 
