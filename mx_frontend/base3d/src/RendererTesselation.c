@@ -422,10 +422,10 @@ void drawFloorAt(const struct Vec3 center,
                 initTextureForRotation(texture, cameraDirection);
             }
 
-            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ) - 2,
                       texture->rotations[cameraDirection]);
 #else
-            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ) - 2,
                   texture->rotations[0]);
 #endif
         }
@@ -473,10 +473,10 @@ void drawCeilingAt(const struct Vec3 center,
                 initTextureForRotation(texture, cameraDirection);
             }
 
-            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ) - 2,
                       texture->rotations[cameraDirection]);
 #else
-            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ),
+            drawFloor(llz1.mY, lrz0.mY, llz1.mX, lrz1.mX, llz0.mX, lrz0.mX, fixToInt(center.mZ) - 2,
                       texture->rotations[0]);
 #endif
         }
