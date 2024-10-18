@@ -546,8 +546,8 @@ void drawFrontWall(FixP_t x0,
         int ix = 0;
         int stipple = 0;
         lastU = 0;
-        if ((shouldStippleLine = (farEnoughForStipple >= 2)) ||
-            (farEnoughForStipple == 1 && iy & 1)) {
+        if ((shouldStippleLine = (farEnoughForStipple >= 2) ||
+                                 (farEnoughForStipple == 1 && iy & 1))) {
             stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
         }
 
