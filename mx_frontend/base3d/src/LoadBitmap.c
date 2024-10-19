@@ -37,8 +37,9 @@ extern int currentSelectedItem;
 void clearTextures(void) {
     int c, d;
     struct Texture* tex;
+    void*ptr;
     for (c = 0; c < 256; ++c) {
-        void* ptr = getFromMap(&animations, c);
+        ptr = (void*)getFromMap(&animations, c);
         if (ptr) {
             disposeMem(ptr);
         }

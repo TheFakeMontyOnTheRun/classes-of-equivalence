@@ -269,7 +269,6 @@ extern int needsToRedrawHUD;
 extern struct MapWithCharKey tileProperties;
 extern struct Vec2i cameraPosition;
 extern enum ECommand mBufferedCommand;
-extern struct Texture *nativeTextures[TOTAL_TEXTURES];
 extern uint16_t clippingY1;
 extern struct Projection projectionVertices[8];
 extern FixP_t playerHeight;

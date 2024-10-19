@@ -167,8 +167,8 @@ int* loadAnimation(char* filename) {
     while (head != end && (usedTexture < TOTAL_TEXTURES)) {
         char val = *head;
         if (val == '\n' || val == 0) {
+             uint8_t index = usedTexture;
             *head = 0;
-            uint8_t index = usedTexture;
             makeTextureFrom(nameStart);
             *ptr = (index);
             ++ptr;
