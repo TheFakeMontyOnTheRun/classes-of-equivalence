@@ -236,7 +236,10 @@ void renderRoomTransition(void) {
         currentPresentationState = kWaitingForInput;
         zCameraOffset = xCameraOffset = yCameraOffset = 0;
         needsToRedrawHUD = TRUE;
-
+	visibilityCached = FALSE;
+	needsToRedrawVisibleMeshes = FALSE;
+	enable3DRendering = FALSE;
+	hasSnapshot = FALSE;
     } else {
         xCameraOffset = yCameraOffset = 0;
 
@@ -273,6 +276,10 @@ void renderRoomTransition(void) {
         if (zCameraOffset == 0) {
             currentPresentationState = kCheckingForRandomBattle;
             needsToRedrawHUD = TRUE;
+	    visibilityCached = FALSE;
+	    needsToRedrawVisibleMeshes = FALSE;
+	    enable3DRendering = FALSE;
+	    hasSnapshot = FALSE;
         }
     }
 }

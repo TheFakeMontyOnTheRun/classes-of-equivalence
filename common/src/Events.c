@@ -69,6 +69,7 @@ void onLevelLoaded(int index) {
     clearTileProperties();
     loadTexturesForLevel(index);
     loadTileProperties(index);
+    enable3DRendering = TRUE;	
 }
 
 void tickMission(enum ECommand cmd) {
