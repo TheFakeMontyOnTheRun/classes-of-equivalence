@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "Enums.h"
 #include "Core.h"
 #include "Common.h"
-#include "Enums.h"
 #include "FixP.h"
 #include "Vec.h"
 #include "Vec.h"
@@ -190,7 +190,6 @@ void handleSystemEvents(void) {
 
 void graphicsShutdown(void) {
     XCloseDisplay(display);
-    texturesUsed = 0;
 }
 
 void flipRenderer(void) {
