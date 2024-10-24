@@ -546,8 +546,20 @@ void drawFrontWall(FixP_t x0,
         int ix = 0;
         int stipple = 0;
         lastU = 0;
-        if ((shouldStippleLine = (farEnoughForStipple >= 2) ||
-                                 (farEnoughForStipple == 1 && iy & 1))) {
+
+        /*
+         Sadly, this group of if-blocks can't be simplified; any change to group up things here will stop GBA builds
+         from working
+         */
+        if (farEnoughForStipple >= 2) {
+            shouldStippleLine = 1;
+        }
+
+        if ((farEnoughForStipple == 1) && (iy & 1)) {
+            shouldStippleLine = 1;
+        }
+
+        if (shouldStippleLine) {
             stipple = (((ix + iy) & 1)) ? 0xFFFFFFFF : 0;
         }
 
