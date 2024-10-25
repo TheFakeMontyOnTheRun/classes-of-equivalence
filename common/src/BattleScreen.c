@@ -44,7 +44,7 @@ enum EBattleStates {
 #define TOTAL_FRAMES_PER_MONSTER 2
 #define TOTAL_SPLAT_FRAMES 3
 
-struct Bitmap *foe[TOTAL_MONSTER_COUNT][TOTAL_FRAMES_PER_MONSTER];
+struct Bitmap *foe[TOTAL_MONSTER_COUNT][TOTAL_FRAMES_PER_MONSTER][2];
 struct Bitmap *splat[TOTAL_SPLAT_FRAMES];
 
 struct MonsterArchetype {
@@ -348,13 +348,22 @@ void BattleScreen_initStateCallback(enum EGameMenuState tag) {
     splat[1] = loadBitmap("splat1.img");
     splat[2] = loadBitmap("splat2.img");
 
-    foe[0][0] = loadBitmap("bull0.img");
-    foe[1][0] = loadBitmap("cuco0.img");
-    foe[2][0] = loadBitmap("lady0.img");
+    foe[0][0][0] = loadBitmap("bull0a.img");
+    foe[1][0][0] = loadBitmap("cuco0a.img");
+    foe[2][0][0] = loadBitmap("lady0a.img");
 
-    foe[0][1] = loadBitmap("bull1.img");
-    foe[1][1] = loadBitmap("cuco1.img");
-    foe[2][1] = loadBitmap("lady1.img");
+    foe[0][1][0] = loadBitmap("bull1a.img");
+    foe[1][1][0] = loadBitmap("cuco1a.img");
+    foe[2][1][0] = loadBitmap("lady1a.img");
+
+    foe[0][0][1] = loadBitmap("bull0b.img");
+    foe[1][0][1] = loadBitmap("cuco0b.img");
+    foe[2][0][1] = loadBitmap("lady0b.img");
+
+    foe[0][1][1] = loadBitmap("bull1b.img");
+    foe[1][1][1] = loadBitmap("cuco1b.img");
+    foe[2][1][1] = loadBitmap("lady1b.img");
+
 
     if (getPlayerRoom() == 22) {
         monsterTypeOffset = 23;
@@ -458,8 +467,12 @@ void BattleScreen_repaintCallback(void) {
                     &buffer[0]);
 
             drawBitmap(4 + 11 * 8 + (c * (32 + 16)),
-                       -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame]->height) / 2,
-                       foe[monsterTypeIndex][spriteFrame], 1);
+                       -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame][0]->height) / 2,
+                       foe[monsterTypeIndex][spriteFrame][0], 1);
+            drawBitmap(4 + 11 * 8 + (c * (32 + 16)),
+                       -16 + 32 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame][1]->height) / 2,
+                       foe[monsterTypeIndex][spriteFrame][1], 1);
+
 
             if (splatMonster == (monstersPresent - c - 1) &&
                 battleTargets[currentCharacter] ==
@@ -731,11 +744,18 @@ void BattleScreen_unloadStateCallback(enum EGameMenuState newState) {
     releaseBitmap(splat[1]);
     releaseBitmap(splat[2]);
 
-    releaseBitmap(foe[0][0]);
-    releaseBitmap(foe[1][0]);
-    releaseBitmap(foe[2][0]);
+    releaseBitmap(foe[0][0][0]);
+    releaseBitmap(foe[1][0][0]);
+    releaseBitmap(foe[2][0][0]);
+    releaseBitmap(foe[0][0][1]);
+    releaseBitmap(foe[1][0][1]);
+    releaseBitmap(foe[2][0][1]);
 
-    releaseBitmap(foe[0][1]);
-    releaseBitmap(foe[1][1]);
-    releaseBitmap(foe[2][1]);
+    releaseBitmap(foe[0][1][0]);
+    releaseBitmap(foe[1][1][0]);
+    releaseBitmap(foe[2][1][0]);
+
+    releaseBitmap(foe[0][1][1]);
+    releaseBitmap(foe[1][1][1]);
+    releaseBitmap(foe[2][1][1]);
 }
