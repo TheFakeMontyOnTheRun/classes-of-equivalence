@@ -41,6 +41,8 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\BattleResultScreen.obj"
+	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
@@ -78,7 +80,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /ML /W3 /O2 /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x816 /fo"$(INTDIR)\Sub Mare Imperium.res" /d "NDEBUG" 
 BSC32=bscmake.exe
@@ -102,23 +104,25 @@ LINK32_OBJS= \
 	"$(INTDIR)\FixP.obj" \
 	"$(INTDIR)\GameMenu.obj" \
 	"$(INTDIR)\Globals.obj" \
+	"$(INTDIR)\HackingMinigameRules.obj" \
 	"$(INTDIR)\HackingScreen.obj" \
 	"$(INTDIR)\HelpScreen.obj" \
 	"$(INTDIR)\LoadBitmap.obj" \
 	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
+	"$(INTDIR)\Mesh.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Parser.obj" \
+	"$(INTDIR)\Renderer.obj" \
+	"$(INTDIR)\RendererRasterization.obj" \
+	"$(INTDIR)\RendererTesselation.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
 	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\RendererTesselation.obj" \
-	"$(INTDIR)\RendererRasterization.obj" \
-	"$(INTDIR)\Renderer.obj" \
-	"$(INTDIR)\Mesh.obj" \
-	"$(INTDIR)\HackingMinigameRules.obj"
+	"$(INTDIR)\BattleResultScreen.obj" \
+	"$(INTDIR)\BattleScreen.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -137,6 +141,8 @@ ALL : "$(OUTDIR)\Sub Mare Imperium Derelict.exe"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\BattleResultScreen.obj"
+	-@erase "$(INTDIR)\BattleScreen.obj"
 	-@erase "$(INTDIR)\CGDIRenderer.obj"
 	-@erase "$(INTDIR)\Common.obj"
 	-@erase "$(INTDIR)\Core.obj"
@@ -175,7 +181,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
 RSC_PROJ=/l 0x409 /fo"$(INTDIR)\Sub Mare Imperium.res" /d "_DEBUG" 
 BSC32=bscmake.exe
@@ -199,23 +205,25 @@ LINK32_OBJS= \
 	"$(INTDIR)\FixP.obj" \
 	"$(INTDIR)\GameMenu.obj" \
 	"$(INTDIR)\Globals.obj" \
+	"$(INTDIR)\HackingMinigameRules.obj" \
 	"$(INTDIR)\HackingScreen.obj" \
 	"$(INTDIR)\HelpScreen.obj" \
 	"$(INTDIR)\LoadBitmap.obj" \
 	"$(INTDIR)\Main.obj" \
 	"$(INTDIR)\MainMenu.obj" \
 	"$(INTDIR)\MapWithCharKey.obj" \
+	"$(INTDIR)\Mesh.obj" \
 	"$(INTDIR)\PackedFileReader.obj" \
 	"$(INTDIR)\Parser.obj" \
+	"$(INTDIR)\Renderer.obj" \
+	"$(INTDIR)\RendererRasterization.obj" \
+	"$(INTDIR)\RendererTesselation.obj" \
 	"$(INTDIR)\UI.obj" \
 	"$(INTDIR)\Vec.obj" \
 	"$(INTDIR)\VisibilityStrategy.obj" \
 	"$(INTDIR)\Sub Mare Imperium.res" \
-	"$(INTDIR)\RendererTesselation.obj" \
-	"$(INTDIR)\RendererRasterization.obj" \
-	"$(INTDIR)\Renderer.obj" \
-	"$(INTDIR)\Mesh.obj" \
-	"$(INTDIR)\HackingMinigameRules.obj"
+	"$(INTDIR)\BattleResultScreen.obj" \
+	"$(INTDIR)\BattleScreen.obj"
 
 "$(OUTDIR)\Sub Mare Imperium Derelict.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -265,6 +273,18 @@ LINK32_OBJS= \
 
 
 !IF "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Release" || "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Debug"
+SOURCE=..\..\..\common\src\BattleResultScreen.c
+
+"$(INTDIR)\BattleResultScreen.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+SOURCE=..\..\..\common\src\BattleScreen.c
+
+"$(INTDIR)\BattleScreen.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
 
 "$(INTDIR)\CGDIRenderer.obj" : $(SOURCE) "$(INTDIR)"
@@ -377,7 +397,7 @@ SOURCE=..\..\menu\src\Main.c
 
 !IF  "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Release"
 
-CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 "$(INTDIR)\Main.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -387,7 +407,7 @@ CPP_SWITCHES=/nologo /ML /W3 /O2 /I "c:\space-trashman-blues\common\include" /I 
 
 !ELSEIF  "$(CFG)" == "Sub Mare Imperium Derelict - Win32 Debug"
 
-CPP_SWITCHES=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_SWITCHES=/nologo /MLd /W3 /Gm /GX /ZI /Od /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /I "c:\space-trashman-blues\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 "$(INTDIR)\Main.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<

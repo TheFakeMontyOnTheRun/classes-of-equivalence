@@ -67,8 +67,6 @@ void muteSound(void) {}
 long frame = 0;
 
 void graphicsShutdown(void) {
-    texturesUsed = 0;
-
 }
 
 void putStr(int x, int y, const char *str, int fg, int bg) {

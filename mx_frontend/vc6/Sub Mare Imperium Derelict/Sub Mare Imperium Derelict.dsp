@@ -43,8 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /W3 /O2 /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /c
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /nologo /W3 /O2 /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x816 /d "NDEBUG"
@@ -70,8 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\space-trashman-blues\common\include" /I "c:\space-trashman-blues\mx_frontend\base3d\include" /I "c:\space-trashman-blues\mx_frontend\menu\include" /I "c:\space-trashman-blues\mx_frontend\SoundSystem" /I "c:\space-trashman-blues\core\include" /I "c:\space-trashman-blues\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /GZ /c
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\classes-of-equivalence\common\include" /I "c:\classes-of-equivalence\mx_frontend\base3d\include" /I "c:\classes-of-equivalence\mx_frontend\menu\include" /I "c:\classes-of-equivalence\mx_frontend\SoundSystem" /I "c:\classes-of-equivalence\core\include" /I "c:\classes-of-equivalence\mx_frontend\VC6\Sub Mare Imperium Derelict" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "MSVC" /D "CLI_BUILD" /D "SUPPORTS_HACKING_MINIGAME" /D "PAGE_FLIP_ANIMATION" /D "INCLUDE_ITEM_DESCRIPTIONS" /D "ENDIANESS_AWARE" /D "EMIT_QUIT_OPTION" /D XRES_FRAMEBUFFER=320 /D YRES_FRAMEBUFFER=200 /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x816 /d "_DEBUG"
@@ -92,6 +90,14 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\..\common\src\BattleResultScreen.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\common\src\BattleScreen.c
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\base3d\src\Win32Version\CGDIRenderer.c
