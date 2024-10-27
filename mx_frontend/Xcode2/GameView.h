@@ -7,6 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <AudioToolbox/AudioToolbox.h>
+
 
 @interface GameView : NSView {
     NSTimer* timer;
@@ -22,4 +24,12 @@
 -(void)keyUp:(NSEvent*)event;
 -(void)keyDown:(NSEvent*)event;
 - (BOOL)acceptsFirstResponder;
+
+
+@property (nonatomic) MusicPlayer musicPlayer;
+@property (nonatomic) MusicSequence musicSequence;
+
+- (void)initMusic:(NSString *)filePath;
+- (void)playMusic;
+- (void)stopMusic;
 @end

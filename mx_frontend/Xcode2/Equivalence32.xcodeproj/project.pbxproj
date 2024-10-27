@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		F11957942A3B0F00004A2B3B /* CTile3DProperties.c in Sources */ = {isa = PBXBuildFile; fileRef = F11957932A3B0EFF004A2B3B /* CTile3DProperties.c */; };
 		F149B82A263CB11700A3F597 /* Core.c in Sources */ = {isa = PBXBuildFile; fileRef = F149B829263CB11700A3F597 /* Core.c */; };
+		F15161962CCE648B00862708 /* winter.mid in Resources */ = {isa = PBXBuildFile; fileRef = F15161952CCE648B00862708 /* winter.mid */; };
+		F15161982CCE64CD00862708 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F15161972CCE64CD00862708 /* AudioToolbox.framework */; };
 		F155CC1E2C4664F4008C6603 /* BattleScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F155CC1C2C4664F4008C6603 /* BattleScreen.c */; };
 		F155CC1F2C4664F4008C6603 /* BattleResultScreen.c in Sources */ = {isa = PBXBuildFile; fileRef = F155CC1D2C4664F4008C6603 /* BattleResultScreen.c */; };
 		F194EAD62610B51400E292ED /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -90,6 +92,8 @@
 		F1277A28236DE6DD00478B2C /* OSXRenderer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OSXRenderer.m; sourceTree = "<group>"; };
 		F149B829263CB11700A3F597 /* Core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Core.c; path = ../../core/src/Core.c; sourceTree = "<group>"; };
 		F149B82B263CB12B00A3F597 /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../core/include/Core.h; sourceTree = "<group>"; };
+		F15161952CCE648B00862708 /* winter.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; path = winter.mid; sourceTree = "<group>"; };
+		F15161972CCE64CD00862708 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F155CC1C2C4664F4008C6603 /* BattleScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleScreen.c; path = ../../common/src/BattleScreen.c; sourceTree = SOURCE_ROOT; };
 		F155CC1D2C4664F4008C6603 /* BattleResultScreen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = BattleResultScreen.c; path = ../../common/src/BattleResultScreen.c; sourceTree = SOURCE_ROOT; };
 		F18B850725581D370012292B /* magbootson.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = magbootson.wav; path = ../data/wavogg/magbootson.wav; sourceTree = "<group>"; };
@@ -164,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1CA76F22610A99900FD1E04 /* Cocoa.framework in Frameworks */,
+				F15161982CCE64CD00862708 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				F18B851125581D370012292B /* bong.wav */,
+				F15161952CCE648B00862708 /* winter.mid */,
 				F19BC7A0260F901800C734C4 /* derelicttheme.wav */,
 				F18B851625581D370012292B /* bonk.wav */,
 				F18B850925581D370012292B /* click.wav */,
@@ -316,6 +322,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F15161972CCE64CD00862708 /* AudioToolbox.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -347,6 +354,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Equivalence32" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = en;
@@ -380,6 +389,7 @@
 				F1CA76E42610A98C00FD1E04 /* pick.wav in Resources */,
 				F1CA76E52610A98C00FD1E04 /* magbootson.wav in Resources */,
 				F1CA76E62610A98D00FD1E04 /* derelicttheme.wav in Resources */,
+				F15161962CCE648B00862708 /* winter.mid in Resources */,
 				F1CA76E72610A98D00FD1E04 /* bonk.wav in Resources */,
 				F1CA76E82610A98E00FD1E04 /* hurt.wav in Resources */,
 				F1CA76E92610A99000FD1E04 /* click.wav in Resources */,

@@ -112,6 +112,30 @@ void setMultiplier(CGSize size) {
     }
 }
 
+
+- (void)initMusic:(NSString *)filePath {
+    // Initialize the sequence
+    NewMusicSequence(&_musicSequence);
+
+    // Load MIDI file into the sequence
+    NSURL *midiURL = [NSURL fileURLWithPath:filePath];
+    MusicSequenceFileLoad(_musicSequence, (__bridge CFURLRef)midiURL, kMusicSequenceFile_MIDIType, kMusicSequenceLoadSMF_ChannelsToTracks);
+
+    // Create a new music player
+    NewMusicPlayer(&_musicPlayer);
+    MusicPlayerSetSequence(_musicPlayer, _musicSequence);
+    MusicPlayerPreroll(_musicPlayer);
+}
+
+- (void)playMusic {
+    MusicPlayerStart(_musicPlayer);
+}
+
+- (void)stopMusic {
+    MusicPlayerStop(_musicPlayer);
+}
+
+
 - (id)initWithFrame:(NSRect)frame
 {
     int r, g, b;
@@ -123,6 +147,7 @@ void setMultiplier(CGSize size) {
         buffer = NULL;
         delegate = self;
         rgb = CGColorSpaceCreateDeviceRGB();
+        NSBundle *bundle = [NSBundle mainBundle];
         
         for (r = 0; r < 256; r += 16) {
             for (g = 0; g < 256; g += 8) {
@@ -155,6 +180,8 @@ void setMultiplier(CGSize size) {
         
         menuTick(50);
         [self initTimer];
+        [self initMusic: [[NSURL fileURLWithPath: [ bundle pathForResource: @"winter" ofType:@"mid"]] path ]];
+        [self playMusic];
     }
     
     return self;
