@@ -34,7 +34,20 @@ int snapshotSignal = '.';
 extern int turning;
 extern int leanX;
 extern int leanY;
+int channel = 0;
 
+bool play = true;
+
+//this function will be called by the timer.
+void timerCallBack()
+{
+    if(play)
+        soundPause(channel);
+    else
+        soundResume(channel);
+
+    play = !play;
+}
 
 void graphicsInit(void) {
     videoSetMode(MODE_0_3D);
@@ -45,6 +58,10 @@ void graphicsInit(void) {
     enableSmoothMovement = TRUE;
     initGL();
     defaultFont = loadBitmap("font.img");
+
+    soundEnable();
+    channel = soundPlayPSG(DutyCycle_50, 10000, 127, 64);
+    timerStart(0, ClockDivider_1024, TIMER_FREQ_1024(5), timerCallBack);
 }
 
 int cooldown = 0;
