@@ -35,6 +35,33 @@
 int snapshotSignal = '.';
 int cooldown = 0;
 
+/* DMG Sound registers */
+#define REG_NR52 (*(volatile u8 *)0x4000084) /* Sound on/off */
+#define REG_NR50 (*(volatile u8 *)0x4000080) /* Left/Right volume control */
+#define REG_NR51 (*(volatile u8 *)0x4000081) /* Channel enable */
+#define REG_NR10 (*(volatile u8 *)0x4000060) /* Channel 1 sweep */
+#define REG_NR11 (*(volatile u8 *)0x4000062) /* Channel 1 duty and length */
+#define REG_NR12 (*(volatile u8 *)0x4000063) /* Channel 1 envelope */
+#define REG_NR13 (*(volatile u8 *)0x4000064) /* Channel 1 frequency low */
+#define REG_NR14 (*(volatile u8 *)0x4000065) /* Channel 1 frequency high */
+
+void init_sound(void) {
+    REG_NR52 = 0x80;  /* Turn on sound */
+    REG_NR51 = 0xFF;  /* Enable all sound channels */
+    REG_NR50 = 0x77; /* Set volume for L&R channels */
+}
+
+void play_square_wave(void) {
+
+    REG_NR10 = 0x00;  /* Sweep register (not used) */
+    REG_NR11 = 0xBF;  /* Duty cycle and length (50% duty, 64 steps) */
+    REG_NR12 = 0xF3;  /* Volume envelope (max volume) */
+
+    REG_NR13 = 0x02;  /* Lower byte of frequency (set to 2 for C4) */
+    REG_NR14 = 0x87;  /* Higher 3 bits of frequency (set to 0x80 for start and 0x07 for frequency) */
+}
+
+
 uint8_t getPaletteEntry(const uint32_t origin) {
 	uint8_t shade;
 
@@ -87,6 +114,8 @@ void graphicsInit(void) {
 
 	defaultFont = loadBitmap("font.img");
 	enableSmoothMovement = TRUE;
+    init_sound();
+    play_square_wave();
 }
 
 void handleSystemEvents(void) {
