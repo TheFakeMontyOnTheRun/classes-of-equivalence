@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.media.MediaRouter
 import android.media.SoundPool
 import android.os.Build
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
     val bitmap: Bitmap = Bitmap.createBitmap(320, 240, Bitmap.Config.ARGB_8888)
     private var running = false
     private var multiplier : Float = 0f
+    private var bgMusic : MediaPlayer? = null
 
     private fun setMultiplier(sizeWidth: Int, sizeHeight: Int) {
         multiplier = if (((320.0f / 240.0f) * sizeHeight) < sizeWidth) {
@@ -57,7 +59,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
         sounds[4] = soundPool!!.load(this, R.raw.detected, 1)
         sounds[5] = soundPool!!.load(this, R.raw.fire, 1)
         sounds[6] = soundPool!!.load(this, R.raw.enemyfire, 1)
-        sounds[7] = soundPool!!.load(this, R.raw.derelicttheme, 1)
+        sounds[7] = soundPool!!.load(this, R.raw.winter, 1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,7 +149,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                 while (running) {
                     Thread.sleep(10)
                     when (val sound = DerelictJNI.getSoundToPlay()) {
-                        0, 1, 2, 3, 4, 5, 6, 7, 8 -> runOnUiThread {
+                        0, 1, 2, 3, 4, 5, 6 -> runOnUiThread {
                             soundPool!!.play(
                                 sounds[sound],
                                 1f,
@@ -156,6 +158,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchList
                                 0,
                                 1f
                             )
+                        }
+                        7 -> runOnUiThread {
+                            bgMusic = MediaPlayer.create(this@MainActivity, R.raw.winter)
+                            bgMusic!!.start()
                         }
                     }
                 }

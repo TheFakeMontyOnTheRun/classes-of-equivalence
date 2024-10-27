@@ -92,11 +92,7 @@ void handleSystemEvents(void) {
 }
 
 void graphicsShutdown(void) {
-
-
     releaseBitmap(defaultFont);
-
-    texturesUsed = 0;
 }
 
 void flipRenderer(void) {
@@ -140,6 +136,7 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_initAssets(JNIEnv *env, jclass clazz
 
     AAssetManager *asset_manager = AAssetManager_fromJava(env, assetManager);
     defaultAssetManager = asset_manager;
+    setupOPL2(0);
     srand(time(NULL));
     initHW(0, NULL);
     enableSmoothMovement = TRUE;
@@ -157,7 +154,10 @@ Java_pt_b13h_spacetrashmanblues_DerelictJNI_getPixelsFromNative(JNIEnv *env, jcl
 
 int soundToPlay = -1;
 
-void setupOPL2(int port) {}
+void setupOPL2(int port) {
+    /* Play background music */
+    playSound(7);
+}
 
 void playSound(const uint8_t action) {
     soundToPlay = action;
