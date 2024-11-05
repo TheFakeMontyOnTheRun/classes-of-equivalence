@@ -225,7 +225,8 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1);
+        FixP_t x1y1,
+        FramebufferPixelFormat pixel);
 
 void maskFloor(
         FixP_t y0,

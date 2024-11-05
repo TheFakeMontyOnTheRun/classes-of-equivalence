@@ -188,11 +188,11 @@ void drawColumnAt(const struct Vec3 center,
         }
 
         if (((mask & MASK_RIGHT) && fixToInt(center.mX) > 0) || (mask & MASK_FORCE_RIGHT)) {
-            maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY);
+            maskWall(p2.mX, p0.mX, p2.mY, p3.mY, p0.mY, p1.mY, getPaletteEntry(0xFF000000));
         }
 
         if (((mask & MASK_LEFT) && fixToInt(center.mX) < 0) || (mask & MASK_FORCE_LEFT)) {
-            maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY);
+            maskWall(p1.mX, p3.mX, p0.mY, p1.mY, p2.mY, p3.mY, getPaletteEntry(0xFF000000));
         }
 
         if ((mask & MASK_FRONT)) {
@@ -552,7 +552,7 @@ void drawLeftNear(const struct Vec3 center,
     lrz0 = projectionVertices[3].second;
 
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
+        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, getPaletteEntry(0xFF000000));
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
                  textureScale, fixToInt(center.mZ));
@@ -786,7 +786,7 @@ void drawRightNear(const struct Vec3 center,
     lrz0 = projectionVertices[3].second;
 
     if (center.mZ >= FIXP_DISTANCE_FOR_DARKNESS) {
-        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY);
+        maskWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, getPaletteEntry(0xFF000000));
     } else {
         drawWall(ulz0.mX, urz0.mX, ulz0.mY, llz0.mY, urz0.mY, lrz0.mY, texture->rowMajor,
                  textureScale, fixToInt(center.mZ));

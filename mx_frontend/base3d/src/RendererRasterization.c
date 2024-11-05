@@ -57,7 +57,8 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1) {
+        FixP_t x1y1,
+        FramebufferPixelFormat pixel) {
 
     int32_t x;
     int32_t limit;
@@ -74,7 +75,6 @@ void maskWall(
     FixP_t lowerDyDx;
     int32_t ix;
     FramebufferPixelFormat *bufferData = &framebuffer[0];
-    FramebufferPixelFormat pixel = getPaletteEntry(0xFF000000);
 
     if (x0 > x1) {
         FixP_t tmp = x0;
