@@ -35,6 +35,10 @@ enum ESoundDriver soundDriver;
 
 @implementation GameView
 
+MusicPlayer musicPlayer;
+MusicSequence musicSequence;
+
+
 uint32_t stretchedBuffer[ XRES_FRAMEBUFFER * YRES_FRAMEBUFFER ];
 uint8_t flippedBuffer[XRES_FRAMEBUFFER*YRES_FRAMEBUFFER];
 
@@ -115,24 +119,24 @@ void setMultiplier(CGSize size) {
 
 - (void)initMusic:(NSString *)filePath {
     // Initialize the sequence
-    NewMusicSequence(&_musicSequence);
+    NewMusicSequence(&musicSequence);
 
     // Load MIDI file into the sequence
     NSURL *midiURL = [NSURL fileURLWithPath:filePath];
-    MusicSequenceFileLoad(_musicSequence, (__bridge CFURLRef)midiURL, kMusicSequenceFile_MIDIType, kMusicSequenceLoadSMF_ChannelsToTracks);
+    MusicSequenceFileLoad(musicSequence, (CFURLRef)midiURL, kMusicSequenceFile_MIDIType, kMusicSequenceLoadSMF_ChannelsToTracks);
 
     // Create a new music player
-    NewMusicPlayer(&_musicPlayer);
-    MusicPlayerSetSequence(_musicPlayer, _musicSequence);
-    MusicPlayerPreroll(_musicPlayer);
+    NewMusicPlayer(&musicPlayer);
+    MusicPlayerSetSequence(musicPlayer, musicSequence);
+    MusicPlayerPreroll(musicPlayer);
 }
 
 - (void)playMusic {
-    MusicPlayerStart(_musicPlayer);
+    MusicPlayerStart(musicPlayer);
 }
 
 - (void)stopMusic {
-    MusicPlayerStop(_musicPlayer);
+    MusicPlayerStop(musicPlayer);
 }
 
 

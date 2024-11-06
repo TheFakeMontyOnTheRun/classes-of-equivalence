@@ -25,10 +25,6 @@
 -(void)keyDown:(NSEvent*)event;
 - (BOOL)acceptsFirstResponder;
 
-
-@property (nonatomic) MusicPlayer musicPlayer;
-@property (nonatomic) MusicSequence musicSequence;
-
 - (void)initMusic:(NSString *)filePath;
 - (void)playMusic;
 - (void)stopMusic;
