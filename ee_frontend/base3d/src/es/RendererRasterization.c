@@ -136,7 +136,7 @@ void drawTextAt(const int x, const int y, const char *text, const FramebufferPix
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin,
                                        const char *__restrict__ text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
+                                       const FramebufferPixelFormat colour, char charToReplaceHifenWith) {
 
     if (defaultFont == NULL) {
         defaultFont = loadBitmap("font.img");

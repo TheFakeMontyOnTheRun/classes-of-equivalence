@@ -100,7 +100,7 @@ void createRenderListFor(uint8_t cameraX, uint8_t cameraZ, enum EDirection rotat
 
 void drawTextAtWithMargin(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour);
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const uint8_t colour,
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text, const FramebufferPixelFormat colour,
                                        char charToReplaceHifenWith);
 
 void drawTextAt(const int x,

@@ -349,15 +349,12 @@ void drawRepeatBitmap(
 }
 
 void drawTextAt(const int x, const int y, const char *text, const FramebufferPixelFormat colour) {
-    drawTextAtWithMargin(x, y, XRES_FRAMEBUFFER / 8,  text, colour);
+    drawTextAtWithMargin(x, y, XRES_FRAMEBUFFER - 1,  text, colour);
 }
 
-void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
-                                       const uint8_t colour, char charToReplaceHifenWith) {
+void drawCharAt(const int dstX, const int dstY, char currentChar,
+                                       const FramebufferPixelFormat colour) {
 
-    size_t len = strlen(text);
-    int32_t dstX = (x) * 8;
-    int32_t dstY = (y) * 8;
     size_t c;
     uint32_t ascii;
     float line;
@@ -397,8 +394,8 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     
     shortStr[1] = 0;
 
-    dstX = (x) * 8;
-    dstY = (y + 2) * 9;
+//    dstX = (x) * 8;
+//    dstY = (y + 2) * 9;
 
     r = (colour & 0xFF);
     g = ((colour & 0x00FF00) >> 8);
@@ -408,48 +405,25 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
       .color = RGBA32(r, g, b, 0xFF),
     });
 #endif
-    for (c = 0; c < len; ++c) {
-        char currentChar = text[c];
-
-        if (currentChar == '-') {
-            currentChar = charToReplaceHifenWith;
-        }
-        if (currentChar == '\n' || (dstX >= XRES_FRAMEBUFFER) || (dstX >= ((margin - 1) * 8)) ) {
-            dstX = (x) * 8;
-#ifndef N64
-            dstY += 8;
-#else
-            dstY += 9;
-#endif
-            continue;
-        }
-
-        if (currentChar == ' ' || currentChar == '\r') {
-            dstX += 8;
-            continue;
-        }
 
 #ifndef N64
-        ascii = currentChar - ' ';
-        line = (((ascii >> 5) + 1) * blockHeight);
-        col = (((ascii & 31)) * blockWidth);
+    ascii = currentChar - ' ';
+    line = (((ascii >> 5) + 1) * blockHeight);
+    col = (((ascii & 31)) * blockWidth);
 
-        glTexCoord2f(col, line - blockHeight);
-        glVertex3f(dstX * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
-        glTexCoord2f(col + blockWidth, line - blockHeight);
-        glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
-        glTexCoord2f(col + blockWidth, line);
-        glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
-        glTexCoord2f(col, line);
-        glVertex3f(dstX * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
+    glTexCoord2f(col, line - blockHeight);
+    glVertex3f(dstX * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
+    glTexCoord2f(col + blockWidth, line - blockHeight);
+    glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, dstY * NORMALIZE_ORTHO_Y, -0.1);
+    glTexCoord2f(col + blockWidth, line);
+    glVertex3f((dstX + 8) * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
+    glTexCoord2f(col, line);
+    glVertex3f(dstX * NORMALIZE_ORTHO_X, (dstY + 8) * NORMALIZE_ORTHO_Y, -0.1);
 #else
-        shortStr[0] = currentChar;
-        rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
+    shortStr[0] = currentChar;
+    rdpq_text_print(NULL, 1, dstX, dstY, &shortStr[0]);
 #endif
-
-
-        dstX += 8;
-    }
+    
 #ifndef N64
     glEnd();
 #else
@@ -458,6 +432,54 @@ void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, con
     glColor3f(1, 1, 1);
     glDisable(GL_ALPHA_TEST);
 
+}
+
+void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,
+                                       const FramebufferPixelFormat colour, char charToReplaceHifenWith) {
+    int len = (int)strlen(text);
+    int32_t dstX = x * 8;
+    int32_t dstY = y * 8;
+    int c;
+    int d;
+    uint8_t lastSpacePos = 0xFF;
+
+    for (c = 0; c < len; ++c) {
+
+        char currentChar = text[c];
+
+        if (currentChar == '-') {
+            currentChar = charToReplaceHifenWith;
+        }
+
+        if (currentChar == '\n' || dstX > (margin)) {
+            dstX = x * 8;
+            dstY += 8;
+            continue;
+        }
+
+        if (dstY >= YRES_FRAMEBUFFER) {
+            return;
+        }
+
+        if (currentChar == ' ') {
+            lastSpacePos = c;
+            dstX += 8;
+            continue;
+        } else {
+            if ((c - 1) == lastSpacePos) {
+                d = c;
+                while (d < len && text[d] != ' ') ++d;
+
+                if ((dstX + ((d - c ) * 8)) >= margin ) {
+                    dstX = x * 8;
+                    dstY += 8;
+                }
+            }
+        }
+
+        drawCharAt(dstX, dstY, currentChar, colour);
+        dstX += 8;
+    }
 }
 
 void drawLine(uint16_t x0, uint8_t y0, uint16_t x1, uint8_t y1, uint8_t colour) {
