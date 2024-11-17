@@ -1,14 +1,13 @@
 Sub Mare Imperium
 =================
 
-# Chapter 0: Derelict
+# Chapter 1: Tragedy of the Uncanny
 
-- [Saga overview](sub-mare-imperium)
-- [This installment story](episode0)
+- [This installment story](episode1)
 
 # Technical details
 - [Tests coverage](coverage/index.html)
 - [Core](core)
-- [8-Bit engine](my-frontend)
-- [16-bit engine](mz-frontend)
-- [32-Bit engine](mx-frontend)
+- [GL ES 2/Playstation 2/Wii/GX engine](ee-frontend)
+- [OpenGL 1.1 engine](gl-frontend)
+- [Software rendered engine](mx-frontend)
