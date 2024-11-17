@@ -64,7 +64,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
 
 
         case kGoodVictoryEpilogue:
-            mainText = "Thank you for playing. This is the end of this planned demo. Please, tell me what did you think of it!";
+            mainText = "Thank you for playing!";
 
             GameMenu_StateTitle = "Victory";
 
@@ -74,7 +74,7 @@ void GameMenu_initStateCallback(enum EGameMenuState tag) {
             break;
 
         case kBadVictoryEpilogue:
-            mainText = "Thank you for playing. This is the end of this planned demo. Please, tell me what did you think of it!";
+            mainText = "Thank you for playing!";
             GameMenu_StateTitle = "Victory";
             GameMenu_optionsCount = 1;
             GameMenu_options = GameMenu_Story_options;
