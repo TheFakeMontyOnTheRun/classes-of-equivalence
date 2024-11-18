@@ -1096,21 +1096,24 @@ void renderTick(long ms) {
                 }
 
                 if (itemsSnapshotElement != 0xFF) {
-                    tmp.mY = position.mY + (tileProp->mFloorHeight * 2) + intToFix(1);
+                    struct Item* itemToRender;
+                    itemToRender = getItem(itemsSnapshotElement);
+                    if (itemToRender->hasVisuals) {
+                        tmp.mY = position.mY + (tileProp->mFloorHeight * 2) + intToFix(1);
 
-                    // lazy loading the item sprites
-                    // we can't preload it because...reasons on the NDS
-                    // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
-                    if (itemSprites[itemsSnapshotElement] == NULL) {
-                        char buffer[64];
-                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
-                        itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                        // lazy loading the item sprites
+                        // we can't preload it because...reasons on the NDS
+                        // perhaps some state machine issue? IDK. Placing this here works better for the NDS.
+                        if (itemSprites[itemsSnapshotElement] == NULL) {
+                            char buffer[64];
+                            sprintf(&buffer[0], "%s.img", itemToRender->name);
+                            itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                        }
+
+                        glRotatef(((float) -leanX), 0.0f, 1.0f, 0.0f);
+                        drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
+                        glRotatef(((float) leanX), 0.0f, 1.0f, 0.0f);
                     }
-
-                    glRotatef(((float) -leanX), 0.0f, 1.0f, 0.0f);
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
-                    glRotatef(((float) leanX), 0.0f, 1.0f, 0.0f);
-
                 }
                 glTranslatef(-fixToFloat(xPos), 0, fixToFloat(zPos));
             }

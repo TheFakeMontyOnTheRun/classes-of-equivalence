@@ -123,7 +123,8 @@ struct Item *addItem(const char *description,
 #endif
                      uint8_t pickable,
                      int8_t positionX,
-                     int8_t positionY) {
+                     int8_t positionY,
+                     uint8_t hasVisuals) {
 
     struct Item *toReturn = &item[itemsCount];
 
@@ -138,6 +139,7 @@ struct Item *addItem(const char *description,
 
     toReturn->useCallback = cantBeUsedCallback;
     toReturn->useWithCallback = cantBeUsedWithOthersCallback;
+    toReturn->hasVisuals = hasVisuals;
 
     return toReturn;
 }

@@ -592,7 +592,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-            FALSE, 0, 0);
+            FALSE, 0, 0, 0);
 
     /* LSS-Daedalus */
     newItem = addItem("emp-bomb",
@@ -604,7 +604,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             5,
 #endif
-                      TRUE, 9, 6);
+                      TRUE, 9, 6, 1);
     newItem->useCallback = bombActivatedCallback;
 
 
@@ -619,7 +619,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 10, 6);
+                      TRUE, 10, 6, 1);
     newItem->useCallback = bombControllerActivatedCallback;
 
     newItem = addItem("ship-ignition",
@@ -630,7 +630,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 11, 6);
+                      TRUE, 11, 6, 1);
     newItem->useCallback = bombActivatedCallback;
 
     newItem = addItem("metal-wire",
@@ -640,7 +640,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             2,
 #endif
-                      TRUE, 28, 12);
+                      TRUE, 28, 12, 1);
 
     addToRoom("lss-daedalus", newItem);
     newItem->pickable = TRUE;
@@ -653,7 +653,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             2,
 #endif
-                      TRUE, 15, 15);
+                      TRUE, 15, 15, 0);
     newItem->active = TRUE;
     pickObject(newItem);
     newItem->pickable = FALSE;
@@ -667,7 +667,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 4, 14);
+                      TRUE, 4, 14, 1);
     addToRoom("hall-2", newItem);
     newItem->useWithCallback = useCardWithCardWriter;
     newItem->pickCallback = keycardPickCallback;
@@ -681,7 +681,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 29, 15);
+                      TRUE, 29, 15, 1);
     newItem->useWithCallback = useKeycardWith;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
@@ -695,7 +695,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             17,
 #endif
-                      FALSE, 5, 0);
+                      FALSE, 5, 0, 0);
     addToRoom("rls-bohr-2", newItem);
     newItem->active = TRUE;
 
@@ -708,7 +708,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                      FALSE, 12, 3);
+                      FALSE, 12, 3, 0);
     addToRoom("hangar", newItem);
 
 
@@ -720,7 +720,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                      FALSE, 7, 2);
+                      FALSE, 7, 2, 0);
     addToRoom("hall-1", newItem);
 
 
@@ -731,7 +731,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                      FALSE, 6, 2);
+                      FALSE, 6, 2, 0);
     addToRoom("hall-2", newItem);
 
 
@@ -742,7 +742,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                      FALSE, 7, 2);
+                      FALSE, 7, 2, 0);
     addToRoom("hall-3", newItem);
 
     /* Diaries */
@@ -753,7 +753,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 4, 6);
+                      TRUE, 4, 6, 1);
     addToRoom("pod-1", newItem);
     newItem->pickCallback = consumeOnPickup;
 
@@ -764,7 +764,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 11, 8);
+                      TRUE, 11, 8, 1);
     addToRoom("pod-2", newItem);
     newItem->pickCallback = consumeOnPickup;
 
@@ -775,7 +775,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 3, 2);
+                      TRUE, 3, 2, 1);
     addToRoom("pod-3", newItem);
     newItem->pickCallback = consumeOnPickup;
 
@@ -791,7 +791,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 5, 10);
+                      TRUE, 5, 10, 1);
     addToRoom("pod-4", newItem);
     newItem->pickCallback = consumeOnPickup;
 
@@ -803,7 +803,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             1,
 #endif
-                      TRUE, 26, 8);
+                      TRUE, 26, 8, 1);
     addToRoom("crew-bunks", newItem);
     newItem->pickCallback = consumeOnPickup;
 
@@ -816,7 +816,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             3,
 #endif
-                      FALSE, 29, 17);
+                      FALSE, 29, 17, 0);
     addToRoom("computer-core", newItem);
 
 
@@ -827,7 +827,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 23, 17);
+                      TRUE, 23, 17, 1);
     newItem->useWithCallback = useKeycardWith;
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
@@ -841,7 +841,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             138,
 #endif
-                      FALSE, 16, 4);
+                      FALSE, 16, 4, 0);
     newItem->useCallback = useComputerRack;
     addToRoom("situation-room", newItem);
 
@@ -853,7 +853,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             138,
 #endif
-                      FALSE, 16, 5);
+                      FALSE, 16, 5 ,0);
     newItem->useCallback = useComputerRack;
     addToRoom("situation-room", newItem);
 
@@ -868,7 +868,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 8, 6);
+                      TRUE, 8, 6, 1);
     addToRoom("situation-room", newItem);
 
     newItem = addItem("metal-mending",
@@ -878,7 +878,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             74,
 #endif
-                      FALSE, 5, 4);
+                      FALSE, 5, 4, 1);
     addToRoom("radar-array", newItem);
 
 
@@ -891,7 +891,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             1,
 #endif
-                      TRUE, 17, 17);
+                      TRUE, 17, 17, 1);
     addToRoom("wc", newItem);
 
 
@@ -902,7 +902,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             1,
 #endif
-                      FALSE, 22, 17);
+                      FALSE, 22, 17, 0);
     newItem->useCallback = useCloggedFlush;
     addToRoom("wc", newItem);
 
@@ -913,7 +913,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             1,
 #endif
-                      FALSE, 18, 17);
+                      FALSE, 18, 17, 0);
     newItem->useCallback = useRegularFlush;
     addToRoom("wc", newItem);
 
@@ -927,7 +927,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             209,
 #endif
-                      FALSE, 29, 10);
+                      FALSE, 29, 10, 1);
     addToRoom("reactor-core", newItem);
 
 
@@ -939,7 +939,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             62,
 #endif
-                      FALSE, 21, 4);
+                      FALSE, 21, 4, 0);
     newItem->useCallback = reactorValveCallback;
     addToRoom("reactor-core", newItem);
 
@@ -951,7 +951,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      TRUE, 16, 3);
+                      TRUE, 16, 3, 1);
     newItem->pickCallback = keycardPickCallback;
     newItem->dropCallback = keycardDropCallback;
 
@@ -963,7 +963,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      FALSE, 2, 0);
+                      FALSE, 2, 0, 0);
     newItem->useCallback = elevatorGoDownCallback;
     addToRoom("elevator-level-1", newItem);
 
@@ -974,7 +974,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      FALSE, 2, 0);
+                      FALSE, 2, 0, 0);
     newItem->useCallback = elevatorGoDownCallback;
     addToRoom("elevator-level-2", newItem);
 
@@ -985,7 +985,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      FALSE, 3, 0);
+                      FALSE, 3, 0, 0);
     newItem->useCallback = elevatorGoUpCallback;
     addToRoom("elevator-level-2", newItem);
 
@@ -996,7 +996,7 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                      FALSE, 3, 0);
+                      FALSE, 3, 0, 0);
     newItem->useCallback = elevatorGoUpCallback;
     addToRoom("elevator-level-3", newItem);
 
@@ -1007,6 +1007,6 @@ void initStation(void) {
 #ifdef ITEMS_HAVE_WEIGHT
             200,
 #endif
-                      TRUE, 15, 19);
+                      TRUE, 15, 19, 1);
     addToRoom("crew-bunks", newItem);
 }
