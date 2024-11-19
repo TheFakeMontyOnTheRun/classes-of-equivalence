@@ -57,7 +57,7 @@ void maskWall(
         FixP_t x0y0,
         FixP_t x0y1,
         FixP_t x1y0,
-        FixP_t x1y1) {
+        FixP_t x1y1, FramebufferPixelFormat tint) {
 
     int32_t x;
     int32_t limit;
@@ -212,7 +212,7 @@ void drawWall(FixP_t x0,
               FixP_t x1y1,
               const TexturePixelFormat *texture,
               const FixP_t textureScaleY,
-              const int z) {
+              const int z, FramebufferPixelFormat tint) {
     int32_t x;
     int32_t limit;
     FixP_t upperY0;
@@ -235,17 +235,7 @@ void drawWall(FixP_t x0,
     FixP_t du;
     int32_t ix;
     FramebufferPixelFormat *bufferData = &framebuffer[0];
-    int farEnoughForStipple;
-    
-    if (z < distanceForPenumbra -4)  {
-        farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra -2) {
-        farEnoughForStipple = 1;
-    } else if (z < distanceForPenumbra) {
-        farEnoughForStipple = 2;
-    } else {
-        farEnoughForStipple = 3;
-    }
+    int farEnoughForStipple = (tint < 8) ? 2 : 0;
 
     if (x0 > x1) {
         FixP_t tmp = x0;
@@ -400,7 +390,7 @@ void drawMask(
         const FixP_t x0,
         const FixP_t y0,
         const FixP_t x1,
-        const FixP_t y1) {
+        const FixP_t y1, FramebufferPixelFormat tint) {
 
     int32_t _x0 = fixToInt(x0);
     int32_t _y0 = fixToInt(y0);
@@ -454,7 +444,7 @@ void drawFrontWall(FixP_t x0,
                    const FixP_t textureScaleY,
                    const int z,
                    const int enableAlpha,
-                   const int size) {
+                   const int size, FramebufferPixelFormat tint) {
     int16_t y;
     int limit;
     FixP_t dY;
@@ -470,17 +460,7 @@ void drawFrontWall(FixP_t x0,
     int iX1;
     FixP_t du;
     FramebufferPixelFormat *bufferData = &framebuffer[0];
-    int farEnoughForStipple = 0;
-    
-    if (z < distanceForPenumbra -4)  {
-        farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra -2) {
-        farEnoughForStipple = 1;
-    } else if (z < distanceForPenumbra) {
-        farEnoughForStipple = 2;
-    } else {
-        farEnoughForStipple = 3;
-    }
+    int farEnoughForStipple = (tint < 8) ? 2 : 0;
 
 
     /* if we have a quad in which the base is smaller */
@@ -629,7 +609,7 @@ void drawFrontWall(FixP_t x0,
 __attribute__((target("arm"), section(".iwram"), noinline))
 #endif
 
-void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, FramebufferPixelFormat pixel) {
+void maskFloor(FixP_t y0, FixP_t y1, FixP_t x0y0, FixP_t x1y0, FixP_t x0y1, FixP_t x1y1, FramebufferPixelFormat pixel, FramebufferPixelFormat tint) {
 
     int32_t y;
     int32_t limit;
@@ -783,7 +763,7 @@ void drawFloor(FixP_t y0,
                FixP_t x0y1,
                FixP_t x1y1,
                int z,
-               const TexturePixelFormat *texture) {
+               const TexturePixelFormat *texture, FramebufferPixelFormat tint) {
 
     int32_t y = 0;
     int32_t limit;
@@ -805,7 +785,7 @@ void drawFloor(FixP_t y0,
     FixP_t dv;
     FixP_t lastDiffX = 0xFFFFFFFF;
     const TexturePixelFormat *sourceLineStart;
-    int farEnoughForStipple;
+    int farEnoughForStipple = (tint < 8) ? 2 : 0;
 
     if (y0 == y1) {
         return;
@@ -831,16 +811,6 @@ void drawFloor(FixP_t y0,
     }
 
     bufferData = &framebuffer[0];
-
-    if (z < distanceForPenumbra -4)  {
-        farEnoughForStipple = 0;
-    } else if (z < distanceForPenumbra -2) {
-        farEnoughForStipple = 1;
-    } else if (z < distanceForPenumbra) {
-        farEnoughForStipple = 2;
-    } else {
-        farEnoughForStipple = 3;
-    }
     
     y = fixToInt(y0);
     limit = fixToInt(y1);
@@ -1139,7 +1109,7 @@ void fillTopFlat(int *coords, FramebufferPixelFormat colour) {
 }
 
 
-void fillTriangle(int *coords, FramebufferPixelFormat colour) {
+void fillTriangle(int *coords, FramebufferPixelFormat colour, FramebufferPixelFormat tint) {
     int newCoors[6];
     int newCoors2[6];
 
@@ -1524,7 +1494,7 @@ void drawTexturedTopFlatTriangle(int *coords, uint8_t *uvCoords, struct Texture 
     }
 }
 
-void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z) {
+void drawTexturedTriangle(int *coords, uint8_t *uvCoords, struct Texture *texture, int z, FramebufferPixelFormat tint) {
     int newCoors[6];
     uint8_t newUV[6];
     int c;
@@ -1645,7 +1615,7 @@ void drawBitmapRaw(const int dx,
                    int width,
                    int height,
                    BitmapPixelFormat *bitmapData,
-                   const int transparent) {
+                   const int transparent, FramebufferPixelFormat tint) {
 
     FramebufferPixelFormat *destination = &framebuffer[0];
     BitmapPixelFormat *sourceLine = bitmapData;
@@ -1680,9 +1650,9 @@ void drawBitmapRaw(const int dx,
 void drawBitmap(const int x,
                 const int y,
                 struct Bitmap *tile,
-                const uint8_t transparent) {
+                const uint8_t transparent, FramebufferPixelFormat tint) {
 
-    drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent);
+    drawBitmapRaw(x, y, tile->width, tile->height, tile->data, transparent, tint);
 }
 
 void drawTextAtWithMarginWithFiltering(const int x, const int y, int margin, const char *text,

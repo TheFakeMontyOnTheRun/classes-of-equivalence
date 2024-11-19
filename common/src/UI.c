@@ -187,7 +187,7 @@ void drawGraphic(uint16_t x, uint8_t  y, uint16_t dx, uint8_t dy, const uint8_t 
 	  buffer[4] = x + ((dx * shape[4]) / 128);
 	  buffer[5] = y + ((dy * shape[5]) / 128);
 
-            fillTriangle(&buffer[0], colour);
+            fillTriangle(&buffer[0], colour, getPaletteEntry(0xFFFFFFFF));
 
             ptr += 2 * npoints;
         } else if (npoints == 2) {

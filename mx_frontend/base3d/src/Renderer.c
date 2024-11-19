@@ -38,7 +38,7 @@ extern int leanX, leanY, turning;
 
 int pointerClickPositionX = -1;
 int pointerClickPositionY = -1;
-
+uint8_t lightMap[MAP_SIZE * MAP_SIZE];
 int hasSnapshot = FALSE;
 FixP_t playerHeight = 0;
 FixP_t walkingBias = 0;
@@ -67,7 +67,11 @@ struct Vec3 mCamera;
 long gameTicks = 0;
 int dirtyLineY0 = 0;
 int dirtyLineY1 = YRES_FRAMEBUFFER;
-const int distanceForPenumbra = 16;
+#ifndef AGS
+const int distanceForPenumbra = 0;
+#else
+const int distanceForPenumbra = 0;
+#endif
 struct MapWithCharKey tileProperties;
 struct MapWithCharKey customMeshes;
 struct Vec2i cameraPosition;
@@ -92,6 +96,50 @@ char *messageLogBuffer;
 int messageLogBufferCoolDown = 0;
 
 void printMessageTo3DView(const char *message);
+
+void spreadLight(int x, int y, int intensity) {
+
+    if (x < 0 || x >= MAP_SIZE || y < 0 || y >= MAP_SIZE ) {
+        return;
+    }
+
+    if (intensity > 0) {
+
+        uint8_t currentIntensity = lightMap[y * MAP_SIZE + x];
+
+        if ((intensity + currentIntensity) > 255 ) {
+            lightMap[y * MAP_SIZE + x] = 255;
+        } else {
+            lightMap[y * MAP_SIZE + x] = currentIntensity + intensity;
+        }
+
+        if (isPositionAllowed(x, y)) {
+            intensity /= 2;
+            spreadLight(x, y - 1, intensity);
+            spreadLight(x, y + 1, intensity);
+            spreadLight(x - 1, y, intensity);
+            spreadLight(x + 1, y, intensity);
+        }
+    }
+}
+
+void computeLightning(void) {
+    struct ObjectNode* itemNode;
+
+    memset(&lightMap[0], 4, MAP_SIZE * MAP_SIZE);
+
+    itemNode = getRoom(getPlayerRoom())->itemsPresent;
+
+    while(itemNode != NULL) {
+        if (itemNode->item != 0) {
+            struct Item  *item = getItem(itemNode->item);
+            if ( item != NULL ) {
+                spreadLight( item->position.x, item->position.y, 128);
+            }
+        }
+        itemNode = itemNode->next;
+    }
+}
 
 void enter2D(void) {
 
@@ -224,6 +272,7 @@ void loadTexturesForLevel(const uint8_t levelNumber) {
     /* tmp */
     playerHeight = 0;
     playerHeightChangeRate = 0;
+    computeLightning();
 }
 
 void renderRoomTransition(void) {
@@ -236,11 +285,12 @@ void renderRoomTransition(void) {
         currentPresentationState = kWaitingForInput;
         zCameraOffset = xCameraOffset = yCameraOffset = 0;
         needsToRedrawHUD = TRUE;
-	visibilityCached = FALSE;
-	needsToRedrawVisibleMeshes = FALSE;
-	enable3DRendering = FALSE;
-	hasSnapshot = FALSE;
+        visibilityCached = FALSE;
+        needsToRedrawVisibleMeshes = FALSE;
+        enable3DRendering = FALSE;
+        hasSnapshot = FALSE;
     } else {
+        FramebufferPixelFormat tint = getPaletteEntry(0xFFFFFFFF);
         xCameraOffset = yCameraOffset = 0;
 
         fillRect(0, 0, XRES + 1, YRES, getPaletteEntry(0xFF000000), 0);
@@ -248,38 +298,38 @@ void renderRoomTransition(void) {
         center.mY = 0;
         center.mZ = intToFix(3);
         center.mX = -intToFix(3);
-        drawColumnAt(center, intToFix(3), &textures[1], MASK_LEFT, 0, 1);
+        drawColumnAt(center, intToFix(3), &textures[1], MASK_LEFT, 0, 1, tint);
 
         center.mX = intToFix(3);
-        drawColumnAt(center, intToFix(3), &textures[1], MASK_RIGHT, 0, 1);
+        drawColumnAt(center, intToFix(3), &textures[1], MASK_RIGHT, 0, 1, tint);
 
         center.mY = intToFix(5) - zCameraOffset;
         center.mX = -intToFix(1);
-        drawColumnAt(center, intToFix(3), &textures[0], MASK_FRONT, 0, 1);
+        drawColumnAt(center, intToFix(3), &textures[0], MASK_FRONT, 0, 1, tint);
         center.mX = intToFix(1);
-        drawColumnAt(center, intToFix(3), &textures[0], MASK_FRONT, 0, 1);
+        drawColumnAt(center, intToFix(3), &textures[0], MASK_FRONT, 0, 1, tint);
 
 
 
         center.mX = intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, &textures[0], kNorth);
+        drawCeilingAt(center, &textures[0], kNorth, tint);
 
         center.mX = -intToFix(1);
         center.mY = intToFix(2) - zCameraOffset;
         center.mZ = intToFix(3);
-        drawCeilingAt(center, &textures[0], kNorth);
+        drawCeilingAt(center, &textures[0], kNorth, tint);
 
         zCameraOffset -= intToFix(1) / 4;
 
         if (zCameraOffset == 0) {
             currentPresentationState = kCheckingForRandomBattle;
             needsToRedrawHUD = TRUE;
-	    visibilityCached = FALSE;
-	    needsToRedrawVisibleMeshes = FALSE;
-	    enable3DRendering = FALSE;
-	    hasSnapshot = FALSE;
+            visibilityCached = FALSE;
+            needsToRedrawVisibleMeshes = FALSE;
+            enable3DRendering = FALSE;
+            hasSnapshot = FALSE;
         }
     }
 }
@@ -463,6 +513,7 @@ void renderTick(long ms) {
     }
 
     if (needsToRedrawVisibleMeshes) {
+        uint8_t lightIntensity;
         uint8_t itemsSnapshotElement = 0xFF;
         struct Vec3 tmp, tmp2;
         struct CTile3DProperties *tileProp;
@@ -518,7 +569,7 @@ void renderTick(long ms) {
                         x = visPos.x;
                         z = visPos.y;
                         element = LEVEL_MAP(x, z);
-
+                        lightIntensity = lightMap[ z * MAP_SIZE + x];
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX =
@@ -558,6 +609,7 @@ void renderTick(long ms) {
                         z = visPos.y;
 
                         element = LEVEL_MAP(x, z);
+                        lightIntensity = lightMap[ z * MAP_SIZE + x];
                         itemsSnapshotElement = ITEMS_IN_MAP(x, z);
 
                         position.mX = mCamera.mX - intToFix(2 * x);
@@ -590,6 +642,7 @@ void renderTick(long ms) {
                         z = visPos.x;
 
                         element = LEVEL_MAP(z, x);
+                        lightIntensity = lightMap[ x * MAP_SIZE + z];
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX - intToFix(2 * x);
@@ -627,6 +680,7 @@ void renderTick(long ms) {
 
                         /* yes, it's reversed */
                         element = LEVEL_MAP(z, x);
+                        lightIntensity = lightMap[ x * MAP_SIZE + z];
                         itemsSnapshotElement = ITEMS_IN_MAP(z, x);
 
                         position.mX = mCamera.mX + intToFix(2 * x);
@@ -691,14 +745,14 @@ void renderTick(long ms) {
                             drawRightNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
                                     &textures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE, lightIntensity);
 
                             break;
 
                         case kLeftNearWall:
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
-                                    &textures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]], facesMask, TRUE);
+                                    &textures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]], facesMask, TRUE, lightIntensity);
                             break;
 
                         case kCube:
@@ -708,7 +762,7 @@ void renderTick(long ms) {
                             drawColumnAt(
                                     tmp, intToFix(tileProp->mFloorRepetitions),
                                     &textures[tileProp->mFloorRepeatedTexture.frames[tileProp->mFloorRepeatedTexture.currentFrame]],
-                                    facesMask, FALSE, TRUE);
+                                    facesMask, FALSE, TRUE, lightIntensity);
                             break;
                     }
                 }
@@ -723,14 +777,14 @@ void renderTick(long ms) {
                             drawRightNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     &textures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE, lightIntensity);
                             break;
 
                         case kLeftNearWall:
                             drawLeftNear(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     &textures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
-                                    facesMask, TRUE);
+                                    facesMask, TRUE, lightIntensity);
                             break;
 
                         case kCube:
@@ -740,14 +794,14 @@ void renderTick(long ms) {
                             drawColumnAt(
                                     tmp, intToFix(tileProp->mCeilingRepetitions),
                                     &textures[tileProp->mCeilingRepeatedTexture.frames[tileProp->mCeilingRepeatedTexture.currentFrame]],
-                                    facesMask, FALSE, TRUE);
+                                    facesMask, FALSE, TRUE, lightIntensity);
                             break;
                     }
                 }
 
                 if (tileProp->mFloorTexture.frameNumbers) {
                     tmp.mY = position.mY + twiceFloorHeight;
-                    drawFloorAt(tmp, &textures[tileProp->mFloorTexture.frames[tileProp->mFloorTexture.currentFrame]], cameraDirection);
+                    drawFloorAt(tmp, &textures[tileProp->mFloorTexture.frames[tileProp->mFloorTexture.currentFrame]], cameraDirection, lightIntensity);
                 }
 
                 if (tileProp->mCeilingTexture.frameNumbers) {
@@ -765,7 +819,7 @@ void renderTick(long ms) {
                     tmp.mY = position.mY + twiceCeilingHeight;
 
                     drawCeilingAt(
-                            tmp, &textures[tileProp->mCeilingTexture.frames[tileProp->mCeilingTexture.currentFrame]], newDirection);
+                            tmp, &textures[tileProp->mCeilingTexture.frames[tileProp->mCeilingTexture.currentFrame]], newDirection, lightIntensity);
                 }
 
                 if (tileProp->mGeometryType != kNoGeometry
@@ -805,7 +859,7 @@ void renderTick(long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture, lightIntensity);
                             break;
                         case kWallWest:
                             switch (cameraDirection) {
@@ -829,7 +883,7 @@ void renderTick(long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture, lightIntensity);
                             break;
 
                         case kWallCorner:
@@ -854,21 +908,21 @@ void renderTick(long ms) {
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture, lightIntensity);
                             break;
 
                         case kRightNearWall:
                             drawRightNear(
                                     tmp, (heightDiff + adjust),
                                     &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
-                                    facesMask, tileProp->mRepeatMainTexture);
+                                    facesMask, tileProp->mRepeatMainTexture, lightIntensity);
                             break;
 
                         case kLeftNearWall:
                             drawLeftNear(
                                     tmp, (heightDiff + adjust),
                                     &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
-                                    facesMask, tileProp->mRepeatMainTexture);
+                                    facesMask, tileProp->mRepeatMainTexture, lightIntensity);
                             break;
 
                         case kRampNorth: {
@@ -879,7 +933,7 @@ void renderTick(long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             drawRampAt(tmp, tmp2, &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]], cameraDirection,
-                                       flipTextureVertical);
+                                       flipTextureVertical, lightIntensity);
                         }
                             break;
 
@@ -891,7 +945,7 @@ void renderTick(long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kWest);
 
                             drawRampAt(tmp, tmp2, &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]], cameraDirection,
-                                       flipTextureVertical);
+                                       flipTextureVertical, lightIntensity);
                         }
                             break;
 
@@ -903,7 +957,7 @@ void renderTick(long ms) {
                             flipTextureVertical = (cameraDirection == kSouth || cameraDirection == kEast);
 
                             drawRampAt(tmp, tmp2, &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
-                                       (cameraDirection + 1) & 3, flipTextureVertical);
+                                       (cameraDirection + 1) & 3, flipTextureVertical, lightIntensity);
                         }
                             break;
                         case kRampWest: {
@@ -914,14 +968,14 @@ void renderTick(long ms) {
                             flipTextureVertical = (cameraDirection == kNorth || cameraDirection == kWest);
 
                             drawRampAt(tmp, tmp2, &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
-                                       (cameraDirection + 3) & 3, flipTextureVertical);
+                                       (cameraDirection + 3) & 3, flipTextureVertical, lightIntensity);
                         }
                             break;
                         case kCube:
                             drawColumnAt(tmp, (heightDiff + adjust),
                                          &textures[tileProp->mMainWallTexture.frames[tileProp->mMainWallTexture.currentFrame]],
                                          facesMask, tileProp->mNeedsAlphaTest,
-                                         tileProp->mRepeatMainTexture);
+                                         tileProp->mRepeatMainTexture, lightIntensity);
                         default:
                             break;
                     }
@@ -931,7 +985,7 @@ void renderTick(long ms) {
 
                     tmp.mY = position.mY + twiceFloorHeight + heightDiff;
 
-                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection);
+                    drawMesh((struct Mesh*)getFromMap(&customMeshes, tileProp->mGeometryType), tmp, cameraDirection, lightIntensity);
                 }
 
                 if (itemsSnapshotElement != 0xFF) {
@@ -944,7 +998,7 @@ void renderTick(long ms) {
                         itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
                     }
 
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
+                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32, lightIntensity);
                 }
             }
         }

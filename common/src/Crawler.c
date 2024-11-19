@@ -541,7 +541,7 @@ void Crawler_repaintCallback(void) {
             int c;
             int yWindow = 0;
             char buffer[64];
-
+            computeLightning();
             renderTick(30);
 
             recenterView();

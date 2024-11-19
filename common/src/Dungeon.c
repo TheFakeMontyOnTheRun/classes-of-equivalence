@@ -173,6 +173,7 @@ void dungeonTick(const enum ECommand command) {
                         parseCommand("use", item2->name);
                     }
                 }
+                computeLightning();
                 gameSnapshot.turn++;
             }
                 break;
@@ -227,6 +228,7 @@ void dungeonTick(const enum ECommand command) {
 		        defaultLogger("Can't drop it");
 		    }
                 }
+                computeLightning();
                 gameSnapshot.turn++;
             }
                 break;

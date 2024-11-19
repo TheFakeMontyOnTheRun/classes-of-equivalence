@@ -468,10 +468,10 @@ void BattleScreen_repaintCallback(void) {
 
             drawBitmap(4 + 11 * 8 + (c * (32 + 16)),
                        -16 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame][0]->height) / 2,
-                       foe[monsterTypeIndex][spriteFrame][0], 1);
+                       foe[monsterTypeIndex][spriteFrame][0], 1, getPaletteEntry(0xFFFFFFFF));
             drawBitmap(4 + 11 * 8 + (c * (32 + 16)),
                        -16 + 32 + (YRES_FRAMEBUFFER - foe[monsterTypeIndex][spriteFrame][1]->height) / 2,
-                       foe[monsterTypeIndex][spriteFrame][1], 1);
+                       foe[monsterTypeIndex][spriteFrame][1], 1, getPaletteEntry(0xFFFFFFFF));
 
 
             if (splatMonster == (monstersPresent - c - 1) &&
@@ -488,7 +488,7 @@ void BattleScreen_repaintCallback(void) {
                 if (frame >= 0) {
                     drawBitmap(4 + 11 * 8 + (c * (32 + 16)),
                                -16 + (YRES_FRAMEBUFFER - splat[frame]->height) / 2, splat[frame],
-                               1);
+                               1, getPaletteEntry(0xFFFFFFFF));
                 }
 
                 sprintf(&buffer3[0], "%d HP", battleDamages[currentCharacter]);
