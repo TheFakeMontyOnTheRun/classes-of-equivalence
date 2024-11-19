@@ -935,16 +935,19 @@ void renderTick(long ms) {
                 }
 
                 if (itemsSnapshotElement != 0xFF) {
-                    tmp.mY = position.mY + twiceFloorHeight + intToFix(1);
+                    struct Item* itemToRender;
+                    itemToRender = getItem(itemsSnapshotElement);
+                    if (itemToRender->hasVisuals) {
+                        tmp.mY = position.mY + twiceFloorHeight + intToFix(1);
+                        /* lazy loading the item sprites */
+                        if (itemSprites[itemsSnapshotElement] == NULL) {
+                            char buffer[64];
+                            sprintf(&buffer[0], "%s.img", itemToRender->name);
+                            itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
+                        }
 
-                    /* lazy loading the item sprites */
-                    if (itemSprites[itemsSnapshotElement] == NULL) {
-                        char buffer[64];
-                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
-                        itemSprites[itemsSnapshotElement] = loadBitmap(&buffer[0]);
+                        drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
                     }
-
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], intToFix(1), 32);
                 }
             }
         }

@@ -177,7 +177,7 @@ TEST_F(TestInventoryManipulation, objectsCanOnlyExistInOneRoom) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     addToRoom("lss-daedalus", item);
 
     ASSERT_TRUE(hasItemInRoom("lss-daedalus", "farofinha"));

@@ -84,6 +84,7 @@ struct Item {
     UseObjectCallback useCallback;
     DropObjectCallback dropCallback;
     PickObjectCallback pickCallback;
+    uint8_t hasVisuals: 1;
 };
 /**
  *
@@ -284,7 +285,8 @@ struct Item *addItem(const char *description,
 #endif
                      uint8_t pickable,
                      int8_t positionX,
-                     int8_t positionY);
+                     int8_t positionY,
+                     uint8_t hasVisuals);
 
 /**
  *

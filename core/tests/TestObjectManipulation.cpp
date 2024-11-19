@@ -96,7 +96,7 @@ TEST_F(TestObjectManipulation, canUseObjectsTogether) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     item->useCallback = usableCallback;
     addToRoom("lss-daedalus", item);
 
@@ -108,7 +108,7 @@ TEST_F(TestObjectManipulation, canUseObjectsTogether) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19 ,0);
     addToRoom("lss-daedalus", item);
 
 
@@ -119,7 +119,7 @@ TEST_F(TestObjectManipulation, canUseObjectsTogether) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     addToRoom("lss-daedalus", item);
 
     item = addItem("cocada",
@@ -129,7 +129,7 @@ TEST_F(TestObjectManipulation, canUseObjectsTogether) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     addToRoom("lss-daedalus", item);
 
     ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usableWith"));
@@ -159,7 +159,7 @@ TEST_F(TestObjectManipulation, canUseObjects) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     item->useCallback = usableCallback;
 
     addToRoom("lss-daedalus", item);
@@ -172,7 +172,7 @@ TEST_F(TestObjectManipulation, canUseObjects) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     addToRoom("lss-daedalus", item);
 
     ASSERT_TRUE(hasItemInRoom("lss-daedalus", "usable"));
@@ -197,7 +197,7 @@ TEST_F(TestObjectManipulation, cantPickObjectsTwice) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   TRUE, 15, 19);
+                   TRUE, 15, 19, 0);
     item->pickCallback = usablePickCallback;
 
     addToRoom("lss-daedalus", item);
@@ -220,7 +220,7 @@ TEST_F(TestObjectManipulation, usingObjectsYouDontHaveWillUseThoseInTheRoom) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   FALSE, 15, 19);
+                   FALSE, 15, 19, 0);
     item->useCallback = usableCallback;
 
     addToRoom("lss-daedalus", item);
@@ -245,7 +245,7 @@ TEST_F(TestObjectManipulation, cantUseObjectsInOtherRoom) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   FALSE, 15, 19);
+                   FALSE, 15, 19, 0);
     item->useCallback = usableCallback;
 
     addToRoom("hangar", item);
@@ -266,7 +266,7 @@ TEST_F(TestObjectManipulation, cantPickUnpickableObjects) {
 #ifdef ITEMS_HAVE_WEIGHT
             0,
 #endif
-                   FALSE, 15, 19);
+                   FALSE, 15, 19, 0);
     item->useCallback = usableCallback;
 
     addToRoom("lss-daedalus", item);

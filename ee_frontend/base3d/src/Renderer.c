@@ -1014,22 +1014,25 @@ void renderTick(long ms) {
                 }
 
                 if (itemsSnapshotElement != 0xFF) {
-                    tmp.mX = position.mX;
-                    tmp.mY = position.mY;
-                    tmp.mZ = position.mZ;
+                    struct Item* itemToRender;
+                    itemToRender = getItem(itemsSnapshotElement);
+                    if (itemToRender->hasVisuals) {
+                        tmp.mX = position.mX;
+                        tmp.mY = position.mY;
+                        tmp.mZ = position.mZ;
 
-                    addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
+                        addToVec3(&tmp, 0, (tileProp->mFloorHeight * 2) + one, 0);
 
-                    // lazy loading the item sprites
-                    if (itemSprites[itemsSnapshotElement] == NULL) {
-                        char buffer[64];
-                        sprintf(&buffer[0], "%s.img", getItem(itemsSnapshotElement)->name);
-                        itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                        // lazy loading the item sprites
+                        if (itemSprites[itemsSnapshotElement] == NULL) {
+                            char buffer[64];
+                            sprintf(&buffer[0], "%s.img", itemToRender->name);
+                            itemSprites[itemsSnapshotElement] = makeTextureFrom(&buffer[0]);
+                        }
+
+                        drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                     }
-
-                    drawBillboardAt(tmp, itemSprites[itemsSnapshotElement], one, 32);
                 }
-
             }
         }
 
