@@ -508,6 +508,7 @@
 		F1CA76B72610A8C100FD1E04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;
@@ -518,6 +519,7 @@
 		F1CA76B82610A8C100FD1E04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Derelict-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Derelict;

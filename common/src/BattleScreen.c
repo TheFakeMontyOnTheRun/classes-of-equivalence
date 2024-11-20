@@ -23,6 +23,7 @@
 #include "Derelict.h"
 #include "SoundSystem.h"
 #include "Dungeon.h"
+#include "EDirection_Utils.h"
 
 enum EBattleAction {
     kAttack,
@@ -600,7 +601,10 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                             int roll = nextRandomInteger() % 10;
                             int agility = party[currentCharacter].agility;
                             if (roll < agility) {
-                                initRoom(getPlayerRoom());
+                                enteredThru = oppositeOf(enteredThru);
+                                setPlayerDirection((enum EDirection) enteredThru);
+                                setPlayerLocation(lastPlayerRoom);
+                                initRoom(lastPlayerRoom);
                                 return kEscapedBattle;
                             }
                         }
@@ -685,9 +689,9 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
 
     if (currentBattleState == kPlayerSelectingMoves) {
         int action;
-        
+
         if (party[currentCharacter].specialStype == kNone) {
-            
+
             action = handleCursor(
                                   0,
                                   (YRES_FRAMEBUFFER / 8) - 9 - kDummyBattleOptionsCount,
@@ -710,21 +714,21 @@ enum EGameMenuState BattleScreen_tickCallback(enum ECommand cmd, void *data) {
                                   cmd,
                                   kResumeCurrentState);
         }
-        
-        
+
+
         /* No energy for special or no special? Nothing happens */
         if (action == kSpecial &&
             !canCastSpecial(currentCharacter)) {
             return kResumeCurrentState;
         } else if (action != kResumeCurrentState ){
             firstFrameOnCurrentState = 1;
-            
+
             battleActions[currentCharacter] = action;
-            
+
             cursorPosition = 0;
-            
+
             skipToNextValidCharacter();
-            
+
             if (currentCharacter == (TOTAL_CHARACTERS_IN_PARTY)) {
                 enum EGameMenuState nextTurn = prepareNextTurn();
                 if (nextTurn != kResumeCurrentState) {
