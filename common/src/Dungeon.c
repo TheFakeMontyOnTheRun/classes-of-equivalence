@@ -38,6 +38,7 @@ uint8_t *itemsInMap;
 uint8_t *collisionMap;
 int enteredThru = 0;
 int currentSelectedItem = 0;
+int lastPlayerRoom;
 
 uint8_t isPositionAllowed(int8_t x, int8_t y) {
 
@@ -376,7 +377,7 @@ void dungeonTick(const enum ECommand command) {
                 int c = 0;
                 int room = getPlayerRoom();
                 struct Room *roomPtr = getRoom(room);
-
+                lastPlayerRoom = currentPlayerRoom;
                 for (c = 0; c < 6; ++c) {
                     if (roomPtr->connections[c] == currentPlayerRoom) {
                         enteredThru = oppositeOf(c);
