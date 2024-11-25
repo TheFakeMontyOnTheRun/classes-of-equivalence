@@ -6,6 +6,7 @@ Sub Mare Imperium
 - [This installment story](episode1)
 
 # Technical details
+
 - [Tests coverage](coverage/index.html)
 - [Core](core)
 - [GL ES 2/Playstation 2/Wii/GX engine](ee-frontend)

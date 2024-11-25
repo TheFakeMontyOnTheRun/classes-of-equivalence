@@ -114,7 +114,6 @@ hybrids and the forces that have controlled their lives.
 
 Goal: with the final bosses killed, the minotaur turns against you. Stun the minotaur long enough to make a escape.
 
-
 ## Songs to consider
 
 - Pavane pour une Infante Defunte

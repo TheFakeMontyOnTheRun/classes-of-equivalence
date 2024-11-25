@@ -1,7 +1,7 @@
 gl-frontend
 ===========
 
-The OpenGL frontend uses the most basic resources from that library, in order 
+The OpenGL frontend uses the most basic resources from that library, in order
 to stay compatible with the most possible systems that support at least some
 OpenGL version.
 

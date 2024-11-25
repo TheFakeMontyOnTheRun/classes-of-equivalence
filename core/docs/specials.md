@@ -242,7 +242,9 @@ A cyborg with advanced programming skills can reprogram enemy machines or hybrid
 
 Temporarily takes control of an enemy cyborg or robot, turning them into an ally for a short time. This ability can be
 used to target high-priority enemies or to gain an advantage by using the enemy's own abilities against them.
+
 ### Cooldown
+
 6 turns.
 
 ## Shockwave
@@ -258,7 +260,9 @@ stored electrical power within their body to create a sudden burst of force.
 
 Deals area damage and stuns enemies for a turn, making them unable to act or move. It can also knock down enemies that
 are weak to physical disruption.
+
 ### Cooldown
+
 4 turns.
 
 # Foes specials
