@@ -10,9 +10,5 @@ machine, a lot of compromises and changes had to be made.
 This is a highly unstable port, lagging behind even the Nintendo DS (GL) and
 Game Boy Advanced (MX) ports that came after it.
 
-The desire is to eventually add support for the Nintendo Gamecube and/or Wii,
-given that this is the "128-bit" port.
-
-It might be useful to eventually add a OpenGL ES version here as well, to
-help on debuggability, as the the flexilbility of that library would afford
-us more fidelity.
+Eventually, ports for Wii/GameCube and OpenGL ES 2
+(including for Android, iOS and HTML5/Emscripten) were added.
