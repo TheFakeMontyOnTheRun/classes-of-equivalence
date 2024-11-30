@@ -6,11 +6,6 @@ Location: [The Memory Vaults](locations/memory-vaults.md)
 
 Song: Beethoven - Moonlight Sonata (1st Movement)
 
-Why it fits: The melancholic and introspective tone of Moonlight Sonata aligns
-with the hybrids’ struggle to understand their past and identity. The soft,
-haunting piano can enhance the somber mood as players explore forgotten corners
-of the prison, uncovering memories and unraveling their shared history.
-
 Goal: find the memory from a deceased prisoner on where he hid the key-card that
 will grant passage around a very strong garrison that guards strangle point
 passage.
@@ -25,11 +20,6 @@ Location: [The Inner Sanctum](locations/inner-sanctum.md)
 
 Song: Bach - Toccata and Fugue in D Minor
 
-Why it fits: The dramatic, ominous intensity of this piece works perfectly for
-an area dominated by dark religious rituals. The rising, powerful organ notes
-create an unsettling atmosphere, amplifying the sense of danger as the hybrids
-uncover the cult's twisted practices.
-
 Goal: plant a vulnerability on the software controlling the minotaur
 servomotors.
 
@@ -38,11 +28,6 @@ servomotors.
 Location: [The Submerged Prison Docks](locations/submerged-docks.md)
 
 Song: Handel - Water Music (Air)
-
-Why it fits: The fluid, serene melody of Water Music captures the vast, tranquil
-beauty of the ocean, while also hinting at the danger of escape. The music’s
-gentle flow mirrors the ebb and tide of the ocean, adding a sense of grandeur to
-the moment of the hybrids’ potential freedom.
 
 Goal: activate the bridge, the drains (to make the docks walkable) and the
 pumps (to flood the passage), so to allow the escape submarine to enter the
@@ -54,11 +39,6 @@ Location: [The Forbidden Archive](locations/forbidden-archive.md)
 
 Song: Chopin - Nocturne in E-flat Major, Op. 9 No. 2
 
-Why it fits: The delicate, emotional nature of this piece complements the quiet,
-reflective moments in the archive. The piece’s elegance and introspection
-enhance the revelation of long-buried secrets and hidden truths, offering a
-brief respite from the darker elements of the game.
-
 Goal: find out how to impersonate the general upon submarine collection.
 
 ## The Prison’s Heartbeat
@@ -66,11 +46,6 @@ Goal: find out how to impersonate the general upon submarine collection.
 Location: [The Reactor Core](locations/reactor-core.md)
 
 Song: Grieg - In the Hall of the Mountain King
-
-Why it fits: The rising tension and frantic pace of this piece make it ideal for
-moments where urgency is high. As the hybrids navigate through the dangerous
-core, the escalating intensity of the music matches the pressure of a potential
-catastrophe, with the ticking clock heightening the stakes.
 
 Goal: The hybrids must shut down the core or risk destroying the entire prison.
 
@@ -80,11 +55,6 @@ Location: [The Prison’s Underground](locations/prison-underground.md)
 
 Song: Tchaikovsky - Swan Lake (Main Theme)
 
-Why it fits: The main theme from Swan Lake has a tragic, yet regal feel that can
-underscore the tension between the hybrids' longing for freedom and the violence
-that may follow. The melody’s elegance adds emotional depth to the rebellion,
-emphasizing the bittersweet nature of their struggle for autonomy.
-
 Goal: quell the large scale rebellion. Otherwise, your escape would be
 impossible.
 
@@ -93,11 +63,6 @@ impossible.
 Location [dissection labs](locations/dissection-labs.md)
 
 Song: Berlioz - Symphonie Fantastique (Dream of a Witches’ Sabbath)
-
-Why it fits: The chaotic, eerie tones of this piece perfectly match the
-distorted, dreamlike nature of the simulation. The music creates a sense of
-surrealism and dread, fitting for moments where the hybrids face their inner
-demons or confront mental challenges.
 
 Goal:
 
@@ -122,11 +87,6 @@ having the minotaur activated, it will actually fight the final bosses for you.
 Location: [The Minotaur’s Throne Room](locations/throne-room.md)
 
 Song: Mozart - Requiem Mass in D minor (Lacrimosa)
-
-Why it fits: The haunting, sorrowful tones of Lacrimosa suit the climactic final
-battle against the cult’s leader. The piece carries a sense of foreboding and
-inevitability, reflecting the gravity of the final confrontation between the
-hybrids and the forces that have controlled their lives.
 
 Goal: with the final bosses killed, the minotaur turns against you. Stun the
 minotaur long enough to make a escape.

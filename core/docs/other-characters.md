@@ -1,12 +1,12 @@
 # Supporting Characters
 
-## Caden "Jax" Fenn
+## Kade Fenn
 
 (Rebel Leader)
 
 ### Background
 
-A former prisoner who has become the leader of a small resistance group within
+A prisoner who has become the leader of a small resistance group within
 the prison. He helps the party by providing information, supplies, and
 occasionally joining the fight against the cult.
 
@@ -26,5 +26,7 @@ escape, even if it means making difficult decisions.
 
 ### Background
 
-A genius scientist who was captured and forced to work for the cult. He secretly
+A genius scientist who was captured and forced to work for the cult. He 
+secretly admires the prophecies connected to the minotaur, but disagress 
+with how the cult puts it to action.
     

@@ -156,11 +156,12 @@ controlled and optimized.
 ### Background
 
 These glowing fish could be an eerie, alien-like presence in flooded sections of
-the prison. They might swarm in large groups, creating glowing patterns in the
-water, and can serve as both a calming presence and a hint to the player that
-the prison is not as abandoned as it seems. Combat Encounter Some mutated fish
-could be aggressive, their glowing features concealing sharp teeth or toxins
-that can deal damage in combat.
+the prison.
+
+### Combat Encounter
+
+Some mutated fish could be aggressive, their glowing features concealing sharp
+teeth or toxins that can deal damage in combat.
 
 ### Appearance
 
@@ -172,7 +173,11 @@ that can deal damage in combat.
 
 ### Background
 
+It roams the docs and is a vicious creature.
+
 ### Appearance
+
+It has a bloody severed hand hanging from its teeth.
 
 ### Special Ability
 
@@ -230,80 +235,6 @@ enclosed, organic parts of the prison.
 
 ### Personality
 
-## Cyber-Rats
-
-These small but agile creatures are partially robotic, with metallic parts and
-glowing red eyes. They might scurry through the prison, and when in groups, can
-become a nuisance. Represent the consequences of the prison’s technological
-contamination.
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
-
-### Combat Encounter
-
-Swarms of cyber-rats might attack in tight corridors, overwhelming players with
-numbers. Alternatively, their small size could make them good for hacking or
-using as distractions.
-
-## Sentient Pigs/Cattle
-
-Bioengineered animals used by the cult for some unknown purpose (perhaps
-breeding to harvest organs or something darker). These creatures could be kept
-in pens but might escape into the facility, with some becoming sentient or
-aggressive due to their forced modifications.
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
-
-## Mutant Birds
-
-Birds that have adapted to the high-tech environment of the prison, with
-cybernetic enhancements. They could patrol the sky or nests, swooping down to
-attack intruders.
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
-
-### Combat Encounter
-
-These birds might be swift and difficult to hit, forcing the player to use
-ranged attacks or traps to catch them.
-
-## Giant Scorpions/Spiders
-
-Large, mutated arachnids living in the darker sections of the prison,
-potentially growing to enormous sizes due to toxic exposure or genetic
-manipulation. Their venom could induce paralysis or cause hallucinations.
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
-
-### Combat Encounter
-
-These enemies might lurk in dark, forgotten areas of the prison, requiring the
-player to clear out their nests or face dangerous ambushes.
-
 ## Cyborg Dogs
 
 These creatures might be used by the cult as hunting or tracking animals. With
@@ -312,8 +243,7 @@ animals for the cult.
 
 ### Combat Encounter
 
-These enemies could have enhanced speed and agility, making them formidable in
-close quarters, but perhaps vulnerable to hacking or certain weapons.
+This could come in the form of random encounters.
 
 ### Background
 
@@ -344,30 +274,12 @@ These creatures could alter their form to become more dangerous or harder to
 hit, requiring the player to find ways to "solidify" them or expose them to
 extreme conditions to defeat them.
 
-## Giant Worms
-
-Huge, burrowing creatures that exist in the depths of the prison. These
-creatures might only appear when the player ventures into subterranean areas or
-tunnels. Their movements can trigger earthquakes or environmental collapses.
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
-
-### Combat Encounter
-
-Players must avoid or combat these giant, burrowing worms when they trigger the
-collapse of a hallway or during environmental hazards.
-
 ## Energy-Absorbing Jelly
 
 This alien creature feeds on the prison’s energy systems, creating an
 interesting gameplay mechanic where the player must prevent the jelly from
-draining power in specific sections of the prison.
+draining power in specific sections of the prison while baiting it to drain 
+others.
 
 ### Background
 
@@ -381,13 +293,3 @@ draining power in specific sections of the prison.
 
 The player could be tasked with diverting power away from important systems to
 keep the creature from sabotaging key areas, such as escape routes.
-
-## Bioluminescent Fish
-
-### Background
-
-### Appearance
-
-### Special Ability
-
-### Personality
